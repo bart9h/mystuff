@@ -56,6 +56,7 @@ alias cp='cp -i --preserve=timestamps'
 alias mv='mv -i'
 
 function rm() { #{{{
+	#set +o functrace
 	file_count=0
 	for i in "$@"; do
 		if ! expr match "$i" "\-*" > /dev/null; then
@@ -67,7 +68,10 @@ function rm() { #{{{
 			fi
 		fi
 	done
-	if test $file_count -gt 1; then
+	if test $file_count -eq 0; then
+		echo "no files" > /dev/stderr
+		return
+	elif test $file_count -gt 1; then
 		ls -d "$@"
 		read -p "remove $file_count items (y/n) [y]? " answer
 		test "$answer" == "y" -o "$answer" == "" || return
@@ -78,6 +82,7 @@ function rm() { #{{{
 alias xxd='xxd -c $(( (($COLUMNS - 10)/7)*2 ))'
 alias wget='wget -c --timeout=15 --wait=0 --tries=0'
 alias xpdf='xpdf -z width'
+alias grep='grep --exclude="*.svn-base" --devices=skip'
 #alias tar='tar --exclude=.svn --exclude=CVS'
 
 
@@ -94,10 +99,13 @@ alias Z='Z -A'  # like F, but ordered by date
 
 # the lowercase versions (that don't show hidden files):
 function a() {
-	if test $( ls "$@" | wc -l ) -lt $(( $LINES / 2 )); then
-		ls -1F "$@"
-	else
-		ls -F "$@"
+    local n=$( ls "$@" | wc -l )
+	if test $n -gt 0; then
+		if test $n -lt $(( $LINES / 2 )); then
+			ls -1F "$@"
+		else
+			ls -F "$@"
+		fi  
 	fi
 }
 alias d='ls -lF'
@@ -208,24 +216,25 @@ _progress 'version control frontend'
 
 alias svnbk='svnadmin dump /home/svn | bzip2 -9 > bart.svndump.`date +%Y-%m-%d`.bz2'
 
-function svndif_tmp() {
-	tmp=`mktemp /tmp/svndif.XXXXXX`
-	svn diff \
+function svndiff() {
+	svn diff $args \
 		--diff-cmd /usr/bin/diff -x \
-		"-U 5 -rpbB --ignore-all-space --ignore-blank-lines" "$@" \
-	>| "$tmp" || return
-	test -s "$tmp" && echo "$tmp" || /bin/rm "$tmp"
+		"-U 5 -rpbB --ignore-all-space --ignore-blank-lines" "$@"
 }
-
-function svndif() {
-	local arg
+function svndif_tmp() {
+	local args
 	if test "$1" == "-h"; then
-		arg="-r BASE:HEAD"
+		args="-r BASE:HEAD"
 		shift
 	fi
-	tmp=`svndif_tmp $arg "$@"`; test "$tmp" || return
-	vim +'set filetype=diff' +'map <c-x> :q!<cr>' "$tmp"
-	/bin/rm "$tmp"
+	tmp=`mktemp /tmp/svndif.XXXXXX`
+	svndiff "$@" >| "$tmp" || return
+	test -s "$tmp" && echo "$tmp" || rm "$tmp"
+}
+function svndif() {
+	tmp=`svndif_tmp "$@"`; test "$tmp" || return
+	vim +'set filetype=diff' +'set nomodified' "$tmp"
+	rm "$tmp"
 }
 
 function svnci() {
@@ -271,7 +280,7 @@ function update() {
 
 _progress 'software setup'
 
-export LESS='-X -F -M -R -f -a -j2'
+export LESS='-X -F -M -R -f -a -j4'
 export PAGER="less $LESS"
 export MANPAGER="$PAGER"
 #export MANPAGER="col -b | view -c 'set ft=man nomod nolist' -"
@@ -322,6 +331,13 @@ alias reconnect='sudo ifconfig eth0 down; sudo dhclient'
 alias pgo='ping google.com'
 alias kb='~/src/desktop/switch-kbmap'
 
+function lddr() {
+	# ldd "recursivo": faz ldd das bibliotecas nao-padrao mostradas pelo ldd
+	for z in "$@"; do
+		ldd $( ldd "$z" | cut -d '>' -f 2 | cut -d ' ' -f 2 | grep -v '^/\(usr\|lib\)' )
+	done
+}
+
 
 #{{{1          misc
 
@@ -332,13 +348,8 @@ alias pr='set +o history; PS1=histoff:$THE_PS1; pushd $PWD > /dev/null'
 alias pn='set -o history; PS1=$THE_PS1; popd'
 
 # utils
-alias 9h='ssh barrett@9h'
-alias utc='ssh barrett@utc'
-alias lutc='lftp fish://barrett@utc -e cd'
-alias libra='ssh x@libra'
-alias lf='lftp fish://barrett@9h/home/barrett/'
-alias pkg='web --linux-packages'
-alias sl='web --slackware'
+alias utc='ssh barrett@mail.utcoverseas.com.br'
+alias lutc='lftp fish://barrett@mail.utcoverseas.com.br -e cd'
 alias t='source ~/src/scripts/untar'
 alias l='less'
 alias grepsmallnear='find . -type f -maxdepth 2 -size -10k -not -name "* *" | xargs grep'
@@ -346,9 +357,6 @@ alias grepsmallnear='find . -type f -maxdepth 2 -size -10k -not -name "* *" | xa
 #alias k='sudo kbdrate -r 30 -d 250'
 #alias caps='xmodmap -e "keysym Caps_Lock = Escape"'
 alias caps='xmodmap -e "remove Lock = Caps_Lock" -e "keysym Caps_Lock = Escape"'
-#alias x='startx'
-#alias x='pidof X > /dev/null 2>&1 && kill `pidof X` || startx' # start/kill X (toggle)
-#alias kx='kill `pidof X`'
 alias data='date +%Y-%m-%d'
 alias geom="xwininfo -root | sed -rn '/-geometry/s/[^0-9]*([0-9]+x[0-9]+).*/-resize\ \1/p'"
 alias 2view='convert -quality 80 -resize `geom`'
@@ -376,10 +384,10 @@ alias updb='sudo updatedb &'
 # build tools
 alias configure='nice ./configure --disable-nls'
 alias mk='nice make'
-alias cm='configure && nice make'
+alias cm='configure && mk'
 alias conf='./configure --help && read a && configure $a'
 alias confh='./configure --help | less'
-alias cmi='conf && nice make && mki'
+alias cmi='conf && mk && mki'
 alias qpro='rm Makefile *.pro; qmake -project && qmake && make clean'
 
 function mki() {
@@ -439,7 +447,7 @@ alias sup='sudo upgradepkg'
 export GDK_USE_XFT=1
 
 alias fu='du -sc * | sort -n'
-alias www='webfsd -d -F -p 8080 -r .'
+#alias www='webfsd -d -F -p 8080 -r .'
 alias ntop='sudo jnettop'
 #alias w1='cd ~/fotos/incoming && sudo gphoto2 -P'
 #alias w1='source /home/barrett/bin/w1'
@@ -663,6 +671,13 @@ fi
 fi
 
 #}}}
+
+
+#{{{1 host-specific
+
+if test -r "$HOME/.bashrc_local"; then
+	source "$HOME/.bashrc_local"
+fi
 
 
 #}}}
