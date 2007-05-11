@@ -1,0 +1,670 @@
+# ~/.bashrc: executed by bash(1) for non-login shells.
+test -z "$PS1" && return
+#{{{1 quick edit&reload this file
+
+unalias -a
+alias ea='vi ~/.bashrc && source ~/.bashrc'
+
+function _progress() { # for profiling and debugging
+	true #printf "\r%-*s" $COLUMNS "$*"
+}
+
+#{{{1 path
+
+function add_to_path() {
+	local end='tail'
+	while test -n "$1"; do
+		case "$1" in
+			-t)
+				end='tail'
+			;;
+			-h)
+				end='head'
+			;;
+			*)
+				if
+					! expr match "$PATH"    "$1:"  >/dev/null &&
+					! expr match "$PATH" ".*:$1:"  >/dev/null &&
+					! expr match "$PATH" ".*:$1$"  >/dev/null
+				then
+					if test "$end" == 'tail'; then
+						export PATH="$PATH:$1"
+					else
+						export PATH="$1:$PATH"
+					fi
+				fi
+			;;
+		esac
+		shift
+	done
+}
+
+add_to_path \
+		-h "$HOME/bin" \
+		-h "/home/sft/d/gdc/bin" \
+		-t "/opt/kde/bin" \
+		-t "/usr/share/texmf/bin" \
+		-t "/usr/sbin" \
+		-t "/sbin" \
+#		-h "/usr/local/lib/cw" \
+
+
+#{{{1          aliases and functions that mask existing programs
+
+alias cp='cp -i --preserve=timestamps'
+
+alias mv='mv -i'
+
+function rm() { #{{{
+	file_count=0
+	for i in "$@"; do
+		if ! expr match "$i" "\-*" > /dev/null; then
+			if test -e "$i"; then
+				file_count=$(( $file_count + 1 ))
+			else
+				/bin/rm "$i"
+				return
+			fi
+		fi
+	done
+	if test $file_count -gt 1; then
+		ls -d "$@"
+		read -p "remove $file_count items (y/n) [y]? " answer
+		test "$answer" == "y" -o "$answer" == "" || return
+	fi
+	/bin/rm "$@"
+} #}}}
+
+alias xxd='xxd -c $(( (($COLUMNS - 10)/7)*2 ))'
+alias wget='wget -c --timeout=15 --wait=0 --tries=0'
+alias xpdf='xpdf -z width'
+#alias tar='tar --exclude=.svn --exclude=CVS'
+
+
+#{{{1 ls
+
+_progress 'ls'
+
+alias ls='ls -v --color=auto'
+
+alias A='a -A'  # single column if fits screen, multi otherwise
+alias D='d -A'  # long listing format
+alias F='f -A'  # with size/date/time info
+alias Z='Z -A'  # like F, but ordered by date
+
+# the lowercase versions (that don't show hidden files):
+function a() {
+	if test $( ls "$@" | wc -l ) -lt $(( $LINES / 2 )); then
+		ls -1F "$@"
+	else
+		ls -F "$@"
+	fi
+}
+alias d='ls -lF'
+function f() {
+	\ls -FGhln --color=always --time-style=long-iso "$@" |
+	sed 's/^[^\ ]\+\ \+[^\ ]\+\ \+[^\ ]\+\ \+\(....\)\ \(20[^\ ]\+\ [^\ ]\+\)\ \(.*\)$/\2\ \ [0;37m\1\ \ \3/'
+}
+alias z='f -rt'
+
+# deprecated stuff:
+#alias _sd='find -type d -maxdepth 1 -name "[^\.]*" -print0 | xargs -0 du -sc | sed "s/\.\///" | sort -n'
+#alias _sf='find -type f -maxdepth 1 -name "[^\.]*" -print0 | xargs -0 du -sc | sed "s/\.\///" | sort -n'
+#alias sz='_sf; ls -F | grep -q \/$ && _sd; echo $(echo $(du -s .)|cut -d \  -f 1) $(du -sh .)'
+#alias dz='du -shc * | grep -v "^0" | grep "[0-9][MG]"'
+
+
+#{{{1          info
+
+function show() {
+	case "$1" in
+	colors)
+		for b in 0 1; do
+			for j in 3 4; do
+				i=0
+				while test $i -le 7; do
+					echo -ne "\e[${b};${j}${i}m [$b;$j$i:abacate] "
+					let i=i+1
+				done
+				echo -e "\e[0;0m "
+			done
+		done
+	;;
+	esac
+}
+
+
+#{{{1 abbreviations
+
+_progress 'abbreviations'
+
+alias apt='sudo aptitude'
+
+
+#{{{1 frontend functions
+
+#{{{ screen
+
+function s() {
+	which screen >/dev/null || return
+
+	# if no arg, list existing screens
+	if test "$1" == ""; then
+		screen -wipe | grep '([AD][te]tached)'
+
+	# if arg is existing screen, attach
+	elif test "$1" != "." && screen -ls | grep "\<[0-9]*\.$1\>"; then
+			screen -x "$1"
+
+	else  # create screen
+		local session_name
+
+		# if arg is existing dir, cd into, else arg is session name
+		test -d "$1" && cd "$1" || session_name="$1"
+
+		# defult session name is $PWD
+		test "$session_name" -o "$session_name" == "." || session_name="`basename "$PWD"`"
+
+		screen -S "$session_name"
+	fi
+}
+
+#}}} screen
+
+#{{{ xmms2
+# With no args, list;
+# if args are files or dirs, add (or radd) them;
+# else pass args to xmms2.
+
+function x()
+{
+	if ! pidof xmms2d >/dev/null; then
+		( exec xmms2d >| $HOME/var/log/xmms2d.log 2>&1 )&
+	fi
+
+	if test "$1" == ""; then
+		xmms2 list
+	else
+		while test "$1"; do
+			if test -d "$1"; then
+				xmms2 radd "$1"
+				shift
+			elif test -e "$1"; then
+				xmms2 add "$1"
+			else
+				xmms2 "$@"
+				break
+			fi
+			shift
+		done
+	fi
+}
+
+#}}} xmms2
+
+#{{{  version control
+
+_progress 'version control frontend'
+
+alias svnbk='svnadmin dump /home/svn | bzip2 -9 > bart.svndump.`date +%Y-%m-%d`.bz2'
+
+function svndif_tmp() {
+	tmp=`mktemp /tmp/svndif.XXXXXX`
+	svn diff \
+		--diff-cmd /usr/bin/diff -x \
+		"-U 5 -rpbB --ignore-all-space --ignore-blank-lines" "$@" \
+	>| "$tmp" || return
+	test -s "$tmp" && echo "$tmp" || /bin/rm "$tmp"
+}
+
+function svndif() {
+	local arg
+	if test "$1" == "-h"; then
+		arg="-r BASE:HEAD"
+		shift
+	fi
+	tmp=`svndif_tmp $arg "$@"`; test "$tmp" || return
+	vim +'set filetype=diff' +'map <c-x> :q!<cr>' "$tmp"
+	/bin/rm "$tmp"
+}
+
+function svnci() {
+	tmp=`svndif_tmp "$@"`; test "$tmp" || return
+	SVN_EDITOR="vim -o \"$tmp\" +\"set filetype=diff\"" svn commit "$@"
+	/bin/rm "$tmp"
+}
+
+function svnst() {
+	svn st "$@" | grep -v '^\?'
+}
+
+function update() {
+	if test -d .svn; then
+		local rev1=`svn info | grep '^Revision:' | cut -d ' ' -f 2`
+		echo "Local revision: $rev1"
+		svn up "$@"
+		local rev2=`svn info | grep '^Revision:' | cut -d ' ' -f 2`
+		if test "$rev1" != "$rev2"; then
+			local dif="svndif -r $rev1:$rev2"
+			echo "$dif"
+			echo "`date +%Y-%m-%d`  $dif" >> .svn/_updates
+		fi
+	elif test -d .git; then
+		git pull "$@"
+	elif test -d CVS; then
+		cvs -z3 -q up -dP "$@" | grep -v '^\?' #grep -v '^cvs\ update:\ Updating\ ' #grep nao funciona pq ta no stderr
+	else
+		echo 'Found no ".svn", "CVS", or ".git" directory.'
+		false
+	fi
+}
+
+#export CVS_RSH=ssh
+#export CVSROOT=:ext:9h:/home/9hells/cvsroot
+
+#}}} version control
+
+#___
+#}}}
+#TODO: organizar o resto abaixo..
+#{{{1 software setup
+
+_progress 'software setup'
+
+export LESS='-X -F -M -R -f -a -j2'
+export PAGER="less $LESS"
+export MANPAGER="$PAGER"
+#export MANPAGER="col -b | view -c 'set ft=man nomod nolist' -"
+[ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
+
+export SVN_EDITOR=vi
+export GREP_OPTIONS='--exclude="*.svn-base"'
+
+# paths
+export DMD_DIR='/home/sft/d/dmd'
+export DERELICT_DIR='/home/sft/d/derelict'
+export LD_LIBRARY_PATH='.'
+export PKG_CONFIG_PATH='/usr/local/lib/pkgconfig:/usr/lib/pkgconfig'
+export CHOICESPATH="${HOME}/.Choices:/usr/local/share/Choices:/usr/share/Choices"
+
+# dev
+export ACLOCAL_FLAGS='-I /usr/local/share/aclocal'
+
+# shell
+export INPUTRC="$HOME/.inputrc"
+#export BASH_COMPLETION="/etc/bash_completion"
+
+# aliases
+alias vi='vim'
+alias pgr='pgrep -l'
+alias cdrec='sudo cdrecord -v dev=/dev/cdrom'
+function q4() {
+	if true; then
+		# metodo menos drastico, impede somente DNS, mantendo conexoes atuais abertas
+		a='/etc/resolv.conf'
+		b='/etc/__disabled__resolv.conf'
+		sudo mv $a $b || return
+		(sleep 90s; sudo mv $b $a) &
+	else
+		sudo ifconfig eth0 down || return
+		(sleep 90s; sudo ~/src/etc/neton) &
+	fi
+	/home/games/quake4/quake4
+}
+
+
+#{{{1          util
+
+_progress 'util'
+
+# network
+alias reconnect='sudo ifconfig eth0 down; sudo dhclient'
+alias pgo='ping google.com'
+alias kb='~/src/desktop/switch-kbmap'
+
+
+#{{{1          misc
+
+_progress 'misc'
+
+alias ph='vi ~/src/txt/phonebook.txt'
+alias pr='set +o history; PS1=histoff:$THE_PS1; pushd $PWD > /dev/null'
+alias pn='set -o history; PS1=$THE_PS1; popd'
+
+# utils
+alias 9h='ssh barrett@9h'
+alias utc='ssh barrett@utc'
+alias lutc='lftp fish://barrett@utc -e cd'
+alias libra='ssh x@libra'
+alias lf='lftp fish://barrett@9h/home/barrett/'
+alias pkg='web --linux-packages'
+alias sl='web --slackware'
+alias t='source ~/src/scripts/untar'
+alias l='less'
+alias grepsmallnear='find . -type f -maxdepth 2 -size -10k -not -name "* *" | xargs grep'
+#alias r='xset r'
+#alias k='sudo kbdrate -r 30 -d 250'
+#alias caps='xmodmap -e "keysym Caps_Lock = Escape"'
+alias caps='xmodmap -e "remove Lock = Caps_Lock" -e "keysym Caps_Lock = Escape"'
+#alias x='startx'
+#alias x='pidof X > /dev/null 2>&1 && kill `pidof X` || startx' # start/kill X (toggle)
+#alias kx='kill `pidof X`'
+alias data='date +%Y-%m-%d'
+alias geom="xwininfo -root | sed -rn '/-geometry/s/[^0-9]*([0-9]+x[0-9]+).*/-resize\ \1/p'"
+alias 2view='convert -quality 80 -resize `geom`'
+alias cn='cat > /dev/null' # quick volatile writepad
+alias dt='~/src/scripts/dtool.pl'
+alias vd='dt vd'
+
+function waitload() {
+	while true; do
+		local threshold=40
+		local load=`cat /proc/loadavg | sed 's/\.//;s/^0//' | cut -d " " -f 1`
+		if test $load -gt $threshold; then
+			echo "load($load) > threshold($threshold)"
+			sleep 5s
+		else
+			echo "load($load) < threshold($threshold)"
+			break
+		fi
+	done
+}
+
+#alias mem='free; kill `pidof WMxmms`; sleep 1s; WMxmms &; sleep 1s; dk kill; sleep 1s; ml &; sleep 3s; free'
+alias updb='sudo updatedb &'
+
+# build tools
+alias configure='nice ./configure --disable-nls'
+alias mk='nice make'
+alias cm='configure && nice make'
+alias conf='./configure --help && read a && configure $a'
+alias confh='./configure --help | less'
+alias cmi='conf && nice make && mki'
+alias qpro='rm Makefile *.pro; qmake -project && qmake && make clean'
+
+function mki() {
+	local args
+	case "$1" in
+	NVIDIA-Linux-*|*/NVIDIA-Linux-*)
+		sudo sh "$1" \
+				--silent \
+				--no-network
+	;;
+
+	*)
+	date=`date +%Y%m%d`
+	name="`basename $PWD`"
+	[ "$name" == "src" ] && name="`basename $(cd ..; echo $PWD)`"
+
+	if test -d 'CVS'; then
+		args="--pkgversion=cvs.$date"
+	elif test -d '.svn'; then
+		args="--pkgversion=svn.$date"
+	elif test -d '.git'; then
+		args="--pkgversion=git.$date"
+	else
+		name="`echo "$name" | cut -d - -f 1`"
+	fi
+
+	if test -f SConstruct -o -f Sconstruct -o -f sconstruct; then
+		cmd="scons install"
+	else
+		cmd="make install"
+	fi
+
+	if test -e /etc/slackware-version; then
+		t=slackware
+	elif test -e /etc/debian_version; then
+		t=debian
+	else
+		echo 'rpm sucks'; false; return
+	fi
+
+	cmd="sudo checkinstall --type=$t --nodoc --pkgname=\"$name\" $args $cmd"
+	echo "$cmd"
+	read -p "proceed ([y]/n)? " answer
+	test "$answer" == "y" -o "$answer" == "" || return
+	$cmd
+	;;
+	esac
+}
+
+
+# pkgtools
+alias sip='sudo installpkg'
+alias srp='sudo removepkg'
+alias sup='sudo upgradepkg'
+
+
+export GDK_USE_XFT=1
+
+alias fu='du -sc * | sort -n'
+alias www='webfsd -d -F -p 8080 -r .'
+alias ntop='sudo jnettop'
+#alias w1='cd ~/fotos/incoming && sudo gphoto2 -P'
+#alias w1='source /home/barrett/bin/w1'
+
+#alias osd='osd_cat -p middle -A center -d 1 -s 3 -c yellow -f "-*-helvetica-bold-r-*-*-24-*-*-*-*-*-*-*"'
+
+#alias dif='diff --unified=5 --show-c-function --recursive --ignore-all-space'
+#alias dif='diff --unified=5 --show-c-function --recursive --ignore-space-change --ignore-blank-lines --ignore-all-space'
+alias mpf='mplayer -fs -osdlevel 0'
+alias mpq='mplayer -nosound -osdlevel 0'
+alias mpr='ls -Q | rl | xargs mplayer -fs'
+alias mprq='ls -Q | rl | xargs mplayer -fs -ao null'
+
+alias g9='gkrellm -w -s 9h &'
+alias irc='irssi -n barrett9h -c irc.freenode.net'
+#alias lm='nice lame -m s -v -h -V 2 -b 32 -B 320'
+alias lm='for z in *.wav; do nice lame -v "$z" "`echo $z | sed s/wav$/mp3/`"; done'
+alias treo='nice lame -m j -v -f'
+#alias v='gvim -geom 80x50 +"set guioptions-=T" +"set guioptions-=m" -font "-misc-fixed-medium-r-semicondensed-*-*-120-*-*-c-*-iso8859-1"'
+
+alias mame='xmame.x11 -rompath .'
+alias bkp='cd ~/src; for z in ~/BACKUP /d/backup /d/tmp ; do echo $z ; tar cfz $z/palito.$(data).tgz palito ; done ; cd -'
+
+alias p='ps -AH --format "%U %p %a"'
+
+function head() {
+	if test "$1" == ""; then
+		`which head` -$(( 2 * $LINES / 3 )) "$@"
+	else
+		`which head` "$@"
+	fi
+}
+
+function mkcd() { mkdir "$1" && cd "$1"; }
+function cd..() {
+	dir="$PWD"
+	cd .. || return
+	read -p "rm -rf \"$dir\"? " || return
+	test "$REPLY" == "y" -o "$REPLY" == "r" || return
+	rm -rf "$dir"
+}
+
+function _x() {
+	echo "$*"
+	echo "$*" | /bin/sh
+}
+
+function v() {
+	if test "$1"; then
+		vim $@
+	else
+		vim .
+	fi
+}
+
+function Seq() {
+	seq $* | sed s/^[0-9]$/0\&/
+}
+
+alias cdq='cdparanoia -Q'
+function cdp() {
+	test "$1" -gt 1 && (
+		for z in $(seq $* | sed s/^[0-9]$/0\&/); do
+			cdparanoia -z $z $z.wav
+		done
+		cdeject
+			)
+}
+
+function bk() {
+	bkdir="$HOME/BACKUP"
+	n=$(( $( echo $1 | wc -c ) - 1 ))
+	if test / == $( echo $1 | cut -b $n ); then
+		dir="$( echo $1 | cut -b 1-$(($n - 1)) )"
+	else
+		dir="$1"
+	fi
+	
+	if test -d "$dir"; then
+		basename="$bkdir/$dir.`date +%Y-%m-%d`"
+		name="$basename.tgz"
+		if test -e "$name"; then
+			for z in a b c d e f g h i j; do
+				name="$basename$z".tgz
+				if test ! -e "$name"; then
+					_x " tar cfz \"$name\" \"$dir\" "
+					break
+				fi
+			done
+		else
+			_x " tar cfz \"$name\" \"$dir\" "
+		fi
+	else
+		echo bk: $dir: not a directory
+		false
+	fi
+}
+
+function sortdir() {
+	#FIXME: don't work for hidden files/dirs within
+	#TODO: check read-only permission before starting
+	#TODO: recursive
+	local arg
+	if test "$1" == ""; then
+		echo "usage: sortdir [-v] <directory> [<directory> ...]"
+	else
+		while test "$1"; do
+			if test "$1" == "-v"; then
+				arg="-v"
+			elif test -d "$1"; then
+				local tmpdir="_sortdir_tmp"
+				mv $arg "$1" "$tmpdir" && \
+				mkdir $arg "$1" && \
+				mv $arg "$tmpdir"/* "$1" && \
+				rmdir $arg "$tmpdir" \
+				|| return
+			fi
+			shift
+		done
+	fi
+}
+
+
+# TRASH trash
+#which() {
+#	alias | grep "^alias\ $1="
+#	declare -f | /usr/bin/which --all --read-functions $@ 2> /dev/null
+#}
+#export -f which
+
+export LS_COLORS='no=00:fi=00:di=01;31:ln=01;36:pi=40;33:so=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jpg=01;35:*.png=01;35:*.gif=01;35:*.bmp=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.png=01;35:*.mpg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:';
+
+alias tetrinet='tetrinet -noslide -fancy bart9h games03.click21.com.br'
+alias ponte='mplayer mms://200.246.17.121/pontelive'
+
+
+alias u='if test -e *.rar; then rar x *.rar && rm *.rar; elif test -e *.zip; then unzip *.zip && rm *.zip; fi'
+alias k='sudo kbdrate -r 30 -d 200'
+alias black='xsetroot -solid black'
+
+
+#{{{1 shell setup
+
+if test -t 0 ; then
+	stty -ixon -ixoff
+fi
+
+_progress 'shell setup'
+
+#test "$TERM" == "vt100" && export TERM="xterm"
+
+# append on history, instead of overwriting
+shopt -s histappend
+
+# check the window size after each command,
+# updating $LINES and $COLUMNS if necessary
+shopt -s checkwinsize
+
+# vi mode for command prompt editing
+set -o vi
+
+# prohibits overwriting files with '>'.
+# use '>|' to force overwriting.
+set -o noclobber
+
+
+#{{{ ulimit
+
+# core file size          (blocks, -c) 0
+ulimit -c $(( 32 * 1024 ))
+
+# data seg size           (kbytes, -d) unlimited
+ulimit -d $(( 800 * 1024 ))
+
+# file size               (blocks, -f) unlimited
+ulimit -f $(( 20 * 1024*1024 ))
+
+# max locked memory       (kbytes, -l) unlimited
+ulimit -l $(( 512 * 1024 ))
+
+# max memory size         (kbytes, -m) unlimited
+ulimit -m $(( 800 * 1024 ))
+
+# max user processes              (-u) unlimited
+ulimit -u 1024
+
+# virtual memory          (kbytes, -v) unlimited
+ulimit -v $(( 1500 * 1024 ))
+
+# file locks                      (-x) unlimited
+ulimit -x 128
+
+#}}}
+
+#{{{ the command prompt
+
+export HISTCONTROL="ignoreboth"
+PS1='\[\e[0;31m\]\t \[\e[0;33m\][`echo $STY|cut -d . -f 2`.$WINDOW] \u@\h \[\e[0;32m\]\w\n\$\[\e[0m\] '
+export PS1
+export THE_PS1=$PS1
+#export PROMPT_COMMAND='echo -ne "\033]0;[`echo $STY|cut -d . -f 2`.${WINDOW}] ${PWD}\007"'
+#PROMPT_COMMAND='test "$TERM" == "screen" && echo -ne "\ek`basename "$PWD"`/\e\\"'
+
+PROMPT_COMMAND='echo -ne "\033]0;${PWD/$HOME/~}\007"'
+
+if false; then
+
+function titlebar() {
+	test "$TERM" == "screen" || return
+	local s="$*"
+	case "$s" in cd|cd\ *|ls\ *) return ;; esac
+	s="`echo $s | cut -d \  -f 1`"
+	echo -ne "\ek$s\e\\"
+}
+
+if echo "$BASH_VERSION" |  grep -q '^3\.1\..*'; then
+	set -o functrace
+	trap 'titlebar $BASH_COMMAND' DEBUG
+fi
+
+fi
+
+#}}}
+
+
+#}}}
+_progress ''
+# vim: set fdm=marker:%foldclose:
