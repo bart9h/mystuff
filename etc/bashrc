@@ -629,7 +629,7 @@ ulimit -d $(( 800 * 1024 ))
 ulimit -f $(( 20 * 1024*1024 ))
 
 # max locked memory       (kbytes, -l) unlimited
-ulimit -l $(( 512 * 1024 ))
+ulimit -l $(( 512 * 1024 )) 2>/dev/null  #FIXME: check if I can
 
 # max memory size         (kbytes, -m) unlimited
 ulimit -m $(( 800 * 1024 ))
@@ -641,7 +641,9 @@ ulimit -u 1024
 ulimit -v $(( 1500 * 1024 ))
 
 # file locks                      (-x) unlimited
-ulimit -x 128
+if [ $BASH_VERSINFO -ge 3 ]; then
+	ulimit -x 128
+fi
 
 #}}}
 
