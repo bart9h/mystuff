@@ -90,10 +90,13 @@ alias grep='grep --exclude="*.svn-base" --devices=skip'
 
 _progress 'ls'
 
-alias ls='ls -v --color=auto'
+if [ "$TERM" != "dumb" ]; then
+	eval "`dircolors -b`"
+	alias ls='ls --color=auto'
+fi
 
 alias A='a -A'  # single column if fits screen, multi otherwise
-alias D='d -A'  # long listing format
+alias D='d -A'  # ls' long listing format
 alias F='f -A'  # with size/date/time info
 alias Z='Z -A'  # like F, but ordered by date
 
@@ -301,7 +304,9 @@ export ACLOCAL_FLAGS='-I /usr/local/share/aclocal'
 
 # shell
 export INPUTRC="$HOME/.inputrc"
-#export BASH_COMPLETION="/etc/bash_completion"
+if false && [ -f /etc/bash_completion ]; then
+	. /etc/bash_completion
+fi
 
 # aliases
 alias vi='vim'
@@ -348,8 +353,6 @@ alias pr='set +o history; PS1=histoff:$THE_PS1; pushd $PWD > /dev/null'
 alias pn='set -o history; PS1=$THE_PS1; popd'
 
 # utils
-alias utc='ssh barrett@mail.utcoverseas.com.br'
-alias lutc='lftp fish://barrett@mail.utcoverseas.com.br -e cd'
 alias t='source ~/src/scripts/untar'
 alias l='less'
 alias grepsmallnear='find . -type f -maxdepth 2 -size -10k -not -name "* *" | xargs grep'
@@ -428,7 +431,7 @@ function mki() {
 		echo 'rpm sucks'; false; return
 	fi
 
-	cmd="sudo checkinstall --type=$t --nodoc --pkgname=\"$name\" $args $cmd"
+	cmd="sudo checkinstall --type=$t --nodoc --pkgname=\"$name\" $args $CHECKINSTALL_ARGS $cmd"
 	echo "$cmd"
 	read -p "proceed ([y]/n)? " answer
 	test "$answer" == "y" -o "$answer" == "" || return
@@ -651,7 +654,9 @@ export THE_PS1=$PS1
 #export PROMPT_COMMAND='echo -ne "\033]0;[`echo $STY|cut -d . -f 2`.${WINDOW}] ${PWD}\007"'
 #PROMPT_COMMAND='test "$TERM" == "screen" && echo -ne "\ek`basename "$PWD"`/\e\\"'
 
-PROMPT_COMMAND='echo -ne "\033]0;${PWD/$HOME/~}\007"'
+if test -n "$DISPLAY"; then
+	PROMPT_COMMAND='echo -ne "\033]0;${PWD/$HOME/~}\007"'
+fi
 
 if false; then
 
