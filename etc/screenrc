@@ -1,0 +1,19 @@
+# screen
+#term xterm
+termcapinfo xterm*|rxvt* 'ti@:te@'
+termcapinfo xterm 'hs:ts=\E]2;:fs=\007:ds=\E]1;screen\007'
+deflogin on
+defscrollback 5000
+
+altscreen on
+vbell off
+autodetach on
+startup_message off
+shell "-/bin/bash"
+
+#caption always "window %3n (%t) %u%? | system load: %l | %D, %d %M %Y %C%a"
+#caption always "%{Yb} %D %Y-%02m-%02d %0c:%s %{k}|%{G} %l %{k}|%{W} %-w%{+u}%n %t%{-u}%+w"
+#caption always "%{Yb} %Y-%02m-%02d %0c %{k}|%{C} %LD %{k}|%{G} %l %{k}|%{W} %-Lw%{+u}%n %t%{-u}%+Lw"
+#caption always "%{Yb} %Y-%02m-%02d %0c %{k}|%{C} %LD %{k}|%{G} %l %{k}|%{W} %-Lw%{+u}%n %f %t%{-u}%+Lw"
+#hardstatus alwayslastline "%{wk}%H %{wk}%?%-Lw%?%{wb}%n*%f %t%?(%u)%?%{wk}%?%+Lw%? %{dk}%= %{ck}%Y-%m-%d %{ck}%c"
+bind 'w' windowlist -b
