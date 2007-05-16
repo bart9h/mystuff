@@ -1,0 +1,73 @@
+!!
+!!  "Shy" (red variation) - minimalist Fluxbox skin, by bart9h
+!!  
+!!
+!!  Reference:  man fluxstyle
+!!        and:  http://fluxbox.org/docbook/en/html/app-themeref.html
+!!
+! ///1  global
+
+*.justify: center
+*Font: sans-10:bold
+
+
+! ///1  window
+
+window.label.focus: Raised
+*.focus.textColor: #eec
+*.unfocus.textColor: #dcb
+window.label.focus.color: #722
+window.label.unfocus.color: #433
+
+window.button.focus: Raised
+window.button.focus.color: #987
+window.button.*.picColor: #000
+window.button.unfocus.color: #765
+window.button.pressed: Sunken
+window.button.pressed.color: #987
+
+window.handle.focus.color: #722
+window.grip.focus.color: #987
+window.grip.focus: Raised
+
+window.handle.unfocus.color: #433
+window.grip.unfocus.color: #765
+
+window.borderWidth: 1
+window.borderColor: #000
+handleWidth: 4
+
+
+! ///1  toolbar
+
+toolbar.*.color: #433
+toolbar.*.textColor: #dcb
+toolbar.iconbar.*.justify: left
+toolbar.iconbar.focused.color: #722
+toolbar.iconbar.focused.textColor: #eec
+
+
+! ///1  slit
+
+slit: ParentRelative
+slit.borderWidth: 1
+slit.borderColor: #000
+
+
+! ///1  menu
+
+menu.title: Raised
+menu.title.color: #aad
+menu.title.textColor: #000
+
+menu.frame: Sunken
+menu.frame.color: #322
+
+menu.hilite: Raised
+menu.hilite.color: #557
+menu.bullet: triangle
+menu.bullet.position: right
+
+
+! ///1 EOF
+! vim600:fdm=marker:fmr=///,\\\:

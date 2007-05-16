@@ -1,0 +1,347 @@
+# ~/.fluxbox/keys
+# {{{1          misc
+
+# use Ctrl-Alt-Del to reload this file
+Control Mod1 Delete :MacroCmd {Reconfigure} {ExecCommand fbsetbg -l; invalidate}
+
+
+Control Mod1 Mod4 p :MacroCmd { SetResourceValue session.screen0.slit.placement TopCenter 1 } { SetResourceValue session.screen0.slit.direction, Horizontal }
+#{ ExecCommand xrandr -o left }
+
+Control Mod1 Mod4 l :MacroCmd { SetResourceValue session.screen0.slit.placement RightCenter 1 } { SetResourceValue session.screen0.slit.direction Vertical }
+#{ ExecCommand xrandr -o normal }
+
+#	{ ExecCommand $HOME/src/desktop/x-rotate.sh }
+
+
+# {{{1          mouse
+
+OnDesktop Mouse1 :hideMenus
+OnDesktop Mouse2 :workspaceMenu
+OnDesktop Mouse3 :rootMenu
+OnDesktop Mouse4 :nextWorkspace
+OnDesktop Mouse5 :prevWorkspace
+
+
+# {{{1          menu
+
+Control Escape :RootMenu
+Mod4 w :WorkSpaceMenu
+Control Mod1 w :WorkSpaceMenu
+
+
+# {{{1          window operations
+
+Mod4 z :MinimizeWindow
+Mod4 x :MaximizeWindow
+Mod4 c :MaximizeHorizontal
+Mod4 v :MaximizeVertical
+Mod4 b :ShadeWindow
+Mod4 s :StickWindow
+Mod4 BackSpace :Close
+#Mod4 Escape :Close
+
+Mod1 F2  :StickWindow
+Mod1 F3  :MinimizeWindow
+Mod1 F12 :MinimizeWindow
+Mod1 F5  :MaximizeWindow
+Mod1 F6  :MaximizeVertical
+Mod1 F7  :MaximizeHorizontal
+Mod1 F8  :ShadeWindow
+Mod1 F4  :Close
+Control Mod1 F4 :KillWindow
+
+
+# {{{1          window switching
+
+Mod4 j :NextGroup
+Mod4 k :PrevGroup
+Mod1 Tab :NextGroup
+Mod1 Shift Tab :PrevGroup
+
+Mod4 o :NextTab
+Mod4 i :PrevTab
+Mod4 Tab :NextTab
+Mod4 Shift Tab :PrevTab
+Control Mod1 Tab :NextTab
+Control Mod1 Shift Tab :PrevTab
+
+
+# {{{1          composite
+
+Mod4 bracketright :ExecCommand  /home/doti/bin/transset-df -p --inc .1
+Mod4 bracketleft  :ExecCommand  /home/doti/bin/transset-df -p --dec .1
+Mod4 backslash    :ExecCommand  /home/doti/bin/transset-df -p 1
+
+
+# {{{1          workspaces
+
+# next / prev workspace
+Mod4 l :NextWorkspace
+Mod4 h :PrevWorkspace
+Control Mod1 l :NextWorkspace
+Control Mod1 h :PrevWorkspace
+Control Mod1 Right :NextWorkspace
+Control Mod1 Left :PrevWorkspace
+
+# Window (or Ctrl-Alt): jump to workspace
+Mod4 m :Workspace 1
+Mod4 comma :Workspace 2
+Mod4 period :Workspace 3
+Mod4 slash :Workspace 4
+Control Mod1 m :Workspace 1
+Control Mod1 comma :Workspace 2
+Control Mod1 period :Workspace 3
+Control Mod1 slash :Workspace 4
+
+# Window (ou Ctrl-Alt) + Shift: send window to workspace
+Mod4 Shift m :SendToWorkspace 1
+Mod4 Shift comma :SendToWorkspace 2
+Mod4 Shift period :SendToWorkspace 3
+Mod4 Shift slash :SendToWorkspace 4
+Control Mod1 Shift m :SendToWorkspace 1
+Control Mod1 Shift comma :SendToWorkspace 2
+Control Mod1 Shift period :SendToWorkspace 3
+Control Mod1 Shift slash :SendToWorkspace 4
+
+
+# {{{1          window move / resize
+
+# shift + keypad = move window
+#  alt  + keypad = resize window
+# use control to move/resize slower
+
+#Mod4 Home  :MoveTo  0  0
+#TODO: hack fluxbox to support these:
+#Mod4 KP_End   :MoveTo  0 -0
+#Mod4 KP_Prior :MoveTo -0  0
+#Mod4 KP_Next  :MoveTo -0 -0
+
+Shift KP_Right :MoveRight  10
+Shift KP_Left  :MoveLeft   10
+Shift KP_Up    :MoveUp     10
+Shift KP_Down  :MoveDown   10
+
+Mod1 KP_Right :Resize  1  0
+Mod1 KP_Left  :Resize -1  0
+Mod1 KP_Up    :Resize  0 -1
+Mod1 KP_Down  :Resize  0  1
+
+Mod1 Shift KP_Right :Resize  8  0
+Mod1 Shift KP_Left  :Resize -8  0
+Mod1 Shift KP_Up    :Resize  0 -8
+Mod1 Shift KP_Down  :Resize  0  8
+
+Mod1 Shift Control KP_Right :Resize  64   0
+Mod1 Shift Control KP_Left  :Resize -64   0
+Mod1 Shift Control KP_Up    :Resize   0 -64
+Mod1 Shift Control KP_Down  :Resize   0  64
+
+# xwit as workaround for pointer changing focus w/o moving (the window moves), in mousefocus mode
+#Shift KP_Right :MacroCmd {ExecCommand xwit -rwarp  10   0} {Move  10   0}
+#Shift KP_Left  :MacroCmd {ExecCommand xwit -rwarp -10   0} {Move -10   0}
+#Shift KP_Up    :MacroCmd {ExecCommand xwit -rwarp   0 -10} {Move   0 -10}
+#Shift KP_Down  :MacroCmd {ExecCommand xwit -rwarp   0  10} {Move   0  10}
+
+Control Shift KP_Right :Move 1 0
+Control Shift KP_Left :Move -1 0
+Control Shift KP_Up :Move 0 -1
+Control Shift KP_Down :Move 0 1
+
+
+# {{{1          move pointer
+
+# move pointer to top-left corner (0, 0)
+Mod4 KP_7 :ExecCommand xwit -rwarp -9999 -9999
+Mod4 KP_5: ExecCommand xwit -rwarp -9999 -9999; xwit -rwarp 1300 800
+
+# move pointer around
+Mod4 Right :ExecCommand xwit -rwarp  40   0
+Mod4 Left  :ExecCommand xwit -rwarp -40   0
+Mod4 Up    :ExecCommand xwit -rwarp   0 -40
+Mod4 Down  :ExecCommand xwit -rwarp   0  40
+Control Mod4 Right :ExecCommand xwit -rwarp  4  0
+Control Mod4 Left  :ExecCommand xwit -rwarp -4  0
+Control Mod4 Up    :ExecCommand xwit -rwarp  0 -4
+Control Mod4 Down  :ExecCommand xwit -rwarp  0  4
+
+Control Shift Mod4 Right :ExecCommand xwit -rwarp  1  0
+Control Shift Mod4 Left  :ExecCommand xwit -rwarp -1  0
+Control Shift Mod4 Up    :ExecCommand xwit -rwarp  0 -1
+Control Shift Mod4 Down  :ExecCommand xwit -rwarp  0  1
+
+
+# {{{1          programs
+
+Mod1 F2 :ExecCommand fbrun
+Mod4 r  :ExecCommand fbrun
+
+Mod4 space :ExecCommand sleep 1s && xset dpms force standby
+Control Mod1 space :ExecCommand sleep 1s && xset dpms force standby
+Mod4 Return :ExecCommand xterm
+Control Mod1 Return :ExecCommand xterm
+Mod4 t :ExecCommand xterm
+Control Mod1 Return :ExecCommand xterm
+
+#Mod4 a :ExecCommand sh -c 'echo "mainwindow toggle" | nc -w 1 localhost 3000'
+#Mod4 i :ExecCommand sh -c 'echo "show"              | nc -w 1 localhost 3000'
+Mod4 n :ExecCommand dk limit toggle
+Control Mod4 n :ToggleCmd {ExecCommand dk limit 2 6}  {ExecCommand dk limit high}
+Mod4 n :ExecCommand dk limit toggle
+Control Mod1 n :ExecCommand dk limit toggle
+Control Mod4 Mod1 n :ExecCommand dk limit show
+
+Mod4 F12 :ExecCommand ~/bin/shot
+Control Mod4 F12 :ExecCommand ~/bin/shot -n
+None 161 :ExecCommand xcalc
+
+Mod4 h :ExecCommand ~/src/scripts/fluxbox_keys_help.pl
+
+Mod4 grave :ExecCommand ~/src/desktop/switch-kbmap
+Mod4 apostrophe :ExecCommand ~/src/desktop/switch-kbmap
+
+# email 236
+#Mod4 None :ExecCommand thunderbird
+
+# utils
+#Mod1 P :ExecCommand pause-scp
+Mod1 Control Up :ExecCommand gamma + .2
+Mod1 Control Down :ExecCommand gamma - .2
+#Mod1 Control a :ExecCommand aumix -v +2
+#Mod1 Control z :ExecCommand aumix -v -2
+#Mod4 Escape :ExecCommand xmodmap -e 'remove Lock = Caps_Lock' && xmodmap -e 'keysym Caps_Lock = Escape' && osd Caps Lock is now mapped to Escape
+
+
+# {{{1          music
+
+# play
+Mod4 162 :ExecCommand xmms_remote -0
+None 162 :ExecCommand xmms_remote -t
+# stop
+None 164 :ExecCommand xmms_remote -s
+Control Mod4 v :ExecCommand xmms_remote -s
+# <<   >>
+None 144 :ExecCommand xmms_remote -r
+None 153 :ExecCommand xmms_remote -f
+
+Control Mod4 z :ExecCommand xmms2 prev
+Control Mod4 x :ExecCommand xmms2 play
+Control Mod4 c :ExecCommand xmms2 pause
+Control Mod4 v :ExecCommand xmms2 stop
+Control Mod4 b :ExecCommand xmms2 next
+#Control Mod4 k :ExecCommand xmms_remote -f
+#Control Mod4 j :ExecCommand xmms_remote -f
+
+
+# media 129
+None 129 :ExecCommand rox /home/media
+
+# lua 223
+None 223 :ExecCommand rox /home/media/musicas
+
+None 223 :ToggleCmd {ExecCommand /home/doti/bin/osd putz} {ExecCommand /home/doti/bin/osd blah}
+
+# volume wheel
+#None 176 :ExecCommand aumix -v +4 -w +4
+#None 174 :ExecCommand aumix -v -4 -w -4
+None 176 :ToggleCmd {ExecCommand amixer sset PCM 2+} {ExecCommand amixer sset Master 2+}
+None 174 :ToggleCmd {ExecCommand amixer sset PCM 2-} {ExecCommand amixer sset Master 2-}
+
+# mute
+None 160 :ExecCommand aumix -v 0
+
+Control Mod1 Prior :ExecCommand amixer sset PCM 2+; amixer sset Master 2+
+Control Mod1 Next  :ExecCommand amixer sset PCM 2-; amixer sset Master 2-
+
+
+
+# {{{1          command reference (deprecated)
+#
+# source: /home/sft/desktop/fluxbox/doc/asciidoc/fluxbox.txt
+#
+# Window Manager Commands
+# ~~~~~~~~~~~~~~~~~~~~~~~
+# - Restart <argument>
+# - Quit
+# - Reconfigure
+# - SetStyle <argument>
+# - ExecCommand <argument>
+# 
+# Currently Focused Window Commands
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# - Minimize
+# - MinimizeWindow
+# - Iconify
+# - Maximize
+# - MaximizeWindow
+# - MaximizeHorizontal
+# - MaximizeVertical
+# - ResizeTo <width> <height>
+# - Resize <delta-width> <delta-height>
+# - ResizeHorizontal <delta-width>
+# - ResizeVertical <delta-height>
+# - MoveTo <x> <y>
+# - Move <delta-x> <delta-y>
+# - MoveRight <delta-x>
+# - MoveLeft <delta-x>
+# - MoveUp <delta-y>
+# - MoveDown <delta-y>
+# - Raise
+# - Lower
+# - Close
+# - Shade
+# - ShadeWindow
+# - Stick
+# - StickWindow
+# - ToggleDecor
+# - TakeToWorkspace <number>
+# - TakeToNextWorkspace <offset>
+# - TakeToPrevWorkspace <offset>
+# - SendToWorkspace <number>
+# - SendToNextWorkspace <offset>
+# - SendToPrevWorkspace <offset>
+# - KillWindow
+# - NextTab
+# - PrevTab
+# - MoveTabLeft
+# - MoveTabRight
+# - DetachClient
+# 
+# Workspace Commands
+# ~~~~~~~~~~~~~~~~~~
+# - NextWorkspace
+# - PrevWorkspace
+# - RightWorkspace <by-number>
+# - LeftWorkspace <by-number>
+# - Workspace <number>
+# - NextWindow <bitmask>
+# - PrevWindow <bitmask>
+# - NextGroup <by-number>
+# - PrevGroup <by-number>
+# - FocusLeft
+# - FocusRight
+# - FocusUp
+# - FocusDown
+# - ArrangeWindows
+# - ShowDesktop (Iconifies all windows)
+# - Deiconify all|allworkspace|last|lastworkspace current|origin|originquiet
+# - RootMenu
+# - WorkspaceMenu
+# - WindowMenu
+# - SetWorkspaceName <name>
+# 
+# Special Commands
+# ~~~~~~~~~~~~~~~~
+# - MacroCmd
+# - ToggleCmd
+# - ReloadStyle
+# - SetResourceValue <resourcename> <resource> value
+# - BindKey <key><value>: <action>
+# - KeyMode <keymode name> <return key sequence>
+# - SetModKey <modifier>
+#
+
+
+#}}}
+# vim:set fdm=marker:%foldc!:
+
