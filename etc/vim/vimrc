@@ -1,0 +1,250 @@
+" ~barrett/.vimrc
+" {{{1 basico
+
+set nocompatible
+set noswapfile
+set noignorecase
+
+
+" {{{1 behaviour
+
+set backspace="indent,start"
+set bs=2
+set wildmenu
+
+
+" {{{1 tab
+
+set tabstop=4
+set shiftwidth=4
+set nosmarttab
+set softtabstop=0
+
+
+" {{{1 ident
+
+set linebreak  " no horizontal scroll
+set autoindent
+"set cindent
+set smartindent
+inoremap # X#
+  " do not ident # to the first column
+
+
+" {{{1 options
+
+set hlsearch
+set wildmenu
+set visualbell t_vb=
+if version >= 700
+	let loaded_matchparen=1
+	set diffopt+=vertical
+endif
+
+set grepprg=grep\ -nH\ $*
+filetype indent on
+let g:netrw_sort_sequence="[\/]$,*,.bak$,.o$,.swp$,.obj$"
+
+
+" {{{1 filetype
+
+autocmd! FileType c,cpp setlocal cindent
+autocmd! FileType tex setlocal makeprg=pdflatex\ %\ &&\ xpdf\ -remote\ vim\ -reload
+autocmd! FileType perl FileTypePerl
+command! FileTypePerl setlocal makeprg=perl\ -c\ %
+\	| setlocal keywordprg=perldoc\ -f
+\	| setlocal cindent
+\	| setlocal errorformat=
+\%-G%.%#had\ compilation\ errors.,
+\%-G%.%#syntax\ OK,
+\%m\ at\ %f\ line\ %l.,
+\%+A%.%#\ at\ %f\ line\ %l\\,%.%#,
+\%+C%.%#
+
+"autocmd! BufEnter * resize
+autocmd! BufWritePost ~/.vimrc,$HOME/src/etc/vim/vimrc source ~/.vimrc
+autocmd! BufWritePost ~/.vim/colors/my-elflord.vim,$HOME/src/etc/vim/colors/my-elflord.vim colo my-elflord
+"autocmd! BufWritePost /etc/apache2/httpd.conf !sudo sh /etc/rc.d/rc.httpd restart
+
+"{{{2 vim -b : edit binary using xxd-format!
+augroup Binary
+au!
+au BufReadPre  *.bin let &bin=1
+au BufReadPost *.bin if &bin | %!xxd
+au BufReadPost *.bin set ft=xxd | endif
+
+au BufWritePre *.bin if &bin | %!xxd -r
+au BufWritePre *.bin endif
+au BufWritePost *.bin if &bin | %!xxd
+au BufWritePost *.bin set nomod | endif
+augroup END
+
+
+" {{{1 aparencia
+
+syntax enable
+set nonumber
+set ruler
+set winminheight=0
+set hlsearch
+set scrolloff=5
+
+" nao pisca sobre ([{pares}])
+let loaded_matchparen=1
+
+" pinta $variavels->{complexas} como variavel
+let perl_extended_vars=1
+
+if has("gui_running")
+	set guioptions -=T
+"	set guioptions -=m
+	set guifont=Monospace\ 16
+"	set guifont=Bitstream\ Vera\ Sans\ Mono\ 11
+"	set guifont=Lucida\ Sans\ Typewriter:style=Bold
+"	hi Normal guifg=gray guibg=#202030
+	set bg=light
+	colo blue
+else
+"	set background=light
+"	set background=dark
+	set bg=dark
+	colorscheme my-elflord
+	hi Search ctermbg=magenta guibg=#b000b0
+endif
+
+" hi link cComment Comment
+" "hi link PerlComment Comment
+" "hi PerlIdentifier ctermfg=white guifg=#ffffff
+" hi PerlComment ctermfg=red guifg=#ff0000
+" hi Comment ctermfg=cyan guifg=#a0c0f0
+
+"set statusline=%F%m%r%h%w\ [FORMAT=%{&ff}]\ [TYPE=%Y]\ [ASCII=\%03.3b]\ [HEX=\%02.2B]\ [POS=%04l,%04v][%p%%]\ [LEN=%L]
+"set laststatus=2 " always show the status line
+
+
+" {{{1 hotkeys
+
+" search
+nmap <C-c> :!cd "`dirname "%:p"`"; grep "\<<cword>\>" *.[cChd] *.cpp *.cxx *.pl *.pm 2> /dev/null; true<CR>
+
+" save
+if has("gui_running")  " Ctrl-S don't work on terminals
+	nmap <C-s> :update<CR>
+endif
+
+" navigate through long lines
+nmap <Down> gj
+nmap <Up> gk
+imap <Down> <ESC>gja
+imap <Up> <ESC>gka
+
+" rotate windows
+nmap <C-k> <C-W>r<C-W>k<C-w>_
+nmap <C-j> <C-W>j<C-W>R<C-w>_
+imap <C-k> <ESC><C-k>
+imap <C-j> <ESC><C-j>
+
+" switch windows
+nmap <C-u> :tabp<CR>
+nmap <C-i> :tabn<CR>
+
+" resize window
+nmap <C-kPlus> <C-W>+
+nmap <C-kMinus> <C-W>-
+nmap <+> <C-W>+
+nmap <-> <C-W>-
+
+" make
+nmap <C-n> :wall<CR>:make<CR>
+"nmap <C-n> :wall<CR>:new<CR>:make<CR>
+"TODO: se terminar sem arquivo carregado, :q<CR>
+imap <C-n> <ESC><C-n>
+
+" quit
+nmap <C-x> :q<CR>
+imap <C-x> <ESC>:q<CR>
+
+nmap M :Man <C-R><C-W><CR>
+
+
+" {{{1 commands
+
+command! -bar -nargs=1 DoMan %!/usr/bin/man -7 -a -S 3:2:1:5:8:4:7:6:9 -P cat <args>
+command! -bar -nargs=1 Man
+\   new
+\|  DoMan <args>
+\|  set filetype=man
+\|  goto 1
+\|  set buftype=nofile
+
+"\|  %s/.//g
+
+command! ToHtml
+\ HtmlToAcento
+\| %s/<[^>]*>//g
+\| %s/&nbsp;/\ /ge
+\| %s/&gt;/>/ge
+\| %s/&lt;/</ge
+"\| %s/&\(.\)[a-z]*;/\1/ge
+
+command! AcentoToHtml
+\  %s/\~a/\&atilde;/ge  |  %s/\~A/\&Atilde;/ge
+\| %s/\~o/\&otilde;/ge  |  %s/\~O/\&Otilde;/ge
+\| %s/\~n/\&ntilde;/ge  |  %s/\~N/\&Ntilde;/ge
+\| %s/\`a/\&agrave;/ge  |  %s/\`A/\&Agrave;/ge
+\| %s/\^a/\&acirc;/ge   |  %s/\^A/\&Acirc;/ge 
+\| %s/\^e/\&ecirc;/ge   |  %s/\^E/\&Ecirc;/ge 
+\| %s/\^o/\&ocirc;/ge   |  %s/\^O/\&Ocirc;/ge 
+\| %s/\'a/\&aacute;/ge  |  %s/\'A/\&Aacute;/ge
+\| %s/\'e/\&eacute;/ge  |  %s/\'E/\&Eacute;/ge
+\| %s/\'i/\&iacute;/ge  |  %s/\'I/\&Iacute;/ge
+\| %s/\'o/\&oacute;/ge  |  %s/\'O/\&Oacute;/ge
+\| %s/\'u/\&uacute;/ge  |  %s/\'U/\&Uacute;/ge
+\| %s/\'c/\&ccedil;/ge  |  %s/\'C/\&Ccedil;/ge
+
+command! HtmlToAcento
+\  %s/&atilde;/\~a/ge  |  %s/&Atilde;/\~A/ge
+\| %s/&otilde;/\~o/ge  |  %s/&Otilde;/\~O/ge
+\| %s/&ntilde;/\~n/ge  |  %s/&Ntilde;/\~N/ge
+\| %s/&agrave;/\`a/ge  |  %s/&Agrave;/\`A/ge
+\| %s/&acirc;/\^a/ge   |  %s/&Acirc;/\^A/ge 
+\| %s/&ecirc;/\^e/ge   |  %s/&Ecirc;/\^E/ge 
+\| %s/&ocirc;/\^o/ge   |  %s/&Ocirc;/\^O/ge 
+\| %s/&aacute;/\'a/ge  |  %s/&Aacute;/\'A/ge
+\| %s/&eacute;/\'e/ge  |  %s/&Eacute;/\'E/ge
+\| %s/&iacute;/\'i/ge  |  %s/&Iacute;/\'I/ge
+\| %s/&oacute;/\'o/ge  |  %s/&Oacute;/\'O/ge
+\| %s/&uacute;/\'u/ge  |  %s/&Uacute;/\'U/ge
+\| %s/&ccedil;/\'c/ge  |  %s/&Ccedil;/\'C/ge
+
+"command! Tex
+
+
+" {{{1 deprecated
+
+"function! InsertTabWrapper(direction)
+"	let col = col('.') - 1
+"	if !col || getline('.')[col - 1] !~ '\k'
+"		return "\<tab>"
+"	elseif "backward" == a:direction
+"		return "\<c-p>"
+"	else
+"		return "\<c-n>"
+"	endif
+"endfunction
+
+"inoremap <tab> <c-r>=InsertTabWrapper ("forward")<cr>
+"inoremap <s-tab> <c-r>=InsertTabWrapper ("backward")<cr>
+
+"so ~/minibufexpl.vim
+"let g:miniBufExplMapCTabSwitchBuffs = 1
+"let g:explVertical=1
+"let g:explWinSize=35
+
+"set restorescreen
+"set t_ti=7[r[?47h t_te=[?47l8
+"set t_ti=1
+"set t_te=1
+
+"}}}
+" vim: set fdm=marker:%foldclose:
