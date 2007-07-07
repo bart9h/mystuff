@@ -1,6 +1,6 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
 test -z "$PS1" && return
-#{{{1 quick edit&reload this file
+#{1 quick edit&reload this file
 
 unalias -a
 alias ea='vi ~/.bashrc && source ~/.bashrc'
@@ -9,7 +9,7 @@ function _progress() { # for profiling and debugging
 	true #printf "\r%-*s" $COLUMNS "$*"
 }
 
-#{{{1 path
+#{1 path
 
 function add_to_path() {
 	local end='tail'
@@ -49,13 +49,13 @@ add_to_path \
 #		-h "/usr/local/lib/cw" \
 
 
-#{{{1          aliases and functions that mask existing programs
+#{1          aliases and functions that mask existing programs
 
 alias cp='cp -i --preserve=timestamps'
 
 alias mv='mv -i'
 
-function rm() { #{{{
+function rm() { #{
 	#set +o functrace
 	file_count=0
 	for i in "$@"; do
@@ -77,7 +77,7 @@ function rm() { #{{{
 		test "$answer" == "y" -o "$answer" == "" || return
 	fi
 	/bin/rm "$@"
-} #}}}
+} #}
 
 alias xxd='xxd -c $(( (($COLUMNS - 10)/7)*2 ))'
 alias wget='wget -c --timeout=15 --wait=0 --tries=0'
@@ -86,7 +86,7 @@ alias grep='grep --exclude="*.svn-base" --devices=skip'
 #alias tar='tar --exclude=.svn --exclude=CVS'
 
 
-#{{{1 ls
+#{1 ls
 
 _progress 'ls'
 
@@ -125,7 +125,7 @@ alias z='f -rt'
 #alias dz='du -shc * | grep -v "^0" | grep "[0-9][MG]"'
 
 
-#{{{1          info
+#{1          info
 
 function show() {
 	case "$1" in
@@ -145,16 +145,16 @@ function show() {
 }
 
 
-#{{{1 abbreviations
+#{1 abbreviations
 
 _progress 'abbreviations'
 
 alias apt='sudo aptitude'
 
 
-#{{{1 frontend functions
+#{1 frontend functions
 
-#{{{ screen
+#{ screen
 
 function s() {
 	which screen >/dev/null || return
@@ -180,9 +180,9 @@ function s() {
 	fi
 }
 
-#}}} screen
+#} screen
 
-#{{{ xmms2
+#{ xmms2
 # With no args, list;
 # if args are files or dirs, add (or radd) them;
 # else pass args to xmms2.
@@ -211,9 +211,9 @@ function x()
 	fi
 }
 
-#}}} xmms2
+#} xmms2
 
-#{{{  version control
+#{  version control
 
 _progress 'version control frontend'
 
@@ -222,22 +222,23 @@ alias svnbk='svnadmin dump /home/svn | bzip2 -9 > bart.svndump.`date +%Y-%m-%d`.
 function svndiff() {
 	svn diff $args \
 		--diff-cmd /usr/bin/diff -x \
-		"-U 5 -rpbB --ignore-all-space --ignore-blank-lines" "$@"
+		"-U 5 -rpbB --ignore-all-space --ignore-blank-lines" \
+		"$@"
 }
 function svndif_tmp() {
 	local args
 	if test "$1" == "-h"; then
-		args="-r BASE:HEAD"
 		shift
+		args="-r BASE:HEAD"
 	fi
 	tmp=`mktemp /tmp/svndif.XXXXXX`
-	svndiff "$@" >| "$tmp" || return
-	test -s "$tmp" && echo "$tmp" || rm "$tmp"
+	svndiff $args "$@" >| "$tmp" || return
+	test -s "$tmp" && echo "$tmp" || /bin/rm "$tmp"
 }
 function svndif() {
 	tmp=`svndif_tmp "$@"`; test "$tmp" || return
 	vim +'set filetype=diff' +'set nomodified' "$tmp"
-	rm "$tmp"
+	/bin/rm "$tmp"
 }
 
 function svnci() {
@@ -274,12 +275,12 @@ function update() {
 #export CVS_RSH=ssh
 #export CVSROOT=:ext:9h:/home/9hells/cvsroot
 
-#}}} version control
+#} version control
 
 #___
-#}}}
+#}
 #TODO: organizar o resto abaixo..
-#{{{1 software setup
+#{1 software setup
 
 _progress 'software setup'
 
@@ -327,7 +328,7 @@ function q4() {
 }
 
 
-#{{{1          util
+#{1          util
 
 _progress 'util'
 
@@ -344,13 +345,11 @@ function lddr() {
 }
 
 
-#{{{1          misc
+#{1          misc
 
 _progress 'misc'
 
 alias ph='vi ~/src/txt/phonebook.txt'
-alias pr='set +o history; PS1=histoff:$THE_PS1; pushd $PWD > /dev/null'
-alias pn='set -o history; PS1=$THE_PS1; popd'
 
 # utils
 alias t='source ~/src/scripts/untar'
@@ -592,7 +591,7 @@ alias k='sudo kbdrate -r 30 -d 200'
 alias black='xsetroot -solid black'
 
 
-#{{{1 shell setup
+#{1 shell setup
 
 if test -t 0 ; then
 	stty -ixon -ixoff
@@ -617,7 +616,7 @@ set -o vi
 set -o noclobber
 
 
-#{{{ ulimit
+#{ ulimit
 
 # core file size          (blocks, -c) 0
 ulimit -c $(( 32 * 1024 ))
@@ -645,9 +644,9 @@ if [ $BASH_VERSINFO -ge 3 ]; then
 	ulimit -x 128
 fi
 
-#}}}
+#}
 
-#{{{ the command prompt
+#{ the command prompt
 
 export HISTCONTROL="ignoreboth"
 PS1='\[\e[0;31m\]\t \[\e[0;33m\][`echo $STY|cut -d . -f 2`.$WINDOW] \u@\h \[\e[0;32m\]\w\n\$\[\e[0m\] '
@@ -677,16 +676,27 @@ fi
 
 fi
 
-#}}}
+#}
 
 
-#{{{1 host-specific
+#{1 host-specific
 
 if test -r "$HOME/.bashrc_local"; then
 	source "$HOME/.bashrc_local"
 fi
 
+uncommited=""
+for dir in $working_dirs; do
+	if svn st $dir|grep '^M'|head -1>/dev/null; then
+		uncommited="$uncommited $dir"
+		break
+	fi
+done
+if test -n "$uncommited"; then
+	echo "uncommited: $uncommited"
+fi
+unset uncommited
 
-#}}}
+#}
 _progress ''
-# vim: set fdm=marker:%foldclose:
+# vim600:foldmethod=marker:foldmarker=#{,#}:
