@@ -55,6 +55,11 @@ my %engines = (
 		args => [ '-l',  '--linux' ],
 		url => 'http://www.google.com/linux?q=',
 	},
+	imdb => {
+		description => 'Wikipedia (portuguese)',
+		args => [ '-i', '--imdb' ],
+		url => 'http://www.imdb.com/find?s=all&q=',
+	},
 	img => {
 		description => 'Google Images',
 		args => [ '-img', '--image' ],
