@@ -2,9 +2,7 @@
 use strict;
 use warnings;
 
-######################################################################
-# <preferences>
-
+#{#  <preferences>
 
 # Unless set by --browser argument, or WEB_BROWSER environg variable,
 # the first one avaiable from the list bellow will be used.
@@ -12,8 +10,9 @@ my @browsers = qw/ links elinks lynx firefox opera /;
 
 
 # Definitions of search engines.
-# The hash key doubles as the WEB_ENGINE environt variable,
-# or the parameter implicit by the program name.
+# The engine can be selected by arguments,
+# by the WEB_ENGINE environment variable,
+# or by the basename of this program.
 my %engines = (
 	cpan => {
 		description => 'CPAN module',
@@ -89,21 +88,20 @@ my %engines = (
 	wiki => {
 		description => 'Wikipedia (english)',
 		args => [ '-w',  '--wikipedia' ],
-		url => 'http://en.wikipedia.org/wiki/',
+		url => 'http://en.wikipedia.org/wiki/',  # felling lucky
 	},
 	wpt => {
 		description => 'Wikipedia (portuguese)',
 		args => [ '-wpt', '--wikipedia-pt' ],
-		url => 'http://pt.wikipedia.org/wiki/',
+		url => 'http://pt.wikipedia.org/wiki/',  # felling lucky
 	},
 );
 
-# </preferences>
-######################################################################
+#}#  </preferences>
 
 
 sub usage()
-{
+{#
 	print "Arguments:\n";
 	foreach(sort keys %engines) {
 		printf "\t%s\n\t\t%s  [%s]\n",
@@ -128,11 +126,11 @@ If not specified, the first one avaiable on this list will be used:
 EOF
 	printf "%s\n\n", join ', ', @browsers;
 	exit 1;
-}
+}#
 
 
 sub main()
-{
+{#
 	# parameters
 	my $engine;
 	my $browser_name;
@@ -146,9 +144,9 @@ sub main()
 		}
 	}
 
-	# interpret parameters
 	my $check_args = 1;
-	while(@ARGV) {
+	while(@ARGV)
+	{# interpret parameters
 		my $arg = shift @ARGV;
 
 		my $term;
@@ -175,12 +173,13 @@ sub main()
 			}
 			push @query, $arg;
 		}
-	}
+	}#
 
-	usage() unless @query;
+	usage()  unless @query;
 
-	# check engine definition
-	unless(defined $engine) {
+	unless(defined $engine)
+	{# check engine definition
+
 		if(exists $ENV{WEB_ENGINE}) {
 			$engine = $ENV{WEB_ENGINE};
 		}
@@ -188,12 +187,12 @@ sub main()
 			$engine = `basename $0 .pl`;
 		}
 		exists $engines{$engine} or $engine = 'google';
-	}
+	}#
 
 
-	# check browser binary
 	my $browser_bin;
-	unless(defined $browser_name) {
+	unless(defined $browser_name)
+	{# check browser binary
 		if($ENV{WEB_BROWSER}) {
 			$browser_bin = `which "$ENV{WEB_BROWSER}"`
 				or die;
@@ -207,7 +206,7 @@ sub main()
 				die "couldn't find web browser";
 			}
 		}
-	}
+	}#
 	unless(defined $browser_bin) {
 		$browser_bin = `which $browser_name`
 			or die;
@@ -217,7 +216,9 @@ sub main()
 
 	# call the browser
 	exec $browser_bin, $engines{$engine}->{url}.(join '%20', @query);
-}
+}#
+
 
 main();
 
+# vim600:fdm=marker:fmr={#,}#:
