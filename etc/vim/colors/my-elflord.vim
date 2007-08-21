@@ -27,6 +27,7 @@ hi CursorLine    ctermfg=Red ctermbg=Blue
 hi CursorColumn	ctermfg=Red ctermbg=Blue
 hi LineNr ctermfg=DarkRed
 
+hi Search ctermbg=magenta guibg=#b000b0
 hi Folded ctermbg=none
 
 

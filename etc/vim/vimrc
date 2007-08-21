@@ -11,6 +11,7 @@ set noignorecase
 set backspace="indent,start"
 set bs=2
 set wildmenu
+set tildeop
 
 
 " {{{1 tab
@@ -29,6 +30,7 @@ set autoindent
 set smartindent
 inoremap # X#
   " do not ident # to the first column
+set cinoptions=>s,e0,n0,f0,{0,}0,^0,:0,=s,l0,b0,g0,hs,ps,ts,is,+s,c3,C0,/0,(2s,us,U0,w0,W0,m0,j0,)20,*60
 
 
 " {{{1 options
@@ -63,7 +65,7 @@ command! FileTypePerl setlocal makeprg=perl\ -c\ %
 
 "autocmd! BufEnter * resize
 autocmd! BufWritePost ~/.vimrc,$HOME/src/etc/vim/vimrc source ~/.vimrc
-autocmd! BufWritePost ~/.vim/colors/my-elflord.vim,$HOME/src/etc/vim/colors/my-elflord.vim colo my-elflord
+"autocmd! BufWritePost ~/.vim/colors/my-elflord.vim,$HOME/src/etc/vim/colors/my-elflord.vim colo my-elflord
 "autocmd! BufWritePost /etc/apache2/httpd.conf !sudo sh /etc/rc.d/rc.httpd restart
 
 "{{{2 vim -b : edit binary using xxd-format!
@@ -83,11 +85,11 @@ augroup END
 " {{{1 aparencia
 
 syntax enable
-set nonumber
 set ruler
 set winminheight=0
 set hlsearch
 set scrolloff=5
+set foldmethod=syntax
 
 " nao pisca sobre ([{pares}])
 let loaded_matchparen=1
@@ -98,18 +100,14 @@ let perl_extended_vars=1
 if has("gui_running")
 	set guioptions -=T
 "	set guioptions -=m
-	set guifont=Monospace\ 16
-"	set guifont=Bitstream\ Vera\ Sans\ Mono\ 11
+"	set guifont=Monospace\ 12
+	set guifont=Bitstream\ Vera\ Sans\ Mono\ 11
 "	set guifont=Lucida\ Sans\ Typewriter:style=Bold
 "	hi Normal guifg=gray guibg=#202030
 	set bg=light
 	colo blue
 else
-"	set background=light
-"	set background=dark
-	set bg=dark
-	colorscheme my-elflord
-	hi Search ctermbg=magenta guibg=#b000b0
+	set background=dark
 endif
 
 " hi link cComment Comment
@@ -156,12 +154,12 @@ nmap <-> <C-W>-
 
 " make
 nmap <C-n> :wall<CR>:make<CR>
-"nmap <C-n> :wall<CR>:new<CR>:make<CR>
+"nmap <C-n> :update<CR>:make %:r.o<CR>
 "TODO: se terminar sem arquivo carregado, :q<CR>
 imap <C-n> <ESC><C-n>
 
 " quit
-nmap <C-x> :q<CR>
+nmap <C-x> :q<CR>:resize<CR>
 imap <C-x> <ESC>:q<CR>
 
 nmap M :Man <C-R><C-W><CR>
@@ -246,5 +244,13 @@ command! HtmlToAcento
 "set t_ti=1
 "set t_te=1
 
+
+" {{{1 load local settings
+
+if filereadable("~/.vimrc_local")
+	source ~/.vimrc_local
+endif
+
+
 "}}}
-" vim: set fdm=marker:%foldclose:
+" vim600:fdm=marker:
