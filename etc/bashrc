@@ -247,6 +247,27 @@ function svnci() {
 	/bin/rm "$tmp"
 }
 
+function ci() {
+	if test -d .svn; then
+		svnci "$@"
+	elif test -d CVS; then
+		echo 'nao sei fazer CVS ainda'
+	else # supoe git
+		tmp=`mktemp /tmp/gitdif.XXXXXX` || return
+		git-diff "$@" >| "$tmp" || return
+		if test -s "$tmp"; then
+			tmp2=`mktemp /tmp/gitdif.XXXXXX` || return
+			echo "#!/bin/sh" >> $tmp2 || return
+			echo "vim -c \"set filetype=diff\" -c \"set nofen\" -o \"$tmp\" \"\$@\"" >> $tmp2 || return
+			chmod +x $tmp2 || return
+			test "$*" && quem="$@" || quem=-a
+			EDITOR="$tmp2" git-commit $quem
+			rm "$tmp2"
+		fi
+		rm "$tmp"
+	fi
+}
+
 function svnst() {
 	svn st "$@" | grep -v '^\?'
 }
