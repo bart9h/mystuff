@@ -4,10 +4,9 @@
 
 echo '# ~/.xinitrc'
 
-#xcompmgr -c &
 
 echo '# session setup'
-unset LANG
+#unset LANG
 echo $PATH | grep -q $HOME/bin || export PATH=$HOME/bin:$PATH
 export SDL_AUDIODRIVER='alsa'
 export GTK_IM_MODULE='cedilla'
@@ -16,12 +15,17 @@ export PRINTER='HP-C3180'
 
 #osd '~/.xinitrc' &
 
+#setxkbmap -variant intl
 xmodmap -e 'remove Lock = Caps_Lock' -e 'keysym Caps_Lock = Escape'
 #xhost localhost
 
 if false; then
 	xterm &
-	exec fluxbox
+	if ( which fluxbox >/dev/null ); then
+		exec fluxbox
+	else
+		exec twm
+	fi
 fi
 
 #function m2s() { echo "$1 60 \* p" | dc | cut -d . -f 1 ; }
@@ -37,27 +41,47 @@ xset dpms 1200 2400 3600
 #xmodmap -e "pointer = 1 2 3 6 7 4 5"
 #aumix -L
 
-if echo $DISPLAY | grep -q ':0'; then
-	echo '# startup programs'
-	#( sleep 3s; exec tilda )&
-	if true; then # landscape
-		#( while sleep 1s; do gkrellm -w; done )&
-		xtoolwait gkrellm -w
-	else
-		rotation=$( cat $HOME/var/xrandr-rotation )
-		test -n "$rotation" || rotation="normal"
-		xrandr -o "$rotation"
-		xtoolwait wmhdplop -t -d /dev/sda
-		xtoolwait wmcalclock -24 -tc gray
-		xtoolwait wmget dock --output /home/incoming/wmget
-		xtoolwait wmtop
-		xtoolwait wmnd -M
-		xtoolwait wmmoonclock -lat -43 -lon -23
-		xtoolwait wmxmms2
-		xtoolwait wmfsm --noblink
-		xtoolwait wmbubble
+function xinitrc_bia()
+{
+	if test $( expr match "$DISPLAY" '.*:0' ) -gt 0; then
+		echo '# startup programs'
+		#( sleep 3s; exec tilda )&
+		if true; then # landscape
+			#( while sleep 1s; do gkrellm -w; done )&
+			xtoolwait gkrellm -w
+		else
+			rotation=$( cat $HOME/var/xrandr-rotation )
+			test -n "$rotation" || rotation="normal"
+			xrandr -o "$rotation"
+			xtoolwait wmhdplop -t -d /dev/sda
+			xtoolwait wmcalclock -24 -tc gray
+			xtoolwait wmget dock --output /home/incoming/wmget
+			xtoolwait wmtop
+			xtoolwait wmnd -M
+			xtoolwait wmmoonclock -lat -43 -lon -23
+			xtoolwait wmxmms2
+			xtoolwait wmfsm --noblink
+			xtoolwait wmbubble
+		fi
 	fi
-fi
+}
+
+function xinitrc_doti()
+{
+	xcompmgr -c &
+	gkrellm -w &
+	wmtop -c "xterm -geometry 90x24 -e htop" &
+}
+
+case $( hostname ) in
+	bia-desk)
+		xinitrc_bia
+	;;
+
+	doti-desk)
+		xinitrc_doti
+	;;
+esac
 
 
 if false && ping -q -n 1 google.com 2>/dev/null; then
@@ -125,7 +149,9 @@ fi
 		dir="$HOME/share/wallpaper/random"
 		file="`find "$dir" -not -type d|rl|head -1`"
 		if !  fbsetbg "$file"; then
-			xsetroot -solid black
+			if ! fbsetbg -l; then
+				xsetroot -solid black
+			fi
 		fi
 	fi
 	exec wmdrawer

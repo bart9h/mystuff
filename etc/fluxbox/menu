@@ -1,0 +1,121 @@
+#
+
+[begin]
+
+	[submenu] (programas)
+		[exec] (firefox) {/usr/local/firefox/firefox -P doti}
+		[exec] (baixar fotos) {xterm -e /home/doti/src/scripts/foto.pl}
+		[submenu] (terminals)
+			[exec] (utc) {xterm -bg BlackBlue -geometry +360+0 -e ssh -v -X -C -t barrett@utc}
+			#[exec] (utc) {xterm -bg BlackBlue -geometry +360+0 -e ssh -v -X -C -t utc screen -x a}
+			[exec] (Xnest) {/home/doti/src/desktop/xnest.sh}
+			[exec] (xterm tiny) {xterm -fs 8}
+			[exec] (utc/windows) {rdesktop  -x m -P -a 8 -z  -u rodolfobo utc}
+			#[exec] (9hells) {xterm -bg BlackGreen -geometry 117x24+0+378 -e ssh -v -X -C -t 9h bin/open_screen a}
+			#[exec] (utc/r) {xterm -bg BlackBlue -geometry +360+0 -e ssh -v -X -C -t utc su - -c \"screen -x a\"}
+			[exec] (utc/maua) {xterm -bg BlackBlue -geometry +360+0 -e ssh -v -X -C -t barrett@utc ssh utcrj}
+			#[exec] (unisys) {xterm -bg BlackBlue -e ssh -v -X ssh rodolfo@200.220.31.195}
+			#[exec] (zed) {xterm -bg BlackBlue -e ssh -v -X -C zed}
+			[exec] (xterm) {xterm}
+			[exec] (root) {xterm -bg BlackRed -e sudo su -}
+			[exec] (big) {xterm -fs 16}
+			[exec] (huge) {xterm -fs 19}
+		[end]
+
+		[submenu] (games)
+			[exec] (qonk) {qonk}
+			[exec] (Quake III Arena) {xterm -hold -bg BlackRed -e quake3}
+			[exec] (tetrinet) {xterm -fs 12 -geometry 80x50 -e screen tetrinet -fancy bart9h games03.click21.com.br}
+			[submenu] (arcade)
+				[exec] (kobodl) {kobodl}
+				[exec] (xkobo) {xkobo -quadsize}
+				[exec] (torus trooper) {torus_trooper}
+				[exec] (spout) {spout 3}
+				[exec] (chromium) {chromium}
+				[exec] (tumiki) {tumiki}
+				[exec] (star fighter) {/usr/games/starfighter}
+				[exec] (lbreakout) {lbreakout2}
+				[exec] (critical mass) {criticalmass}
+			[end]
+			[submenu] (puzzle/tetris)
+				[exec] (trimines) {/home/games/trimines/trimines.sh}
+				[exec] (frozen bubble) {frozen-bubble}
+				[exec] (mirror magic) {mirrormagic}
+			[end]
+			[submenu] (board)
+				[exec] (FIBS) {fibs}
+				[exec] (Freeciv) {nice -19 civclient -P none}
+				[exec] (wesnoth) {wesnoth}
+			[end]
+			[submenu] (fps)
+				[exec] (Doom III) {doom3}
+				[exec] (Quake III Arena) {xterm -hold -bg BlackRed -e quake3}
+				[exec] (Quake III Arena @9Hells) {xterm -hold -bg BlackRed -e quake3 +connect quake.9hells.org}
+				[exec] (Wolfstein 3D) {wolf3d}
+				[exec] (Quake IV) {/home/games/quake4/quake4}
+			[end]
+			[submenu] (race)
+				[exec] (torcs) {torcs}
+			[end]
+			[submenu] (unknown)
+				[exec] (holotz castle) {holotz-castle)
+				[exec] (gate88) {gate88}
+				[exec] (supertransball2) {supertransball2}
+				[exec] (freedroid) {freedroid}
+				[exec] (komi) {komi}
+				[exec] (njam) {/usr/games/njam/njam}
+				[exec] (moondefense) {moondefense}
+			[end]
+		[end]
+
+		[submenu] (applications)
+			[exec] (mozilla) {sex /usr/local/firefox/firefox -P doti}
+			[exec] (thunderbird) {sex -n thunderbird aoss thunderbird -P doti}
+			[exec] (gaim) {sex gaim}
+			[exec] (skype) {sex /home/barrett/bin/skype}
+			[exec] (leafpad) {leafpad} (nopead-like editor)
+			[exec] (cream) {gvim -u /usr/share/vim/vim63/cream/creamrc}
+			[exec] (gimp) {sex gimp}
+			[exec] (xmms) {sex xmms}
+			[exec] (mixer) {aumix}
+			[exec] (azureus torrent) {azureus}
+		[end]
+
+		[submenu] (utils)
+			[exec] (xmag) {xmag}
+			[exec] (xev) {xterm -e xev}
+			[exec] (Windowname) {xprop|grep WM_CLASS|cut -d \" -f 2|xmessage -file - -center}
+			[exec] (gkrellm) {gkrellm -w}
+		[end]
+	[end]
+
+	[exec] (xterm) {xterm}
+
+	[submenu] (Fluxbox)
+		#[config] (Configure)
+		#[submenu] (Styles) {Choose a style...}
+		#	[stylesdir] (/usr/share/fluxbox/styles)
+		#	[stylesdir] (~/.fluxbox/styles)
+		#[end]
+		[include] (/etc/X11/fluxbox/fluxbox-menu)
+	[end]
+
+	#[exec] (rodar) {/home/doti/src/desktop/x-rotate.sh}
+
+	[separator]
+
+	[submenu] (DESLIGAR) {===   DESLIGAR O COMPUTADOR ?   ===}
+		[exec] ()
+		[exec] ([    S I M    ]) {sudo /sbin/halt}
+		[exec] ()
+		[exec] ([   N A O   ])
+		[exec] ()
+		[exec] ([   reiniciar   ]) {sudo /sbin/reboot}
+		#[exec] ()
+		#[exec] ([   carregar o Windows   ]) {sudo /sbin/lilo -R windows && sudo /sbin/reboot}
+		[exec] ()
+	[end]
+
+[end]
+
+# vim600:foldmethod=marker:foldmarker=[submenu],[end]:

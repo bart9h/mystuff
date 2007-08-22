@@ -1,0 +1,75 @@
+Xcursor.theme: whiteglass
+#Xcursor.theme: simpleandsoft
+
+*background: grey
+*cutchars: *,; `"'()<>[]{}
+*charClass: 35:48,37-38:48,45-47:48,58:48,61:48,63-64:48,124:48,126:48
+
+XTerm*background: black
+XTerm*foreground: grey
+Xterm*cursorColor: yellow
+
+XTerm*scrollBar: false
+XTerm*rightScrollBar: true
+XTerm*saveLines: 1000
+XTerm*scrollTtyOutput: false
+XTerm*scrollKey: true
+
+#aterm*geometry: 86x62-66+0
+aterm*font: 10x20
+#aterm*font: linux8x16
+aterm*font1: lucidasanstypewriter-24
+aterm*font2: linux8x16
+
+
+#################
+
+aterm*foreground: gray90
+aterm*background: black
+aterm*transparent: yes
+aterm*fading: 75
+#aterm*tinting: gray50
+#aterm*tintingType: true
+#aterm*shading: 50
+
+#aterm*foreground: black
+#aterm*background: gray90
+#aterm*transparent: no
+
+#aterm*foreground: black
+#aterm*background: white
+#aterm*transparent: yes
+#aterm*shading: 90
+
+#################
+
+
+xterm*faceSize: 14
+#xterm*faceName: Bitstream Vera Sans Mono
+xterm*faceName: Inconsolata
+#xterm*faceName: Courier New-bold
+#xterm*faceName: Luxi Mono
+#xterm*faceName: Lucida Sans Typewriter
+#xterm*faceName: Lucida Sans Typewriter:style=Bold
+#xterm*cacheDoublesize: 0
+#xterm*utf8: true
+
+#xterm*backarrowKey: false
+#xterm*backarrowKeyIsErase: true
+#xterm*deleteIsDEL: true
+
+xterm*charClass: 35:48,37-38:48,45-47:48,58:48,61:48,63-64:48,124:48,126:48
+xterm*cutNewline: false
+#xterm*cutToBeginningOfLine: false
+xterm*trimSelection: true
+
+xterm*loginShell: true
+
+#boldFont:         -*-fixed-bold-r-*-*-14-*-*-*-*-*-iso8859-1
+#font:             -*-fixed-bold-r-*-*-14-*-*-*-*-*-iso8859-1
+#visualBell:       false
+#loginShell:       true
+#saveLines:        5000
+#scrollBar:        false
+#utmpInhibit:      true
+

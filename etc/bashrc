@@ -6,7 +6,9 @@ unalias -a
 alias ea='vi ~/.bashrc && source ~/.bashrc'
 
 function _progress() { # for profiling and debugging
-	true #printf "\r%-*s" $COLUMNS "$*"
+	if false; then
+		printf "\r%-*s" $COLUMNS "$*"
+	fi
 }
 
 #{1 path
@@ -353,9 +355,6 @@ function q4() {
 
 _progress 'util'
 
-# network
-alias reconnect='sudo ifconfig eth0 down; sudo dhclient'
-alias pgo='ping google.com'
 alias kb='~/src/desktop/switch-kbmap'
 
 function lddr() {
@@ -365,6 +364,17 @@ function lddr() {
 	done
 }
 
+# network
+alias pgo='ping google.com'
+alias reconnect='sudo ifconfig eth0 down; sudo dhclient'
+#alias reconnect='sudo ifconfig eth0 down; sudo ifconfig eth0 192.168.1.4 netmask 255.255.255.0 && route add default gw 192.168.1.1'
+
+case $(hostname) in
+	doti-desk)
+		alias lf='lftp fish://doti@bia:9922/ -e cd'
+	;;
+esac
+
 
 #{1          misc
 
@@ -373,6 +383,12 @@ _progress 'misc'
 alias ph='vi ~/src/txt/phonebook.txt'
 
 # utils
+
+if test -e /etc/slackware-version; then
+	alias pkg='web --linux-packages'
+	alias sl='web --slackware'
+fi
+
 alias t='source ~/src/scripts/untar'
 alias l='less'
 alias grepsmallnear='find . -type f -maxdepth 2 -size -10k -not -name "* *" | xargs grep'
@@ -381,7 +397,7 @@ alias grepsmallnear='find . -type f -maxdepth 2 -size -10k -not -name "* *" | xa
 #alias caps='xmodmap -e "keysym Caps_Lock = Escape"'
 alias caps='xmodmap -e "remove Lock = Caps_Lock" -e "keysym Caps_Lock = Escape"'
 alias data='date +%Y-%m-%d'
-alias geom="xwininfo -root | sed -rn '/-geometry/s/[^0-9]*([0-9]+x[0-9]+).*/-resize\ \1/p'"
+alias geom="xwininfo -root | sed -rn '/-geometry/s/[^0-9]*([0-9]+x[0-9]+).*/\1/p'"
 alias 2view='convert -quality 80 -resize `geom`'
 alias cn='cat > /dev/null' # quick volatile writepad
 alias dt='~/src/scripts/dtool.pl'
@@ -406,7 +422,7 @@ alias updb='sudo updatedb &'
 
 # build tools
 alias configure='nice ./configure --disable-nls'
-alias mk='nice make'
+alias mk='nice make -j 2'  #TODO: guess number of CPUs
 alias cm='configure && mk'
 alias conf='./configure --help && read a && configure $a'
 alias confh='./configure --help | less'
@@ -708,6 +724,7 @@ fi
 #{1 host-specific
 
 if test -r "$HOME/.bashrc_local"; then
+	_progress '~/.bashrc_local'
 	source "$HOME/.bashrc_local"
 fi
 

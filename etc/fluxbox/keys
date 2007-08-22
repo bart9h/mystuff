@@ -2,25 +2,18 @@
 # {{{1          misc
 
 # use Ctrl-Alt-Del to reload this file
-Control Mod1 Delete :MacroCmd {Reconfigure} {ExecCommand fbsetbg -l; invalidate}
+Control Mod1 Delete :MacroCmd {Restart} {Reconfigure} {ExecCommand fbsetbg -l; invalidate}
 
 
+#Control Mod1 Mod4 p :MacroCmd { SetResourceValue session.screen0.slit.placement TopCenter } { SetResourceValue session.screen0.slit.direction Horizontal }
 Control Mod1 Mod4 p :MacroCmd { SetResourceValue session.screen0.slit.placement TopCenter 1 } { SetResourceValue session.screen0.slit.direction, Horizontal }
 #{ ExecCommand xrandr -o left }
 
+#Control Mod1 Mod4 l :MacroCmd { SetResourceValue session.screen0.slit.placement RightCenter 1 } { SetResourceValue session.screen0.slit.direction Vertical }
 Control Mod1 Mod4 l :MacroCmd { SetResourceValue session.screen0.slit.placement RightCenter 1 } { SetResourceValue session.screen0.slit.direction Vertical }
 #{ ExecCommand xrandr -o normal }
 
 #	{ ExecCommand $HOME/src/desktop/x-rotate.sh }
-
-
-# {{{1          mouse
-
-OnDesktop Mouse1 :hideMenus
-OnDesktop Mouse2 :workspaceMenu
-OnDesktop Mouse3 :rootMenu
-OnDesktop Mouse4 :nextWorkspace
-OnDesktop Mouse5 :prevWorkspace
 
 
 # {{{1          menu
@@ -199,6 +192,8 @@ Mod4 h :ExecCommand ~/src/scripts/fluxbox_keys_help.pl
 
 Mod4 grave :ExecCommand ~/src/desktop/switch-kbmap
 Mod4 apostrophe :ExecCommand ~/src/desktop/switch-kbmap
+Control Mod1 grave :ExecCommand ~/src/desktop/switch-kbmap
+Control Mod1 apostrophe :ExecCommand ~/src/desktop/switch-kbmap
 
 # email 236
 #Mod4 None :ExecCommand thunderbird
@@ -247,12 +242,23 @@ None 223 :ToggleCmd {ExecCommand /home/doti/bin/osd putz} {ExecCommand /home/dot
 None 176 :ToggleCmd {ExecCommand amixer sset PCM 2+} {ExecCommand amixer sset Master 2+}
 None 174 :ToggleCmd {ExecCommand amixer sset PCM 2-} {ExecCommand amixer sset Master 2-}
 
+Control Mod1 Prior :ToggleCmd {ExecCommand amixer sset PCM 2+} {ExecCommand amixer sset Master 2+}
+Control Mod1 Next  :ToggleCmd {ExecCommand amixer sset PCM 2-} {ExecCommand amixer sset Master 2-}
+
 # mute
 None 160 :ExecCommand aumix -v 0
 
 Control Mod1 Prior :ExecCommand amixer sset PCM 2+; amixer sset Master 2+
 Control Mod1 Next  :ExecCommand amixer sset PCM 2-; amixer sset Master 2-
 
+
+# {{{1        mouse actions added by fluxbox-update_configs
+
+OnDesktop Mouse1 :hideMenus
+OnDesktop Mouse2 :workspaceMenu
+OnDesktop Mouse3 :rootMenu
+OnDesktop Mouse4 :nextWorkspace
+OnDesktop Mouse5 :prevWorkspace
 
 
 # {{{1          command reference (deprecated)
