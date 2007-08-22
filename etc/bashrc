@@ -422,7 +422,7 @@ alias updb='sudo updatedb &'
 
 # build tools
 alias configure='nice ./configure --disable-nls'
-alias mk='nice make -j 2'  #TODO: guess number of CPUs
+alias mk="nice make -j $( cat /proc/cpuinfo | grep '^processor\>' | wc -l )"
 alias cm='configure && mk'
 alias conf='./configure --help && read a && configure $a'
 alias confh='./configure --help | less'
@@ -586,7 +586,7 @@ function bk() {
 }
 
 function sortdir() {
-	#FIXME: don't work for hidden files/dirs within
+	#FIXME: doesn't work for hidden files/dirs within
 	#TODO: check read-only permission before starting
 	#TODO: recursive
 	local arg
