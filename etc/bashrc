@@ -57,7 +57,8 @@ alias cp='cp -i --preserve=timestamps'
 
 alias mv='mv -i'
 
-function rm() { #{
+function rm()
+{ #{
 	#set +o functrace
 	file_count=0
 	for i in "$@"; do
@@ -91,6 +92,8 @@ alias grep='grep --exclude="*.svn-base" --devices=skip'
 #{1 ls
 
 _progress 'ls'
+
+export LC_COLLATE="C"
 
 if [ "$TERM" != "dumb" ]; then
 	eval "`dircolors -b`"

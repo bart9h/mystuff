@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 #stty onlcr 0>&1
 
@@ -41,8 +41,7 @@ xset dpms 1200 2400 3600
 #xmodmap -e "pointer = 1 2 3 6 7 4 5"
 #aumix -L
 
-function xinitrc_bia()
-{
+xinitrc_bia() {
 	if test $( expr match "$DISPLAY" '.*:0' ) -gt 0; then
 		echo '# startup programs'
 		#( sleep 3s; exec tilda )&
@@ -66,11 +65,11 @@ function xinitrc_bia()
 	fi
 }
 
-function xinitrc_doti()
-{
+xinitrc_doti() {
 	xcompmgr -c &
 	gkrellm -w &
 	wmtop -c "xterm -geometry 90x24 -e htop" &
+	pidgin --nologin &
 }
 
 case $( hostname ) in

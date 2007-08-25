@@ -16,7 +16,7 @@
 window.label.focus: Raised
 *.focus.textColor: #eec
 *.unfocus.textColor: #dcb
-window.label.focus.color: #722
+window.label.focus.color: #633
 window.label.unfocus.color: #433
 
 window.button.focus: Raised
@@ -26,7 +26,7 @@ window.button.unfocus.color: #765
 window.button.pressed: Sunken
 window.button.pressed.color: #987
 
-window.handle.focus.color: #722
+window.handle.focus.color: #633
 window.grip.focus.color: #987
 window.grip.focus: Raised
 
@@ -43,7 +43,7 @@ handleWidth: 4
 toolbar.*.color: #433
 toolbar.*.textColor: #dcb
 toolbar.iconbar.*.justify: left
-toolbar.iconbar.focused.color: #722
+toolbar.iconbar.focused.color: #633
 toolbar.iconbar.focused.textColor: #eec
 
 
