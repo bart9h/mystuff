@@ -1,0 +1,243 @@
+#!/bin/bash
+# cmdline frontend for mlnet (aka mldonkey) edonkey client
+# by Rodolfo Borges (aka barrett9h / barrett@9hells)
+# '$LastChangedRevision: $'
+
+#{ configuration
+
+test -z "$MLNET_HOME" || MLNET_HOME='/var/lib/mldonkey'
+incoming_dir="$MLNET_HOME/incoming/files"
+
+mldonkey_ip="127.0.0.1"
+mldonkey_port="4000"
+
+toggle_limits=(
+		low   3  20
+		med   8  40
+		high  12 120
+)
+
+#}
+
+if test ! -d "$MLNET_HOME"; then
+	echo "Directory $MLNET_HOME not found. Check \$MLNET_HOME." >/dev/stderr
+	exit 1
+fi
+
+function usage()
+{
+	cat << EOF
+usage:
+	`basename $0` [ args | mlnet-commands ]
+args are:
+	stat
+		(default action)
+		show download statistics, incoming files and remaining disk space
+	start
+		start mlnet
+	.
+		enter interactive telnet session
+	limit
+		(shortcut: l)
+		Sets bandwidth limit.  Args can be:
+		#upload_limit  #download_limit
+			Set the values directly.
+		show
+			(default action)
+			Show current limits.
+		toggle
+			Cycle between the following predefined values.
+EOF
+	i=0
+	while [ "${toggle_limits[$i]}" != "" ]; do
+		printf "\t\t%s\n" "${toggle_limits[$i]}"
+		let iu=$i+1
+		let id=$i+2
+		printf "\t\t\t%d up, %d down\n" "${toggle_limits[$iu]}" "${toggle_limits[$id]}"
+		let i=$i+3
+	done
+	exit
+}
+
+nc='?'
+function dk_tell()
+{
+	if test "$nc" == '?'; then
+		nc="`which nc`"
+		test "$nc" || exit
+	fi
+
+	$nc $mldonkey_ip $mldonkey_port <<EOF
+$*
+q
+EOF
+}
+
+function dk_get_var()
+{
+	dk_tell voo $1 \
+		| grep "$1.*=" \
+		| cut -d  -f 4 \
+		| cut -d m -f 2
+}
+
+msg=
+function set_bandwidth_limit()
+{
+	par_ul='max_hard_upload_rate'
+	par_dl='max_hard_download_rate'
+
+	if test "$2"; then
+		if dk_tell set $par_ul $1 > /dev/null \
+			&& dk_tell set $par_dl $2 > /dev/null
+		then
+			msg="${msg}mlnet up/download rates set to"
+		else
+			msg="error in setting limits to"
+		fi
+		echo -e $msg $1 / $2 | osd
+		return
+	fi
+
+	if test "$1" == "show" -o "$1" == ""; then
+		limit_ul=`dk_get_var $par_ul`
+		limit_dl=`dk_get_var $par_dl`
+		echo "mlnet limits are $limit_ul / $limit_dl" | osd
+		return
+	fi
+
+	i=0
+	i_ul=
+	limit_ul=
+	while [ "${toggle_limits[$i]}" != "" ]; do
+		case "$1" in
+		toggle|up|down)
+			test "$limit_ul" || limit_ul=`dk_get_var $par_ul`
+			let i_ul_test=$i+1
+			if [[ $limit_ul == ${toggle_limits[$i_ul_test]} ]]; then
+				case "$1" in
+				toggle|up)
+					let i_ul=$i_ul_test+3  # next value
+					if test "${toggle_limits[$i_ul]}" == ""; then
+						if test "$1" == "toggle"; then
+							i_ul=1  # warp around
+							msg="REDE RAPIDA,  FILME LENTO.\n\n"
+						else
+							echo 'max reached' | osd
+							return
+						fi
+					else
+						msg="REDE LENTA,  FILME RAPIDO.\n\n"
+					fi
+					;;
+				down)
+					let i_ul=$i_ul_test-3  # next value
+					if [[ $i_ul < 0 ]]; then
+						echo 'min reached' | osd
+						return
+					fi
+					;;
+				esac
+				break
+			fi
+			;;
+		*)
+			if test "$1" == "${toggle_limits[$i]}"; then
+				let i_ul=$i+1  # next value
+				break
+			fi
+			;;
+		esac
+		let i=$i+3
+	done
+
+	if test "$i_ul" == ""; then
+		let i_ul=$i-2  # defaults to the last enry
+	fi
+	let i_dl=$i_ul+1
+	set_bandwidth_limit ${toggle_limits[$i_ul]} ${toggle_limits[$i_dl]}
+}
+
+function dk_start()
+{
+	if pidof mlnet; then
+		echo mldonkey already running | osd
+		return
+	fi
+
+	which mlnet > /dev/null || return
+	cd "$MLNET_HOME" || return
+	cmd="nice -19 mlnet -stdout -stderr"
+
+	echo starting mldonkey | osd
+	if which screen > /dev/null; then
+		if which sex > /dev/null; then
+			exec sex -n edk $cmd
+		else
+			exec screen -S edk $cmd
+		fi
+	else
+		exec $cmd
+	fi
+}
+
+function dk_stat()
+{
+	col=$COLUMNS
+	if test "$col"; then
+		test "$col" -gt 80 || col=132
+	else
+		col=131
+	fi
+	local cmd=`printf "set max_name_len %d\nvd" $(( $col - 70 ))`
+	dk_tell "$cmd" | grep "b\ \|Down:\|%" | grep -iv xxx
+
+	printf '\033[32m'
+	find "$incoming_dir" -maxdepth 1 -type f -mtime -1 \
+			-printf "%Tm/%Td %TH:%TM:%TS  %f  (%k Kb)\n" \
+	| grep -iv xxx | sort
+
+	local free=$(
+		echo $( df "$MLNET_HOME/temp" 2>/dev/null | tail -1 | cut -d G -f 3 ) \
+		| cut -d ' ' -f 4
+	)
+	test "$free" -lt "512000" && printf '\033[3;31;43m ' || printf '\033[0m '
+	echo "$(
+		echo $( df -h "$MLNET_HOME/temp" 2>/dev/null | tail -1 | cut -d G -f 3- ) \
+		| cut -d ' ' -f 1
+	) free "
+	printf '\033[0m '
+}
+
+function dk_command()
+{
+	if test "$1" == ""; then
+		dk_stat
+	else
+		dk_tell "$@"
+		if test "$1" == "cancel"; then
+			dk_tell confirm yes
+		fi
+	fi
+}
+
+dk_last_result()
+{
+	local dt="$HOME/src/scripts/dtool.pl"
+	local dir="$MLNET_HOME/search/"
+	local file="$dir$( ls --sort=time "$dir" | head -1 )"
+	$dt result "$file"
+}
+
+case "$1" in
+	--help|-h|-?)  usage ;;
+	limit)         set_bandwidth_limit "$2" "$3" ;;
+	start)         dk_start ;;
+	.)             exec telnet $mldonkey_ip $mldonkey_port ;;
+	stat)          dk_stat ;;
+	result)        dk_last_result ;;
+	up)            dk_command upstats ;;
+	*)             dk_command "$@" ;;
+esac
+
+# vim600:fdm=marker:fmr={,}
