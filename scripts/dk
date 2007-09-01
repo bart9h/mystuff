@@ -5,7 +5,7 @@
 
 #{ configuration
 
-test -z "$MLNET_HOME" || MLNET_HOME='/var/lib/mldonkey'
+test -n "$MLNET_HOME" || MLNET_HOME='/var/lib/mldonkey'
 incoming_dir="$MLNET_HOME/incoming/files"
 
 mldonkey_ip="127.0.0.1"
@@ -189,7 +189,7 @@ function dk_stat()
 	else
 		col=131
 	fi
-	local cmd=`printf "set max_name_len %d\nvd" $(( $col - 70 ))`
+	local cmd=`printf "set max_name_len %d\nvd" $(( $col - 86 ))`
 	dk_tell "$cmd" | grep "b\ \|Down:\|%" | grep -iv xxx
 
 	printf '\033[32m'
