@@ -6,7 +6,7 @@
 
 # Configuration variables:
 script=/tmp/vimv.tmp.sh  #FIXME: use system function to create uniq temp filename, or it would be bad if two users running it at the same machine.
-editor=vim
+editor='vim "+set nowrap"'
 include_instructions=false
 
 

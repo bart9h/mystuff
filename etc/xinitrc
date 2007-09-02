@@ -4,44 +4,56 @@
 
 echo '# ~/.xinitrc'
 
-
 echo '# session setup'
-#unset LANG
 echo $PATH | grep -q $HOME/bin || export PATH=$HOME/bin:$PATH
 export SDL_AUDIODRIVER='alsa'
 export GTK_IM_MODULE='cedilla'
-export CHOICESPATH=$HOME/.Choices:/usr/local/share/Choices:/usr/share/Choices
-export PRINTER='HP-C3180'
 
 #osd '~/.xinitrc' &
 
-#setxkbmap -variant intl
-xmodmap -e 'remove Lock = Caps_Lock' -e 'keysym Caps_Lock = Escape'
 #xhost localhost
 
-if false; then
-	xterm &
-	if ( which fluxbox >/dev/null ); then
-		exec fluxbox
-	else
-		exec twm
-	fi
-fi
+{ #failsafe mode
 
-#function m2s() { echo "$1 60 \* p" | dc | cut -d . -f 1 ; }
-#xsetroot -solid '#669966'
-xset m 2 32 # mouse accel and it's movement threshold
-xset r rate 224 30 # kb repeat delay and rate
-xset -dpms
-xset s expose
-xset s blank
-# 600=10min 900=15m 1200=20m 1800=30m
-xset s 300
-xset dpms 1200 2400 3600
-#xmodmap -e "pointer = 1 2 3 6 7 4 5"
+	if false; then
+		xterm &
+		if ( which fluxbox >/dev/null ); then
+			exec fluxbox
+		else
+			exec twm
+		fi
+	fi
+}
+
+{ # keyboard map, repeat rate, mouse accel, dpms
+
+	#-- mouse
+	xset m 2 32 # mouse accel and it's movement threshold
+	#xmodmap -e "pointer = 1 2 3 6 7 4 5"
+
+	#-- keyboard
+	xset r rate 224 30 # kb repeat delay and rate
+	#setxkbmap -variant intl
+	xmodmap -e 'remove Lock = Caps_Lock' -e 'keysym Caps_Lock = Escape'
+	#xmodmap -e 'remove Lock = Caps_Lock' -e 'keysym Caps_Lock = Control'
+
+	#-- dpms
+	xset -dpms
+	xset s expose
+	xset s blank
+	# 600=10min 900=15m 1200=20m 1800=30m
+	xset s 300
+	xset dpms 1200 2400 3600
+}
+
 #aumix -L
 
-xinitrc_bia() {
+#{ host-specific
+
+xinitrc_bia()
+{
+	export PRINTER='HP-C3180'
+
 	if test $( expr match "$DISPLAY" '.*:0' ) -gt 0; then
 		echo '# startup programs'
 		#( sleep 3s; exec tilda )&
@@ -62,10 +74,12 @@ xinitrc_bia() {
 			xtoolwait wmfsm --noblink
 			xtoolwait wmbubble
 		fi
+		xtoolwait wmdrawer
 	fi
 }
 
-xinitrc_doti() {
+xinitrc_doti()
+{
 	xcompmgr -c &
 	gkrellm -w &
 	wmtop -c "xterm -geometry 90x24 -e htop" &
@@ -82,68 +96,74 @@ case $( hostname ) in
 	;;
 esac
 
+#}
 
-if false && ping -q -n 1 google.com 2>/dev/null; then
+#{ network programs
 
-	#{{{ start mldonkey
-	if true; then
-		if which dk; then
-			if pidof mlnet; then
-				osd 'mlnet already running'
+	start_mldonkey()
+	{
+		if true; then
+			if which dk; then
+				if pidof mlnet; then
+					osd 'mlnet already running'
+				else
+					delay='1m'
+					[ $delay != 0 ] && osd "starting mldonkey in $delay" &
+					(
+						if sleep $delay; then
+							dk start
+						fi
+					) &
+				fi
 			else
-				delay='1m'
-				[ $delay != 0 ] && osd "starting mldonkey in $delay" &
-				(
-					if sleep $delay; then
-						dk start
-					fi
-				) &
+				osd 'nao achei o mlnet'
 			fi
 		else
-			osd 'nao achei o mlnet'
+			osd 'mlnet desligado'
 		fi
-	else
-		osd 'mlnet desligado'
-	fi
-	#}}}
+	}
 
-	#{{{ start rtorrent
-	torrent_dir=/home/incoming/torrent
-	if true && ls $torrent_dir/*.torrent >/dev/null 2>/dev/null; then
-		if which rtorrent; then
-			if pidof rtorrent; then
-				osd 'rtorrent already running'
-			else
-				delay='1m 20s'
-				test $delay != 0 && osd "starting rtorrent in $delay" &
-				(
-					if sleep $delay; then
-						cd $torrent_dir || exit
+	start_rtorrent()
+	{
+		torrent_dir=/home/incoming/torrent
+		if true && ls $torrent_dir/*.torrent >/dev/null 2>/dev/null; then
+			if which rtorrent; then
+				if pidof rtorrent; then
+					osd 'rtorrent already running'
+				else
+					delay='1m 20s'
+					test $delay != 0 && osd "starting rtorrent in $delay" &
+					(
+						if sleep $delay; then
+							cd $torrent_dir || exit
 #					if screen -ls | grep -q '\.edk\>'; then
 #						screen -x edk -X screen
 #						screen -x edk -X exec rtorrent `find . -maxdepth 1 -type f -name "*.torrent" -printf '"%p"\n'` -o upload_rate=12
 #					else
-							sex -n tor rtorrent `find . -maxdepth 1 -type f -name "*.torrent" -printf '"%p"\n'` -o upload_rate=12 &
+								sex -n tor rtorrent `find . -maxdepth 1 -type f -name "*.torrent" -printf '"%p"\n'` -o upload_rate=12 &
 #					fi
-					fi
-				) &
+						fi
+					) &
+				fi
+			else
+				osd 'nao achei o rtorrent'
 			fi
 		else
-			osd 'nao achei o rtorrent'
+			osd 'rtorrent desligado'
 		fi
-	else
-		osd 'rtorrent desligado'
+	}
+
+	if false && ping -q -n 1 google.com 2>/dev/null; then
+		start_mldonkey
+		start rtorrent
 	fi
-	#}}}
 
-fi
-
+#}
 
 #screen -wipe | grep -q 'sex\.backup' || \
 #sex -n batch_backup '/home/barrett/bin/batch_backup'
 
-
-(
+( #{ desktop background
 	if sleep 1s; then
 		dir="$HOME/share/wallpaper/random"
 		file="`find "$dir" -not -type d|rl|head -1`"
@@ -153,29 +173,32 @@ fi
 			fi
 		fi
 	fi
-	exec wmdrawer
-) &
+) & #}
 
 if ! pidof xmms2d; then
 	( sleep 6s && exec xmms2d ) &
 fi
 
-echo '# window manager'
-wm='fluxbox -screen 0'
-while test "$wm" != "exit"; do
-	echo "running($wm)"
-	$wm
-	wm=` \
-		Xdialog --stdout --inputbox \
-			"$wm terminated. What should I run now?" \
-			40 120 \
-	`
-	echo "new($wm)"
-	if test "$wm" == "" -o "$wm" == "exit"; then
-		break
-	fi
-done
+{ # window manager
+
+	echo '# window manager'
+	wm='fluxbox -screen 0'
+	while test "$wm" != "exit"; do
+		echo "running($wm)"
+		$wm
+		wm=` \
+			Xdialog --stdout --inputbox \
+				"$wm terminated. What should I run now?" \
+				40 120 \
+		`
+		echo "new($wm)"
+		if test "$wm" == "" -o "$wm" == "exit"; then
+			break
+		fi
+	done
+}
+
 true
 
 
-# vim600:fdm=marker:
+# vim600:fdm=marker:foldmarker={,}
