@@ -116,6 +116,7 @@ function a() {
 		fi  
 	fi
 }
+alias c='a *.{c,d,h,sh,pl,java,cpp,cxx,C} 2>/dev/null'
 alias d='ls -lF'
 function f() {
 	\ls -FGhln --color=always --time-style=long-iso "$@" |
@@ -134,17 +135,26 @@ alias z='f -rt'
 
 function show() {
 	case "$1" in
-	colors)
+	ansi|colors)
 		for b in 0 1; do
 			for j in 3 4; do
 				i=0
 				while test $i -le 7; do
-					echo -ne "\e[${b};${j}${i}m [$b;$j$i:abacate] "
+					echo -ne "\e[${b};${j}${i}m [$b;$j$i] "
 					let i=i+1
 				done
-				echo -e "\e[0;0m "
+				echo -e "\e[0;0m"
 			done
 		done
+	;;
+	processors|cpus)
+		cat /proc/cpuinfo | grep '^processor\>' | wc -l
+	;;
+	resolution|res|rez)
+		echo $(xwininfo -root|grep Width:|cut -d : -f 2)x$(xwininfo -root|grep Height:|cut -d : -f 2|sed s/\ //g)
+	;;
+	*)
+		echo "things to show: colors, cpus, resolution"
 	;;
 	esac
 }
@@ -360,12 +370,37 @@ _progress 'util'
 
 alias kb='~/src/desktop/switch-kbmap'
 
-function lddr() {
-	# ldd "recursivo": faz ldd das bibliotecas nao-padrao mostradas pelo ldd
+job()  # manage background jobs
+{ #{
+
+	if test -z "$@"; then
+		ls "$spool_dir"
+		return
+	fi
+
+	let max_jobs=`show cpus`+1
+	spool_dir="/tmp/jobs"
+
+	test -d "$spool_dir" || mkdir "$spool_dir" || exit
+
+	while test $( ls "$spool_dir" | wc -l ) -ge $max_jobs; do
+		sleep 1s
+	done
+
+	(
+		job=$( mktemp "$spool_dir"/job.XXXXXX )
+		test -f "$job" || exit
+		"$@"
+		rm "$job"
+	)&
+} #}
+
+function lddr()  # ldd "recursivo": faz ldd das bibliotecas nao-padrao mostradas pelo ldd
+{ #{
 	for z in "$@"; do
 		ldd $( ldd "$z" | cut -d '>' -f 2 | cut -d ' ' -f 2 | grep -v '^/\(usr\|lib\)' )
 	done
-}
+} #}
 
 # network
 alias pgo='ping google.com'
@@ -425,7 +460,7 @@ alias updb='sudo updatedb &'
 
 # build tools
 alias configure='nice ./configure --disable-nls'
-alias mk="nice make -j $( cat /proc/cpuinfo | grep '^processor\>' | wc -l )"
+alias mk="nice make -j `show cpus`"
 alias cm='configure && mk'
 alias conf='./configure --help && read a && configure $a'
 alias confh='./configure --help | less'
@@ -470,7 +505,7 @@ function mki() {
 		echo 'rpm sucks'; false; return
 	fi
 
-	cmd="sudo checkinstall --type=$t --nodoc --pkgname=\"$name\" $args $CHECKINSTALL_ARGS $cmd"
+	cmd="sudo checkinstall --fstrans=no --type=$t --nodoc --pkgname=\"$name\" $args $CHECKINSTALL_ARGS $cmd"
 	echo "$cmd"
 	read -p "proceed ([y]/n)? " answer
 	test "$answer" == "y" -o "$answer" == "" || return
