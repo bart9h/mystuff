@@ -247,7 +247,7 @@ command! HtmlToAcento
 
 " {{{1 load local settings
 
-if filereadable("~/.vimrc_local")
+if filereadable(expand("~/.vimrc_local"))
 	source ~/.vimrc_local
 endif
 
