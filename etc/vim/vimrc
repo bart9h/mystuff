@@ -90,6 +90,7 @@ set winminheight=0
 set hlsearch
 set scrolloff=5
 set foldmethod=syntax
+set number
 
 " nao pisca sobre ([{pares}])
 let loaded_matchparen=1
@@ -247,7 +248,7 @@ command! HtmlToAcento
 
 " {{{1 load local settings
 
-if filereadable(expand("~/.vimrc_local"))
+if filereadable($HOME . "/.vimrc_local")
 	source ~/.vimrc_local
 endif
 

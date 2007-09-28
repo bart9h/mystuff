@@ -4,14 +4,15 @@
 
 echo '# ~/.xinitrc'
 
-echo '# session setup'
-echo $PATH | grep -q $HOME/bin || export PATH=$HOME/bin:$PATH
-export SDL_AUDIODRIVER='alsa'
-export GTK_IM_MODULE='cedilla'
+{ # environment variables
 
-#osd '~/.xinitrc' &
+	echo $PATH | grep -q $HOME/bin || export PATH=$HOME/bin:$PATH
+	export SDL_AUDIODRIVER='alsa'
+	export GTK_IM_MODULE='cedilla'
+}
 
 #xhost localhost
+#aumix -L
 
 { #failsafe mode
 
@@ -25,28 +26,36 @@ export GTK_IM_MODULE='cedilla'
 	fi
 }
 
-{ # keyboard map, repeat rate, mouse accel, dpms
+{ # mouse
 
-	#-- mouse
-	xset m 2 32 # mouse accel and it's movement threshold
-	#xmodmap -e "pointer = 1 2 3 6 7 4 5"
+	# mouse accel and it's movement threshold
+	xset m 2 32
 
-	#-- keyboard
-	xset r rate 224 30 # kb repeat delay and rate
+	# on logitec lx700, use thumb button (button 8) to paste (button 2)
+	xmodmap -e "pointer = 1 8 3 4 5 6 7 2 9"
+}
+
+{ # keyboard
+
+	# kb repeat delay and rate
+	xset r rate 224 30
+
 	#setxkbmap -variant intl
+
 	xmodmap -e 'remove Lock = Caps_Lock' -e 'keysym Caps_Lock = Escape'
 	#xmodmap -e 'remove Lock = Caps_Lock' -e 'keysym Caps_Lock = Control'
+}
 
-	#-- dpms
+{ # dpms
+
 	xset -dpms
 	xset s expose
 	xset s blank
-	# 600=10min 900=15m 1200=20m 1800=30m
-	xset s 300
-	xset dpms 1200 2400 3600
-}
 
-#aumix -L
+	xset s 300  # seconds to blank
+	xset dpms 1200 2400 3600  # seconds to standby, suspend, and off
+	#hint:  600=10min 900=15m 1200=20m 1800=30m
+}
 
 #{ host-specific
 
@@ -102,7 +111,7 @@ esac
 
 	start_mldonkey()
 	{
-		if true; then
+		if false; then
 			if which dk; then
 				if pidof mlnet; then
 					osd 'mlnet already running'

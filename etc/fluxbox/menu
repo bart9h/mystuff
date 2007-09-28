@@ -91,6 +91,8 @@
 
 	[exec] (xterm) {xterm}
 
+	[exec] (thunar) {thunar}
+
 	[submenu] (Fluxbox)
 		#[config] (Configure)
 		#[submenu] (Styles) {Choose a style...}

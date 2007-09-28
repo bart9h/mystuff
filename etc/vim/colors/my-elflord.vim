@@ -25,10 +25,11 @@ hi StatusLineNC  ctermbg=DarkBlue  ctermfg=Gray
 hi Cursor    ctermfg=Red ctermbg=Blue
 hi CursorLine    ctermfg=Red ctermbg=Blue
 hi CursorColumn	ctermfg=Red ctermbg=Blue
+
 hi LineNr ctermfg=DarkRed
+hi Folded ctermfg=DarkRed
 
 hi Search ctermbg=magenta guibg=#b000b0
-hi Folded ctermbg=none
 
 
 " {{{1 original
@@ -50,27 +51,27 @@ hi Todo	term=standout ctermbg=Yellow ctermfg=Black guifg=Blue guibg=Yellow
 
 " Common groups that link to default highlighting.
 " You can specify other highlighting easily.
-hi link String	Constant
-hi link Character	Constant
-hi link Number	Constant
-hi link Boolean	Constant
-hi link Float		Number
-hi link Conditional	Repeat
-hi link Label		Statement
-hi link Keyword	Statement
-hi link Exception	Statement
-hi link Include	PreProc
-hi link Define	PreProc
-hi link Macro		PreProc
-hi link PreCondit	PreProc
-hi link StorageClass	Type
-hi link Structure	Type
-hi link Typedef	Type
-hi link Tag		Special
-hi link SpecialChar	Special
-hi link Delimiter	Special
+hi link String Constant
+hi link Character Constant
+hi link Boolean Constant
+hi link Number Constant
+hi link Float Number
+hi link Conditional Repeat
+hi link Label Statement
+hi link Keyword Statement
+hi link Exception Statement
+hi link Include PreProc
+hi link Define PreProc
+hi link Macro PreProc
+hi link PreCondit PreProc
+hi link StorageClass Type
+hi link Structure Type
+hi link Typedef Type
+hi link Tag Special
+hi link SpecialChar Special
+hi link Delimiter Special
 hi link SpecialComment Special
-hi link Debug		Special
+hi link Debug Special
 
 
 " {{{1 reference
