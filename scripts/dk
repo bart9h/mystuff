@@ -36,7 +36,7 @@ args are:
 	start
 		start mlnet
 	.
-		enter interactive telnet session
+		enter interactive telnet session (telnet localhost 4000)
 	limit
 		(shortcut: l)
 		Sets bandwidth limit.  Args can be:
