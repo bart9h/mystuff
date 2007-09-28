@@ -427,7 +427,7 @@ if test -e /etc/slackware-version; then
 	alias sl='web --slackware'
 fi
 
-alias t='source ~/src/scripts/untar'
+alias t='source ~/src/scripts/untar.sh'
 alias l='less'
 alias grepsmallnear='find . -type f -maxdepth 2 -size -10k -not -name "* *" | xargs grep'
 #alias r='xset r'
