@@ -3,25 +3,26 @@
 
 =description
 
-# retrieve photos and videos from camera
-# uses gphoto2 as backend
+# Retrieve photos and videos from camera.
+# Uses gphoto2 as backend.
 
 =todo
 
-ETA
+- ETA
 
-die if available_disk_space < 2*files_size
+- die if available_disk_space < 2*files_size
 
-Check existence of required external tools.
+- Check availability of required external tools.
 
-Download to a fixed spool dir, move to right dir later.
-Get date for dir name from exif info (jhead).
+- Download to a fixed spool dir,
+  get date from exif info (jhead).
 
-OSD (maybe external lib to manage output messages in general).
+- OSD (maybe external lib to manage output messages in general).
+  - use osd.pm;  ?
 
-Optimize by running gphoto2 in interactive shell mode,
-instead of calling it multiple times.
-(Must check if it will release memory after each download.)
+- Optimize by running gphoto2 in interactive shell mode,
+  instead of calling it multiple times.
+  (Must check if it will release memory after each download.)
 
 =cut
 
