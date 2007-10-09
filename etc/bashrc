@@ -153,8 +153,17 @@ function show() {
 	resolution|res|rez)
 		echo $(xwininfo -root|grep Width:|cut -d : -f 2)x$(xwininfo -root|grep Height:|cut -d : -f 2|sed s/\ //g)
 	;;
+	sizeof)
+		shift
+		test -z "$1" && echo "sizeof what?" && return
+		local arg
+		while true; do case "$1" in -*) arg="$arg $1"; shift ;; *) break ;; esac; done
+		local aout=`mktemp /tmp/sizeof.XXXXXX`
+		echo -e "#include <stdio.h>\n#include <time.h>\nint main() { printf(\"%d\\\n\", sizeof($*)); return 0; }" |
+		gcc $arg -x c -o "$aout" - && "$aout" && rm "$aout"
+	;;
 	*)
-		echo "things to show: colors, cpus, resolution"
+		echo "things to show: colors, cpus, resolution, sizeof"
 	;;
 	esac
 }
