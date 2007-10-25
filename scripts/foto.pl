@@ -1,10 +1,10 @@
 #!/usr/bin/perl
-# {{{1          header
+# {{{1        heading
 
 =description
 
-# Retrieve photos and videos from camera.
-# Uses gphoto2 as backend.
+# retrieve photos and videos from camera
+# uses gphoto2 as backend
 
 =todo
 
@@ -12,13 +12,12 @@
 
 - die if available_disk_space < 2*files_size
 
-- Check availability of required external tools.
+- Check existence of required external tools.
 
-- Download to a fixed spool dir,
-  get date from exif info (jhead).
+- Download to a fixed spool dir, move to right dir later.
+  Get date for dir name from exif info (exiv2).
 
 - OSD (maybe external lib to manage output messages in general).
-  - use osd.pm;  ?
 
 - Optimize by running gphoto2 in interactive shell mode,
   instead of calling it multiple times.
@@ -26,26 +25,28 @@
 
 =cut
 
+
 use strict;
 use warnings;
 $|=1;
 $\="\n";
 
 
-# {{{1          parameters
+# {{{1        parameters
 
 my %args = (
 
 		dir_desc => undef,
 		sudo => 'sudo',
-		do_gray => 1,
+		do_gray => 0,
 
-		basedir => $ENV{HOME}.'/fotos/archive',
+		basedir => '/home/fotos/archive',
 		max_block_mb => 256,
 		max_file_mb => 600,
 		gray_dir => '../gray',
 		keep_temp_files => 1,
 		nop => 0,
+		file_manager => 'Thunar',
 
 		width => 1024,
 		height => 768,
@@ -87,7 +88,7 @@ sub read_args(@) {
 read_args @ARGV;
 
 
-# {{{1          globals
+# {{{1        globals
 
 my $g_list;         # output of gphoto2 -L
 my @g_ranges = ();  # list of ranges to download
@@ -95,7 +96,7 @@ my %g_files = ();   # file information table (num: name, kb)
 my $g_dir;          # dir to save files to
 
 
-# {{{1          utils
+# {{{1        utils
 
 sub file_read($;$)
 {
@@ -161,7 +162,7 @@ sub mkchdir()
 }
 
 
-# {{{1          gphoto2 interface
+# {{{1        gphoto2 interface
 
 sub get_file_list()
 {
@@ -216,7 +217,7 @@ sub download()
 }
 
 
-# {{{1          collect
+# {{{1        collect
 
 sub collect()
 {
@@ -291,7 +292,7 @@ sub collect()
 }
 
 
-# {{{1          post_process
+# {{{1        post_process
 
 sub post_process()
 {
@@ -299,6 +300,7 @@ sub post_process()
 #TODO keep cache of this value, in case of xwininfo failing
 #     (that is: no X running => use previous geometry)
 #     "width %d height %d"  in  ~/var/screen-pixels
+	$ENV{DISPLAY}  or  $ENV{DISPLAY} = ':0';
 	if( `xwininfo -root` =~ /\bWidth:\s+(\d+)\b.*\bHeight:\s+(\d+)\b/s ) {
 		( $width, $height ) = ( $1, $2 );
 	}
@@ -314,7 +316,8 @@ sub post_process()
 
 				if( $name ne $shot ) {
 					if( ! $args{nop} ) {
-						rename $name, $shot
+						rename $name, $shot;
+						x "chmod -w $shot";
 					}
 					else {
 						print "mv $name $shot";
@@ -346,7 +349,7 @@ sub post_process()
 }
 
 
-# {{{1          main
+# {{{1        main
 
 sub main()
 {
@@ -359,7 +362,7 @@ sub main()
 
 main();
 print "cd \"$g_dir\"" if $g_dir;
-$ENV{DISPLAY} and x("Thunar \"$g_dir\"");
+$ENV{DISPLAY} and x("$args{file_manager} \"$g_dir\" &");
 
 
 #}}}
