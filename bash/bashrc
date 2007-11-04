@@ -377,12 +377,19 @@ function q4() {
 
 _progress 'util'
 
+alias rawbatch='ufraw-batch --wb=auto --exposure=auto --out-type=jpeg --compression=80'
+
+alias raw2jpg='rawbatch --size=`show res` --out-path=.. *'
+
+#TODO: move this to foto.pl
+alias jpg2raw='test -d shot && cd shot; for z in *; do test -f ../`echo $z|sed "s/.cr2$/.jpg/"` || mv -v $z ../.qiv-trash/; done'
+
 alias kb='~/src/desktop/switch-kbmap'
 
 job()  # manage background jobs
 { #{
 
-	if test -z "$@"; then
+	if test -z "$*"; then
 		ls "$spool_dir"
 		return
 	fi
@@ -472,7 +479,7 @@ alias updb='sudo updatedb &'
 
 # build tools
 alias configure='nice ./configure --disable-nls'
-alias mk="nice make -j `show cpus`"
+alias mk="nice make -j $(( 1 + `show cpus` ))"
 alias cm='configure && mk'
 alias conf='./configure --help && read a && configure $a'
 alias confh='./configure --help | less'
