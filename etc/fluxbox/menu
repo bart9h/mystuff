@@ -2,8 +2,13 @@
 
 [begin]
 
+	[exec] (firefox) {/usr/local/firefox/firefox -P doti} </usr/local/firefox/icons/mozicon16.xpm>
+
+	[exec] (thunar) {thunar} </usr/lib/perl5/Tk/folder.xpm>
+
+	[exec] (xterm) {xterm} </usr/share/WindowMaker/Icons/defaultterm.xpm>
+
 	[submenu] (programas)
-		[exec] (firefox) {/usr/local/firefox/firefox -P doti}
 		[exec] (baixar fotos) {xterm -e /home/doti/src/scripts/foto.pl}
 		[submenu] (terminals)
 			[exec] (utc) {xterm -bg BlackBlue -geometry +360+0 -e ssh -v -X -C -t barrett@utc}
@@ -87,11 +92,10 @@
 			[exec] (Windowname) {xprop|grep WM_CLASS|cut -d \" -f 2|xmessage -file - -center}
 			[exec] (gkrellm) {gkrellm -w}
 		[end]
+		[exec] (X-kill) {xkill}
 	[end]
 
-	[exec] (xterm) {xterm}
-
-	[exec] (thunar) {thunar}
+	[separator]
 
 	[submenu] (Fluxbox)
 		#[config] (Configure)
@@ -103,8 +107,6 @@
 	[end]
 
 	#[exec] (rodar) {/home/doti/src/desktop/x-rotate.sh}
-
-	[separator]
 
 	[submenu] (DESLIGAR) {===   DESLIGAR O COMPUTADOR ?   ===}
 		[exec] ()
