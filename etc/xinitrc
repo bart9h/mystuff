@@ -164,7 +164,7 @@ esac
 
 	if false && ping -q -n 1 google.com 2>/dev/null; then
 		start_mldonkey
-		start rtorrent
+		start_rtorrent
 	fi
 
 #}
