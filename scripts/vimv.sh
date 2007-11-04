@@ -5,8 +5,7 @@
 #
 
 # Configuration variables:
-script=/tmp/vimv.tmp.sh  #FIXME: use system function to create uniq temp filename, or it would be bad if two users running it at the same machine.
-editor='vim "+set nowrap"'
+script="`mktemp /tmp/vimv.XXXXXX`"
 include_instructions=false
 
 
@@ -63,14 +62,14 @@ done
 
 # Create the script with the 'mv' commands for the user to edit:
 {
-	echo "exit  # This script _will_ be executed after VI."
+	echo "exit  # This script _will_ be executed after Vim."
 	$include_instructions && cat << EOF
 
 # INSTRUCTIONS:
 # Edit the names in the right column, then remove the above line.
 # Save and exit the editor, to execute this script.
 # To cancel, just quit this editor (leaving the 'exit' at the first line).
-# [ VIM tip: Ctrl-Shift-V enters the block-selection mode. ]
+# [ Vim tip: Use <Ctrl-V> to enter block-selection mode. ]
 
 EOF
 	for z in "$@"; do
@@ -88,5 +87,5 @@ EOF
 
 
 # Call the editor, then execute the resulting script:
-$editor $script && source $script
+vim "+set nowrap" "+set filetype=sh" "$script"
 
