@@ -53,15 +53,40 @@ my %args = (
 		jpeg_quality => 80,
 );
 
-$args{dir_desc} = shift  if scalar @ARGV == 1;
+# {{{1        code
+# {{{2         parameters handling
+
 sub read_args(@) {
 	foreach( @_ ) {
 		if( exists $args{$_} ) {
-			$args{$_} = shift;
+			if( not defined ($args{$_} = shift) ) {
+				print STDERR "missing argument for $_";
+				exit 1;
+			}
+		}
+		elsif( $_ eq '--help' ) {
+			#TODO: better %args, to contain description
+			#      (borrow from other script I wrote..)
+			my $max_len = 0;
+			foreach( keys %args) {
+				$max_len = length $_
+					if length $_ > $max_len;
+			}
+			print "arguments".(' ' x ($max_len - 7))."[defaults]:\n";
+			foreach( sort keys %args ) {
+				my $arg = defined $args{$_} ? $args{$_} : '<empty>';
+				print $_.(' ' x (2 + $max_len - length $_))."[$arg]"
+			}
+			exit 0;
 		}
 		else {
-			print STDERR "unknown arg ($_)";
-			exit 1;
+			if( scalar @ARGV == 1 ) {
+				$args{dir_desc} = shift;
+			}
+			else {
+				print STDERR "unknown arg ($_)";
+				exit 1;
+			}
 		}
 	}
 }
@@ -72,24 +97,21 @@ sub read_args(@) {
 #TODO: check also if it will fit on available mem+swap
 {
 	sub file_read($;$);
-	my $mem_total = 0;
+	my $mem_total_kb = 0;
 	foreach( file_read( '/proc/meminfo' ) ) {
 		if( m/^MemTotal:\s+(\d+)\s+kB$/ ) {
-			$mem_total = $1;
+			$mem_total_kb = $1;
 			last;
 		}
 	}
 
-	if( $mem_total ) {
-		$args{max_file_mb} = int( 3*$mem_total/(4*1024) );
-		$args{max_block_mb} = int( $mem_total/(4*1024) );
+	if( $mem_total_kb ) {
+		$args{max_block_mb} = int( (1/4)*$mem_total_kb/1024 );
+		$args{max_file_mb}  = int( (3/4)*$mem_total_kb/1024 );
 	}
 }
 
-read_args @ARGV;
-
-
-# {{{1        globals
+# {{{2         global variables
 
 my $g_list;         # output of gphoto2 -L
 my @g_ranges = ();  # list of ranges to download
@@ -97,7 +119,14 @@ my %g_files = ();   # file information table (num: name, kb)
 my $g_dir;          # dir to save files to
 
 
-# {{{1        utils
+# {{{2         system utils
+
+sub x($)
+{
+	my $cmd = shift;
+	print $cmd;
+	system( $cmd )  unless $args{nop};
+}
 
 sub file_read($;$)
 {
@@ -120,13 +149,6 @@ sub file_read($;$)
 		close F;
 		return $s;
 	}
-}
-
-sub x($)
-{
-	my $cmd = shift;
-	print $cmd;
-	system( $cmd )  unless $args{nop};
 }
 
 sub file_ok($)
@@ -152,7 +174,7 @@ sub do_mkdir($)
 
 sub mkchdir()
 {
-	-d $args{basedir} or die "$args{basedir}: $!";
+	-d $args{basedir}  or die "$args{basedir}: $!";
 	my( undef, undef, undef, $mday, $mon, $year )= localtime;
 	$g_dir = sprintf '%s/%04d-%02d-%02d', $args{basedir}, $year+1900, $mon+1, $mday;
 	$g_dir .= '.'.$args{dir_desc}  if $args{dir_desc};
@@ -163,7 +185,7 @@ sub mkchdir()
 }
 
 
-# {{{1        gphoto2 interface
+# {{{2         gphoto2 interface
 
 sub get_file_list()
 {
@@ -218,7 +240,7 @@ sub download()
 }
 
 
-# {{{1        collect
+# {{{2         collect
 
 sub collect()
 {
@@ -293,7 +315,7 @@ sub collect()
 }
 
 
-# {{{1        post_process
+# {{{2         post_process
 
 sub post_process()
 {
@@ -354,10 +376,11 @@ sub post_process()
 }
 
 
-# {{{1        main
+# {{{2         main
 
-sub main()
+sub main(@)
 {
+	read_args(@ARGV) &&
 	get_file_list() &&
 	mkchdir() &&
 	collect() &&
@@ -365,10 +388,12 @@ sub main()
 	post_process();
 }
 
-main();
-print "cd \"$g_dir\"" if $g_dir;
-$ENV{DISPLAY} and x("$args{file_manager} \"$g_dir\" &");
+main(@ARGV);
+if( $g_dir ) {
+	print "cd \"$g_dir\"";
+	$ENV{DISPLAY} and x("$args{file_manager} \"$g_dir\" &");
+}
 
 
-#}}}
+#}}}1
 # vim600:fdm=marker:
