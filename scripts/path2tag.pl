@@ -3,18 +3,21 @@ use strict;
 use warnings;
 
 #
+#  IMPORTANT NOTICE:
 #  This is modeled based on the way I arrange my music:
-#  genre/artist.year.album/track#.song_title.ext
+#  genre/artist.year.album/tracknr.songtitle.ext
 #
 
-my $player_cannot_group_by_genre = 0;
-#  If this is true, store genre in artist name, like "genre::artist".
+my $has_genre_field = 1;
+#  If this is false, store genre in artist name, like "genre::artist".
+
+my $has_year_field = 1;
 
 #  must receive base for collection dir as first argument
 defined $ARGV[0] or die 'pass dir to start at';
 my $collection_dir = $ARGV[0];
 
-$collection_dir = $ENV{PWD} if $dir eq '.';
+$collection_dir = $ENV{PWD} if $collection_dir eq '.';
 
 #  check if dir exists
 -d $collection_dir or die "$collection_dir: $!";
@@ -53,7 +56,7 @@ foreach my $path (`find "$collection_dir" -type f`) {
 	#  01.Title
 	if( $file =~ m{^([0-9]{2,3})\.(.+)$} ) {
 		$args{track} = $1;
-		$args{title} = $2;
+		$args{song}  = $2;
 	}
 	elsif( not defined $args{album} ) {
 
@@ -62,28 +65,32 @@ foreach my $path (`find "$collection_dir" -type f`) {
 		#  Artist..Title  or  Artist::Title
 		if( $file =~ m{^(.*?)(\.\.|::)(.+)$} ) {
 			$args{artist} = $1;
-			$args{title} = $3;
+			$args{song}   = $3;
 		}
 		#  Title
 		else {
-			$args{title} = $file;
+			$args{song} = $file;
 		}
 	}
 	else {
 		#  Title
-		$args{title} = $file;
+		$args{song} = $file;
 	}
 
-	if( $player_cannot_group_by_genre ) {
+	if( ! $has_genre_field ) {
 		$args{artist} = "$args{genre}:$args{artist}";
 	}
 
-	$args{album} = "$args{year}:$args{album}"  if $args{year};
+	if( ! $has_year_field ) {
+		$args{album} = "$args{year}:$args{album}"  if $args{year};
+	}
 
 	sub x(@) {
 		my $cmd = join ' ', @_;
 		print "$cmd\n"        if     $ENV{NOP}||$ENV{VERBOSE};
-		system $cmd || last   unless $ENV{NOP};
+		if(!$ENV{NOP}) {
+			system($cmd) == 0  or die;
+		}
 	}
 
 	if( $format eq 'mp3' ) {
@@ -97,7 +104,7 @@ foreach my $path (`find "$collection_dir" -type f`) {
 			year   => 'DATE',
 			album  => 'ALBUM',
 			track  => 'TRACKNUMBER',
-			title  => 'TITLE',
+			song   => 'TITLE',
 		);
 
 		my %f = (  # how to set vorbis metadata for each format
@@ -106,7 +113,14 @@ foreach my $path (`find "$collection_dir" -type f`) {
 		);
 		my $r = $f{$format};
 
-		x $r->{cmd}, ( map { $r->{arg}."\"$m2v{$_}=$args{$_}\"" } keys %args ), "\"$path\"";
+		#FIXME: do not include empty fields (the grep approach is not working)
+		x
+			$r->{cmd},
+			(
+				map { $r->{arg}."\"$m2v{$_}=$args{$_}\"" }
+				grep( defined $args{$_}, keys %args )
+			),
+			"\"$path\"";
 	}
 }
 
