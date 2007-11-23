@@ -89,6 +89,7 @@ sub read_args(@) {
 			}
 		}
 	}
+	1;
 }
 
 # Guess nice values for memory usage limit based on avaiable memory:
@@ -205,6 +206,7 @@ sub get_file_list()
 
 	print $cmd;
 	$g_list = `$cmd`  or die;
+	1;
 }
 
 
