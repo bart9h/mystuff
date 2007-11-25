@@ -16,7 +16,7 @@ if test "$1" == "-g"; then
 fi
 
 verbose=
-test "$VERBOSE" && verbose='-v'
+test "$VERBOSE" -a "$VERBOSE" != "no" -a "$VERBOSE" != "0" && verbose='-v'
 
 nargs=$#
 test $nargs -eq 2 || { echo 'use: dif <object1> <object2>'; exit; }
