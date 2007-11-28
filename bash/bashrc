@@ -153,10 +153,18 @@ function show() {
 		shift
 		test -z "$1" && echo "sizeof what?" && return
 		local arg
-		while true; do case "$1" in -*) arg="$arg $1"; shift ;; *) break ;; esac; done
-		local aout=`mktemp /tmp/sizeof.XXXXXX`
-		echo -e "#include <stdio.h>\n#include <time.h>\nint main() { printf(\"%d\\\n\", sizeof($*)); return 0; }" |
-		gcc $arg -x c -o "$aout" - && "$aout" && rm "$aout"
+		while true; do
+			case "$1" in
+			-*)
+				arg="$arg $1"
+				shift
+				;;
+			*)
+				break
+				;;
+			esac
+		done
+		echo -e "#include <stdio.h>\n#include <time.h>\nint main() { printf(\"%d\\\n\", sizeof($*)); return 0; }" | crun $arg
 	;;
 	*)
 		echo "things to show: colors, cpus, resolution, sizeof"
@@ -431,6 +439,11 @@ case $(hostname) in
 		alias lf='lftp fish://doti@doti:9922/ -e cd'
 	;;
 esac
+
+function crun() {
+	local aout=`mktemp /tmp/crun.XXXXXX`
+	gcc $* -x c -o "$aout" - && "$aout" && rm "$aout"
+}
 
 
 #{1          misc
