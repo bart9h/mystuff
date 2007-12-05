@@ -29,7 +29,7 @@ Mod4 z :MinimizeWindow
 Mod4 x :MaximizeWindow
 Mod4 c :MaximizeHorizontal
 Mod4 v :MaximizeVertical
-Mod4 b :ShadeWindow
+#Mod4 b :ShadeWindow
 Mod4 s :StickWindow
 Mod4 BackSpace :Close
 #Mod4 Escape :Close
@@ -120,15 +120,15 @@ Mod1 KP_Left  :Resize -1  0
 Mod1 KP_Up    :Resize  0 -1
 Mod1 KP_Down  :Resize  0  1
 
-Mod1 Shift KP_Right :Resize  8  0
-Mod1 Shift KP_Left  :Resize -8  0
-Mod1 Shift KP_Up    :Resize  0 -8
-Mod1 Shift KP_Down  :Resize  0  8
+Mod1 Shift KP_Right :Resize  10   0
+Mod1 Shift KP_Left  :Resize -10   0
+Mod1 Shift KP_Up    :Resize   0 -10
+Mod1 Shift KP_Down  :Resize   0  10
 
-Mod1 Shift Control KP_Right :Resize  64   0
-Mod1 Shift Control KP_Left  :Resize -64   0
-Mod1 Shift Control KP_Up    :Resize   0 -64
-Mod1 Shift Control KP_Down  :Resize   0  64
+Mod1 Shift Control KP_Right :Resize  50   0
+Mod1 Shift Control KP_Left  :Resize -50   0
+Mod1 Shift Control KP_Up    :Resize   0 -50
+Mod1 Shift Control KP_Down  :Resize   0  50
 
 # xwit as workaround for pointer changing focus w/o moving (the window moves), in mousefocus mode
 #Shift KP_Right :MacroCmd {ExecCommand xwit -rwarp  10   0} {Move  10   0}
@@ -171,15 +171,16 @@ Mod4 r  :ExecCommand fbrun
 
 Mod4 space :ExecCommand sleep 1s && xset dpms force standby
 Control Mod1 space :ExecCommand sleep 1s && xset dpms force standby
-Mod4 Return :ExecCommand xterm
-Control Mod1 Return :ExecCommand xterm
-Mod4 t :ExecCommand xterm
-Control Mod1 Return :ExecCommand xterm
+Mod4 Return :ExecCommand uxterm
+Control Mod1 Return :ExecCommand uxterm
+Mod4 t :ExecCommand uxterm
+Control Mod1 Return :ExecCommand uxterm
 
 #Mod4 a :ExecCommand sh -c 'echo "mainwindow toggle" | nc -w 1 localhost 3000'
 #Mod4 i :ExecCommand sh -c 'echo "show"              | nc -w 1 localhost 3000'
 Mod4 n :ExecCommand dk limit toggle
 Control Mod4 n :ToggleCmd {ExecCommand dk limit 2 6}  {ExecCommand dk limit high}
+Mod4 b :ToggleCmd {ExecCommand xmodmap -e "pointer = 1 2 3 4 5 6 7 8 9"}  {ExecCommand xmodmap -e "pointer = 1 8 3 4 5 6 7 2 9"}
 Mod4 n :ExecCommand dk limit toggle
 Control Mod1 n :ExecCommand dk limit toggle
 Control Mod4 Mod1 n :ExecCommand dk limit show

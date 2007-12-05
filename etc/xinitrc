@@ -11,10 +11,11 @@ echo '# ~/.xinitrc'
 	export GTK_IM_MODULE='cedilla'
 }
 
+grep -v '^\#' .Xdefaults | xrdb
 #xhost localhost
 #aumix -L
 
-{ #failsafe mode
+{ # failsafe mode
 
 	if false; then
 		xterm &
@@ -32,7 +33,7 @@ echo '# ~/.xinitrc'
 	xset m 2 32
 
 	# on logitec lx700, use thumb button (button 8) to paste (button 2)
-	xmodmap -e "pointer = 1 8 3 4 5 6 7 2 9"
+	#xmodmap -e "pointer = 1 8 3 4 5 6 7 2 9"
 }
 
 { # keyboard
@@ -57,7 +58,7 @@ echo '# ~/.xinitrc'
 	#hint:  600=10min 900=15m 1200=20m 1800=30m
 }
 
-#{ host-specific
+# { host-specific
 
 xinitrc_bia()
 {
@@ -96,11 +97,11 @@ xinitrc_doti()
 }
 
 case $( hostname ) in
-	bia-desk)
+	bia-desk*)
 		xinitrc_bia
 	;;
 
-	doti-desk)
+	doti-desk*)
 		xinitrc_doti
 	;;
 esac

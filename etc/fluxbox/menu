@@ -8,6 +8,8 @@
 
 	[exec] (xterm) {xterm} </usr/share/WindowMaker/Icons/defaultterm.xpm>
 
+	[exec] (gridwars) {gridwars}
+
 	[submenu] (programas)
 		[exec] (baixar fotos) {xterm -e /home/doti/src/scripts/foto.pl}
 		[submenu] (terminals)

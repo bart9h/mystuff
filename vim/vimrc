@@ -122,6 +122,9 @@ endif
 
 " {{{1 hotkeys
 
+" quick macro
+nmap <F9> @q
+
 " search for current word on all source files
 nmap <C-c> :!cd "`dirname "%:p"`"; grep "\<<cword>\>" *.[cChd] *.cpp *.cxx *.pl *.pm 2> /dev/null; true<CR>
 

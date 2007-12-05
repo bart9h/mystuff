@@ -2,7 +2,7 @@ Xcursor.theme: whiteglass
 #Xcursor.theme: simpleandsoft
 
 *background: grey
-*cutchars: *,; `"'()<>[]{}
+#*cutchars: *,; `"'()<>[]{}
 *charClass: 35:48,37-38:48,45-47:48,58:48,61:48,63-64:48,124:48,126:48
 
 XTerm*background: black
