@@ -185,6 +185,7 @@ sub main()
 		}
 		else {
 			$engine = `basename $0 .pl`;
+			chomp $engine;
 		}
 		exists $engines{$engine} or $engine = 'google';
 	}#
