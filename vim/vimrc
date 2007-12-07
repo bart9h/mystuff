@@ -11,7 +11,7 @@ set noignorecase
 set backspace="indent,start"
 set bs=2
 set wildmenu
-set tildeop
+"set tildeop
 
 " {{{1 tab
 
@@ -129,7 +129,8 @@ nmap <F9> @q
 nmap <C-c> :!cd "`dirname "%:p"`"; grep "\<<cword>\>" *.[cChd] *.cpp *.cxx *.pl *.pm 2> /dev/null; true<CR>
 
 " makes * highlight the word, but don't jump to next occurrence
-map <silent> * yiw:let @/=@0<bar>set hls<CR>
+map <silent> * yiw:let @/="\\<".@0."\\>"<bar>set hls<CR>
+"map <silent> * *N
 
 " save
 if has("gui_running")  " Ctrl-S don't work on terminals
