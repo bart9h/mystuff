@@ -1,3 +1,7 @@
+!mouse actions added by fluxbox-update_configs
+OnWindow Mod1 Mouse1 :StartMoving
+OnWindow Mod1 Mouse3 :StartResizing BottomRight
+
 # ~/.fluxbox/keys
 # {{{1          misc
 
@@ -191,10 +195,10 @@ None 161 :ExecCommand xcalc
 
 Mod4 h :ExecCommand ~/src/scripts/fluxbox_keys_help.pl
 
-Mod4 grave :ExecCommand ~/src/desktop/switch-kbmap
-Mod4 apostrophe :ExecCommand ~/src/desktop/switch-kbmap
-Control Mod1 grave :ExecCommand ~/src/desktop/switch-kbmap
-Control Mod1 apostrophe :ExecCommand ~/src/desktop/switch-kbmap
+Mod4 grave :ExecCommand ~/src/desktop/switch-kbmap.sh
+Mod4 apostrophe :ExecCommand ~/src/desktop/switch-kbmap.sh
+Control Mod1 grave :ExecCommand ~/src/desktop/switch-kbmap.sh
+Control Mod1 apostrophe :ExecCommand ~/src/desktop/switch-kbmap.sh
 
 # email 236
 #Mod4 None :ExecCommand thunderbird
@@ -351,4 +355,5 @@ OnDesktop Mouse5 :prevWorkspace
 
 #}}}
 # vim:set fdm=marker:%foldc!:
+
 
