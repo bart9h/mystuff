@@ -57,7 +57,7 @@ my %args = (
 # {{{2         parameters handling
 
 sub read_args(@) {
-	foreach( @_ ) {
+	while( $_ = shift ) {
 		if( exists $args{$_} ) {
 			if( not defined ($args{$_} = shift) ) {
 				print STDERR "missing argument for $_";
@@ -65,6 +65,7 @@ sub read_args(@) {
 			}
 		}
 		elsif( $_ eq '--help' ) {
+			#{{{
 			#TODO: better %args, to contain description
 			#      (borrow from other script I wrote..)
 			my $max_len = 0;
@@ -78,6 +79,7 @@ sub read_args(@) {
 				print $_.(' ' x (2 + $max_len - length $_))."[$arg]"
 			}
 			exit 0;
+			#}}}
 		}
 		else {
 			if( scalar @ARGV == 1 ) {
@@ -352,7 +354,7 @@ sub post_process()
 				print "$count/$total\n";
 				if( $ext eq 'cr2' ) {
            
-					x "nice ufraw-batch --wb=auto --exposure=auto --size=${width}x${height} --out-type=jpeg --compression=$args{jpeg_quality} --out-path=\"$g_dir/..\" \"$shot\"";
+					x "nice ufraw-batch --wb=camera --exposure=auto --size=${width}x${height} --out-type=jpeg --compression=$args{jpeg_quality} --out-path=\"$g_dir/..\" \"$shot\"";
 				}
 				elsif( $ext eq 'jpg' ) {
 					x "nice convert -quality $args{jpeg_quality} -resize ${width}x${height} \"$shot\" \"../$base.jpg\"";
