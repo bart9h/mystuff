@@ -8,19 +8,20 @@ VERBOSE=1
 dbg() { test -n "$VERBOSE" -a "$VERBOSE" != "0" && echo "$*" |tee -a /tmp/gliv-command.log; }
 dbg "command($command), dir($dir), file($file)"
 
-path="$dir/shot/$( dbg "$file" | sed 's/\.[^.]\+$/.cr2/' )"
-dbg "trying($path)"
-if ! test -f "$path"; then
-	path="$dir/shot/$file"
-	dbg "trying($path)"
-	if ! test -f "$path"; then
-		path="$dir/$file"
-		dbg "trying($path)"
-	else
-		dbg "file not found"
+cr2="$( echo "$file" | sed 's/\.[^.]\+$/.cr2/' )"
+
+try() {
+	dbg "trying($1)"
+	if test -f "$1"; then
+		dbg "$command -- \"$1\""
+		exec $command -- "$1"
 		exit
 	fi
-fi
+}
 
-dbg "$command -- \"$path\""
-exec $command -- "$path"
+try "$dir/shot/$cr2"
+try "$dir/../shot/$cr2"
+try "$dir/shot/$file"
+try "$dir/../shot/$file"
+try "$dir/$file"
+
