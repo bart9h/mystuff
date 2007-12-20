@@ -1,3 +1,7 @@
+#  X resources
+
+#{ geral
+
 Xcursor.theme: whiteglass
 #Xcursor.theme: simpleandsoft
 
@@ -5,15 +9,65 @@ Xcursor.theme: whiteglass
 #*cutchars: *,; `"'()<>[]{}
 *charClass: 35:48,37-38:48,45-47:48,58:48,61:48,63-64:48,124:48,126:48
 
-XTerm*background: black
-XTerm*foreground: grey
-Xterm*cursorColor: yellow
+#boldFont:         -*-fixed-bold-r-*-*-14-*-*-*-*-*-iso8859-1
+#font:             -*-fixed-bold-r-*-*-14-*-*-*-*-*-iso8859-1
+#visualBell:       false
+#loginShell:       true
+#saveLines:        5000
+#scrollBar:        false
+#utmpInhibit:      true
 
-XTerm*scrollBar: false
-XTerm*rightScrollBar: true
-XTerm*saveLines: 1000
-XTerm*scrollTtyOutput: false
-XTerm*scrollKey: true
+#}
+
+#{ xterm
+
+#{{ scroll
+	XTerm*saveLines: 5000
+	XTerm*scrollBar: false
+	XTerm*rightScrollBar: true
+	XTerm*scrollTtyOutput: false
+	XTerm*scrollKey: true
+#}
+
+#{{ font
+	xterm*faceSize1: 10
+	xterm*faceSize2: 13
+	xterm*faceSize:  14
+	xterm*faceSize3: 17
+	xterm*faceSize4: 20
+	xterm*faceSize5: 24
+	xterm*faceSize6: 28
+	xterm*faceName: Inconsolata
+	xterm*utf8: 1
+#}
+
+#{{ color
+	XTerm*background: black
+	XTerm*foreground: grey
+	Xterm*cursorColor: yellow
+#}
+
+#{{ selection
+	xterm*charClass: 35:48,37-38:48,45-47:48,58:48,61:48,63-64:48,124:48,126:48
+	xterm*cutNewline: false
+#	xterm*cutToBeginningOfLine: false
+	xterm*trimSelection: true
+
+	xterm*loginShell: true
+#}
+
+#{{ coisas
+
+#	xterm*cacheDoublesize: 0
+
+#	xterm*backarrowKey: false
+#	xterm*backarrowKeyIsErase: true
+#	xterm*deleteIsDEL: true
+#}
+
+#}
+
+#{ aterm
 
 #aterm*geometry: 86x62-66+0
 aterm*font: 10x20
@@ -41,35 +95,6 @@ aterm*fading: 75
 #aterm*transparent: yes
 #aterm*shading: 90
 
-#################
+#}
 
-
-xterm*faceSize: 14
-#xterm*faceName: Bitstream Vera Sans Mono
-xterm*faceName: Inconsolata
-#xterm*faceName: Courier New-bold
-#xterm*faceName: Luxi Mono
-#xterm*faceName: Lucida Sans Typewriter
-#xterm*faceName: Lucida Sans Typewriter:style=Bold
-#xterm*cacheDoublesize: 0
-#xterm*utf8: true
-
-#xterm*backarrowKey: false
-#xterm*backarrowKeyIsErase: true
-#xterm*deleteIsDEL: true
-
-xterm*charClass: 35:48,37-38:48,45-47:48,58:48,61:48,63-64:48,124:48,126:48
-xterm*cutNewline: false
-#xterm*cutToBeginningOfLine: false
-xterm*trimSelection: true
-
-xterm*loginShell: true
-
-#boldFont:         -*-fixed-bold-r-*-*-14-*-*-*-*-*-iso8859-1
-#font:             -*-fixed-bold-r-*-*-14-*-*-*-*-*-iso8859-1
-#visualBell:       false
-#loginShell:       true
-#saveLines:        5000
-#scrollBar:        false
-#utmpInhibit:      true
-
+#  vim600:ft=xdefaults:fdm=marker:fmr=#{,#}:
