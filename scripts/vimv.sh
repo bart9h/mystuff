@@ -87,5 +87,6 @@ EOF
 
 
 # Call the editor, then execute the resulting script:
-vim "+set nowrap" "+set filetype=sh" "$script"
+vim "+set nowrap" "+set filetype=sh" "$script" \
+&& sh "$script"
 
