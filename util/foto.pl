@@ -36,7 +36,8 @@ $\="\n";
 
 my %args = (
 
-		dir_desc => undef,
+		source => undef,
+		tag => undef,
 		sudo => 'sudo',
 		do_gray => 0,
 
@@ -57,33 +58,33 @@ my %args = (
 # {{{2         parameters handling
 
 sub read_args(@) {
-	while( $_ = shift ) {
-		if( exists $args{$_} ) {
-			if( not defined ($args{$_} = shift) ) {
-				print STDERR "missing argument for $_";
-				exit 1;
+	if( scalar @_ == 1 ) {
+		$args{source} = shift;
+	}
+	else {
+		while( $_ = shift ) {
+			if( exists $args{$_} ) {
+				if( not defined ($args{$_} = shift) ) {
+					print STDERR "missing argument for $_";
+					exit 1;
+				}
 			}
-		}
-		elsif( $_ eq '--help' ) {
-			#{{{
-			#TODO: better %args, to contain description
-			#      (borrow from other script I wrote..)
-			my $max_len = 0;
-			foreach( keys %args) {
-				$max_len = length $_
-					if length $_ > $max_len;
-			}
-			print "arguments".(' ' x ($max_len - 7))."[defaults]:\n";
-			foreach( sort keys %args ) {
-				my $arg = defined $args{$_} ? $args{$_} : '<empty>';
-				print $_.(' ' x (2 + $max_len - length $_))."[$arg]"
-			}
-			exit 0;
-			#}}}
-		}
-		else {
-			if( scalar @ARGV == 1 ) {
-				$args{dir_desc} = shift;
+			elsif( $_ eq '--help' ) {
+				#{{{
+				#TODO: better %args, to contain description
+				#      (borrow from other script I wrote..)
+				my $max_len = 0;
+				foreach( keys %args) {
+					$max_len = length $_
+						if length $_ > $max_len;
+				}
+				print "arguments".(' ' x ($max_len - 7))."[defaults]:\n";
+				foreach( sort keys %args ) {
+					my $arg = defined $args{$_} ? $args{$_} : '<empty>';
+					print $_.(' ' x (2 + $max_len - length $_))."[$arg]"
+				}
+				exit 0;
+				#}}}
 			}
 			else {
 				print STDERR "unknown arg ($_)";
@@ -180,7 +181,7 @@ sub mkchdir()
 	-d $args{basedir}  or die "$args{basedir}: $!";
 	my( undef, undef, undef, $mday, $mon, $year )= localtime;
 	$g_dir = sprintf '%s/%04d-%02d-%02d', $args{basedir}, $year+1900, $mon+1, $mday;
-	$g_dir .= '.'.$args{dir_desc}  if $args{dir_desc};
+	$g_dir .= '.'.$args{tag}  if $args{tag};
 	do_mkdir $g_dir;
 	$g_dir .= '/shot';
 	do_mkdir $g_dir;

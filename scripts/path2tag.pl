@@ -8,6 +8,8 @@ use warnings;
 #  genre/artist.year.album/tracknr.songtitle.ext
 #
 
+#TODO: check if external tools are installed
+
 my $has_genre_field = 1;
 #  If this is false, store genre in artist name, like "genre::artist".
 

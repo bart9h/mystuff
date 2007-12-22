@@ -11,7 +11,8 @@ echo '# ~/.xinitrc'
 	export GTK_IM_MODULE='cedilla'
 }
 
-grep -v '^\#' .Xdefaults | xrdb
+~/src/bash/Xdefaults.sh
+
 #xhost localhost
 #aumix -L
 
@@ -135,36 +136,27 @@ esac
 
 	start_rtorrent()
 	{
-		torrent_dir=/home/incoming/torrent
-		if true && ls $torrent_dir/*.torrent >/dev/null 2>/dev/null; then
-			if which rtorrent; then
-				if pidof rtorrent; then
-					osd 'rtorrent already running'
-				else
-					delay='1m 20s'
-					test $delay != 0 && osd "starting rtorrent in $delay" &
-					(
-						if sleep $delay; then
-							cd $torrent_dir || exit
-#					if screen -ls | grep -q '\.edk\>'; then
-#						screen -x edk -X screen
-#						screen -x edk -X exec rtorrent `find . -maxdepth 1 -type f -name "*.torrent" -printf '"%p"\n'` -o upload_rate=12
-#					else
-								sex -n tor rtorrent `find . -maxdepth 1 -type f -name "*.torrent" -printf '"%p"\n'` -o upload_rate=12 &
-#					fi
-						fi
-					) &
-				fi
+		torrent_dir=/home/media/torrent
+		if which rtorrent; then
+			if pidof rtorrent; then
+				osd 'rtorrent already running'
 			else
-				osd 'nao achei o rtorrent'
+				delay='0m 40s'
+				test $delay != 0 && osd "starting rtorrent in $delay" &
+				(
+					if sleep $delay; then
+						cd $torrent_dir || exit
+						exec screen -S tor rtorrent
+					fi
+				) &
 			fi
 		else
-			osd 'rtorrent desligado'
+			osd 'nao achei o rtorrent'
 		fi
 	}
 
-	if false && ping -q -n 1 google.com 2>/dev/null; then
-		start_mldonkey
+	if true || ping -q -n 1 google.com 2>/dev/null; then
+		#start_mldonkey
 		start_rtorrent
 	fi
 

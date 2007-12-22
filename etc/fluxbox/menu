@@ -8,6 +8,8 @@
 
 	[exec] (xterm) {xterm} </usr/share/WindowMaker/Icons/defaultterm.xpm>
 
+	[separator]
+	[exec] (wesnoth) {wesnoth}
 	[exec] (gridwars) {gridwars}
 
 	[submenu] (programas)

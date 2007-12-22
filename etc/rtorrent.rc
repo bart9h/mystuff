@@ -1,12 +1,17 @@
 
-port_range = 59222-59222
+directory = /home/media/torrent
+session   = /home/media/torrent/session
 
-download_rate = 90
+port_range = 59222-59222
+encryption = allow_incoming,try_outgoing,enable_retry
+
+download_rate = 100
 upload_rate = 20
 
 max_open_sockets = 80
+min_peers = 3
+max_peers_seed = 4
 max_peers = 20
-min_peers = 5
-
-session = /home/media/torrent/session
+max_uploads = 2
+max_uploads_global = 5
 
