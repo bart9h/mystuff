@@ -1,45 +1,31 @@
 # ~/.bashrc: executed by bash(1) for non-login shells.
+#{1  prepare the environment, and load local stuff
+
+# escape if environment already loaded
 test -z "$PS1" && return
-#{1 quick edit&reload this file
 
 unalias -a
-alias ea='vi ~/.bashrc && source ~/.bashrc'
 
-function _progress() { # for profiling and debugging
+# for profiling and debugging
+function _progress() {
 	if false; then
 		printf "\r%-*s" $COLUMNS "$*"
 	fi
 }
 
-#{1 path
+# Default values for some global variables...
+prompt_color=30
+working_dirs=
+# ...that can be overwrited here.
+. "$HOME/src/bash/functions"
 
-function add_to_path() {
-	local end='tail'
-	while test -n "$1"; do
-		case "$1" in
-			-t)
-				end='tail'
-			;;
-			-h)
-				end='head'
-			;;
-			*)
-				if
-					! expr match "$PATH"    "$1:"  >/dev/null &&
-					! expr match "$PATH" ".*:$1:"  >/dev/null &&
-					! expr match "$PATH" ".*:$1$"  >/dev/null
-				then
-					if test "$end" == 'tail'; then
-						export PATH="$PATH:$1"
-					else
-						export PATH="$1:$PATH"
-					fi
-				fi
-			;;
-		esac
-		shift
-	done
-}
+if test -r "$HOME/.bashrc_local"; then
+	_progress '~/.bashrc_local'
+	source "$HOME/.bashrc_local"
+fi
+
+
+#{1 path
 
 add_to_path \
 		-h "$HOME/bin" \
@@ -386,6 +372,9 @@ function q4() {
 
 _progress 'util'
 
+# quick edit&reload this file
+alias ea='vi ~/.bashrc && source ~/.bashrc'
+
 alias rawbatch='ufraw-batch --wb=auto --exposure=auto --out-type=jpeg --compression=80'
 
 alias raw2jpg='rawbatch --size=`show res` --out-path=.. *'
@@ -595,7 +584,7 @@ function mkcd() { mkdir "$1" && cd "$1"; }
 function cd..() {
 	dir="$PWD"
 	cd .. || return
-	read -p "rm -rf \"$dir\"? " || return
+	read -p "rm -rf \"$dir\" (y/[n])? " || return
 	test "$REPLY" == "y" -o "$REPLY" == "r" || return
 	rm -rf "$dir"
 }
@@ -762,7 +751,7 @@ esac
 #{ the command prompt
 
 export HISTCONTROL="ignoreboth"
-PS1='\[\e[0;31m\]\t \[\e[0;33m\][`echo $STY|cut -d . -f 2`.$WINDOW] \u@\h \[\e[0;32m\]\w\n\$\[\e[0m\] '
+PS1='\[\e[0;'$prompt_color'm\]\t [`echo $STY|cut -d . -f 2`.$WINDOW] \u@\h \w\n\$\[\e[0m\] '
 export PS1
 export THE_PS1=$PS1
 #export PROMPT_COMMAND='echo -ne "\033]0;[`echo $STY|cut -d . -f 2`.${WINDOW}] ${PWD}\007"'
@@ -793,11 +782,6 @@ fi
 
 
 #{1 host-specific
-
-if test -r "$HOME/.bashrc_local"; then
-	_progress '~/.bashrc_local'
-	source "$HOME/.bashrc_local"
-fi
 
 uncommited=""
 for dir in $working_dirs; do

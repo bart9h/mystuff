@@ -1,0 +1,31 @@
+# vim600:ft=sh:fdm=marker:fmr={,}:
+
+function add_to_path()
+{
+	local end='tail'
+	while test -n "$1"; do
+		case "$1" in
+			-t)
+				end='tail'
+			;;
+			-h)
+				end='head'
+			;;
+			*)
+				if
+					! expr match "$PATH"    "$1:"  >/dev/null &&
+					! expr match "$PATH" ".*:$1:"  >/dev/null &&
+					! expr match "$PATH" ".*:$1$"  >/dev/null
+				then
+					if test "$end" == 'tail'; then
+						export PATH="$PATH:$1"
+					else
+						export PATH="$1:$PATH"
+					fi
+				fi
+			;;
+		esac
+		shift
+	done
+}
+
