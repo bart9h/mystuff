@@ -421,15 +421,6 @@ alias pgo='ping google.com'
 alias reconnect='sudo ifconfig eth0 down; sudo dhclient'
 #alias reconnect='sudo ifconfig eth0 down; sudo ifconfig eth0 192.168.1.4 netmask 255.255.255.0 && route add default gw 192.168.1.1'
 
-case $(hostname) in
-	doti-desk)
-		alias lf='lftp fish://doti@bia:9922/ -e cd'
-	;;
-	bia-desk)
-		alias lf='lftp fish://doti@doti:9922/ -e cd'
-	;;
-esac
-
 function crun() {
 	local aout=`mktemp /tmp/crun.XXXXXX`
 	gcc $* -x c -o "$aout" - && "$aout" && rm "$aout"
@@ -437,6 +428,22 @@ function crun() {
 
 
 #{1          misc
+
+#{2 warn about uncommited changes
+
+uncommited=""
+for dir in $working_dirs; do
+	if svn st $dir|grep '^M'|head -1>/dev/null; then
+		uncommited="$uncommited $dir"
+		break
+	fi
+done
+if test -n "$uncommited"; then
+	echo "uncommited: $uncommited"
+fi
+unset uncommited
+
+#}
 
 _progress 'misc'
 
@@ -782,18 +789,6 @@ fi
 
 
 #{1 host-specific
-
-uncommited=""
-for dir in $working_dirs; do
-	if svn st $dir|grep '^M'|head -1>/dev/null; then
-		uncommited="$uncommited $dir"
-		break
-	fi
-done
-if test -n "$uncommited"; then
-	echo "uncommited: $uncommited"
-fi
-unset uncommited
 
 #}
 _progress ''
