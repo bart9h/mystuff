@@ -1,10 +1,33 @@
 #!/usr/bin/perl
+#{# header
+# vim600:fdm=marker:fmr={#,}#:
+
 use strict;
 use warnings;
+use Data::Dumper;
 
-#{#  global data
+#}#
 
-my %g_files = (
+#{# global data
+
+my %reqs = (  # required external tools
+
+	# X11
+	xosd => { bin => 'osd_cat', deb => 'xosd-bin' },
+	xwit => {},
+
+	# tag
+	id3v2 => {},
+	vorbis => { bin => 'vorbiscomment', deb => 'vorbis-tools' },
+	flac => { bin => 'metaflac' },
+
+	# image
+	gphoto2 => {},
+	ufraw => { bin => 'ufraw-batch' },
+	imagemagick => { bin => 'convert' },
+);
+
+my %files = (
 	'bash/bashrc' => '.bashrc',
 	'bash/Xdefaults.sh' => 'bin/Xdefaults.sh',
 	'etc/fluxbox/styles' => '.fluxbox/styles',
@@ -26,13 +49,51 @@ my %g_files = (
 
 #}#
 
-sub main()
+sub install_files($)
 {#
-	foreach(sort keys %g_files) {
-		print "don't know how to install $_\n";
+	my $files = shift;
+	foreach(sort keys %$files) {
+		print "TODO: ln -s $_ $files->{$_}";
 	}
 }#
 
-main();
+sub install_packages(@)
+{#
+	my $cmd;
+	if(-e '/etc/debian_version') {
+		my $cmd = `which apt-get`
+			or die 'apt-get not found';
+		chomp $cmd;
+		foreach(@_) {
+			$cmd = "sudo $cmd install $_";
+			print "$cmd\n";
+			system $cmd or die;
+		}
+	}
+	else {
+		print "\nYou have to install the following packages:\n".
+				join("\n", @_)."\n";
+	}
+}#
 
-# vim600:fdm=marker:fmr={#,}#:
+sub missing_packages()
+{#
+	my @rc;
+	foreach(sort keys %reqs) {
+		my $bin = ($reqs{$_}->{bin} or $_);
+		my $deb = ($reqs{$_}->{deb} or $_);
+		my $cmd = `which $bin`;
+		if($cmd) {
+			print "$deb is ok\n";
+			$reqs{$_}->{cmd} = $cmd;
+		}
+		else {
+			push @rc, $_;
+		}
+	}
+	return @rc;
+}#
+
+install_files( \%files );
+install_packages( missing_packages() );
+
