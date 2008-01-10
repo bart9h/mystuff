@@ -11,15 +11,11 @@
 #
 # By default this script does nothing.
 
-/bin/stty onlcr
-
-cat<<EOF
-
-###################################
-#  Please <ENTER> to login.
-#  You may use the "guest" account.
-###################################
-
-EOF
+/bin/echo -e "\r\n"
+/bin/echo -e "#####################################\r"
+/bin/echo -e "#  Please <ENTER> to login.\r"
+/bin/echo -e "#  You may use the \"guest\" account.\r"
+/bin/echo -e "#####################################\r"
+/bin/echo -e "\r\n"
 
 exit 0
