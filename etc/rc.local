@@ -11,6 +11,10 @@
 #
 # By default this script does nothing.
 
+if mount | grep "/var/log type tmpfs"; then
+	/bin/mkdir -pv /var/log/apt
+fi
+
 /bin/echo -e "\r\n"
 /bin/echo -e "#####################################\r"
 /bin/echo -e "#  Please <ENTER> to login.\r"
