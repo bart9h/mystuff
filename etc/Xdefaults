@@ -30,13 +30,13 @@ Xcursor.theme: whiteglass
 #}
 
 #{{ font
-	xterm*faceSize1: 6
-	xterm*faceSize2: 8
-	xterm*faceSize:  10
-	xterm*faceSize3: 12
+	xterm*faceSize1: 8
+	xterm*faceSize2: 10
+	xterm*faceSize:  12
+	xterm*faceSize3: 13
 	xterm*faceSize4: 14
-	xterm*faceSize5: 16
-	xterm*faceSize6: 18
+	xterm*faceSize5: 15
+	xterm*faceSize6: 16
 	xterm*faceName: Inconsolata
 	xterm*utf8: 1
 #}
