@@ -1,0 +1,63 @@
+
+xlogin*login.translations: #override \
+	Ctrl<Key>R: abort-display()\n\
+	<Key>F1: set-session-argument(failsafe) finish-field()\n\
+	<Key>Delete: delete-character()\n\
+	<Key>Left: move-backward-character()\n\
+	<Key>Right: move-forward-character()\n\
+	<Key>Home: move-to-begining()\n\
+	<Key>End: move-to-end()\n\
+	Ctrl<Key>KP_Enter: set-session-argument(failsafe) finish-field()\n\
+	<Key>KP_Enter: set-session-argument() finish-field()\n\
+	Ctrl<Key>Return: set-session-argument(failsafe) finish-field()\n\
+	<Key>Return: set-session-argument() finish-field()
+
+
+! position
+xlogin.geometry: 200x130-0+0
+
+! colors
+xlogin*background:  #111111
+xlogin*foreground:  red
+xlogin*greetColor:  red
+xlogin*promptColor: red
+xlogin*failColor:   red
+
+! prompts
+Xlogin*titleMessage:
+xlogin*greeting:
+xlogin*namePrompt:       user:\040
+xlogin*passwdPrompt:     pass:\040
+xlogin*fail:             nao
+
+! fonts
+xlogin*greetFont:       -*-*-*-*-*-*-15-*-*-*-*-*-*-*
+xlogin*font:            -*-*-*-*-*-*-15-*-*-*-*-*-*-*
+xlogin*promptFont:      -*-*-*-*-*-*-15-*-*-*-*-*-*-*
+xlogin*failFont:        -*-*-*-*-*-*-15-*-*-*-*-*-*-*
+
+! shape
+xlogin*borderWidth:      0
+xlogin*frameWidth:       0
+xlogin*innerFramesWidth: 0
+
+
+
+
+! xmessage resources
+! ==================
+
+Xmessage*geometry:              200x30-0+130
+Xmessage*background:            #111111
+Xmessage*foreground:            #666666
+Xmessage*Font:       -*-*-*-*-*-*-15-*-*-*-*-*-*-*
+Xmessage*borderWidth:           0
+
+Xmessage*message.scrollVertical:        Never
+Xmessage*message.scrollHorizontal:      Never
+
+Xmessage*Text*background:       #111111
+Xmessage*Text*foreground:       #666666
+Xmessage*Text.borderColor:      #111111
+Xmessage*Text.borderWidth:      0
+

@@ -1,0 +1,10 @@
+#!/bin/sh
+
+#remove root-tail
+killall root-tail
+
+#remove the xmessage buttons
+killall xmessage
+
+chown $USER /dev/console
+
