@@ -15,11 +15,15 @@ if mount | grep "/var/log type tmpfs"; then
 	/bin/mkdir -pv /var/log/apt
 fi
 
-/bin/echo -e "\r\n"
-/bin/echo -e "#####################################\r"
-/bin/echo -e "#  Please <ENTER> to login.\r"
-/bin/echo -e "#  You may use the \"guest\" account.\r"
-/bin/echo -e "#####################################\r"
-/bin/echo -e "\r\n"
+( dhclient 2>&1 >/dev/null )&
+
+if ! test -x /etc/init.d/xdm; then
+	/bin/echo -e "\r\n"
+	/bin/echo -e "#####################################\r"
+	/bin/echo -e "#  Please <ENTER> to login.\r"
+	/bin/echo -e "#  You may use the \"guest\" account.\r"
+	/bin/echo -e "#####################################\r"
+	/bin/echo -e "\r\n"
+fi
 
 exit 0
