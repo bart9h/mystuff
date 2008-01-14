@@ -91,6 +91,7 @@ set hlsearch
 set scrolloff=5
 set foldmethod=syntax
 set number
+set showcmd
 
 " nao pisca sobre ([{pares}])
 let loaded_matchparen=1
@@ -130,7 +131,7 @@ nmap <F9> @q
 nmap <C-c> :!cd "`dirname "%:p"`"; grep "\<<cword>\>" *.[cChd] *.cpp *.cxx *.pl *.pm 2> /dev/null; true<CR>
 
 " makes * highlight the word, but don't jump to next occurrence
-map <silent> * yiw:let @/="\\<".@0."\\>"<bar>set hls<CR>
+map <silent> * yiw:let @/="\\<".@0."\\>"<CR>:set hls<CR>
 "map <silent> * *N
 
 " save
@@ -161,8 +162,8 @@ nmap <+> <C-W>+
 nmap <-> <C-W>-
 
 " make
-"nmap <C-n> :wall<CR>:make<CR>
-nmap <C-n> :update<CR>:make %:r.o<CR>
+nmap <C-n> :wall<CR>:make<CR>
+"nmap <C-n> :update<CR>:make %:r.o<CR>
 "TODO: se terminar sem arquivo carregado, :q<CR>
 imap <C-n> <ESC><C-n>
 
@@ -175,15 +176,14 @@ nmap M :Man <C-R><C-W><CR>
 
 " {{{1 commands
 
-command! -bar -nargs=1 DoMan %!/usr/bin/man -7 -a -S 3:2:1:5:8:4:7:6:9 -P cat <args>
+command! -bar -nargs=1 DoMan %!/usr/bin/man -a -S 3:2:1:5:8:4:7:6:9 -P cat <args>
 command! -bar -nargs=1 Man
 \   new
 \|  DoMan <args>
 \|  set filetype=man
 \|  goto 1
 \|  set buftype=nofile
-
-"\|  %s/.//g
+\|  %s/.//g
 
 command! ToHtml
 \ HtmlToAcento
