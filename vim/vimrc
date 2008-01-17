@@ -124,6 +124,9 @@ endif
 
 " {{{1 key mappings
 
+" close/open folders
+nmap <space> za
+
 " quick macro
 nmap <F9> @q
 
@@ -261,4 +264,4 @@ endif
 
 
 "}}}
-" vim600:fdm=marker:
+" vim600:fdm=marker:fmr={{{,}}}:
