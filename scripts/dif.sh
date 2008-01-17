@@ -42,7 +42,7 @@ while test "$1"; do
 	fi
 
 	if test -n "$tar_type"; then
-		target="/tmp/""`basename "$1"`"
+		target="/tmp/`basename "$1"`"
 		mkdir $verbose "$target" || exit
 		dir="$target"
 		test -n "$verbose" && echo "untaring \"$1\" to \"$target\""

@@ -3,7 +3,7 @@
 case "$1" in
 	''|'text')
 		./configure \
-			--prefix=$PREFIX \
+			--prefix="$PREFIX" \
 			--disable-nls \
 			--enable-multibyte \
 			--enable-perlinterp \
@@ -13,7 +13,7 @@ case "$1" in
 	;;
 	'gui')
 		./configure \
-			--prefix=$PREFIX \
+			--prefix="$PREFIX" \
 			--disable-nls \
 			--enable-multibyte \
 			--enable-perlinterp \

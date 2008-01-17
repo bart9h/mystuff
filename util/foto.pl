@@ -354,14 +354,13 @@ sub post_process()
 
 				print "$count/$total\n";
 				if( $ext eq 'cr2' ) {
-           
 					x "nice ufraw-batch --wb=camera --exposure=auto --size=${width}x${height} --out-type=jpeg --compression=$args{jpeg_quality} --out-path=\"$g_dir/..\" \"$shot\"";
 				}
 				elsif( $ext eq 'jpg' ) {
 					x "nice convert -quality $args{jpeg_quality} -resize ${width}x${height} \"$shot\" \"../$base.jpg\"";
 					if( $args{do_gray} ) {
 						do_mkdir $args{gray_dir};
-						x "nice convert -colorspace gray -quality 80 -resize ${width}x${height} $shot $args{gray_dir}/$base.jpg";
+						x "nice convert -colorspace gray -quality 80 -resize ${width}x${height} \"$shot\" \"$args{gray_dir}/$base.jpg\"";
 					}
 				}
 				elsif( $ext eq 'mpg' ) {

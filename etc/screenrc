@@ -9,7 +9,8 @@ altscreen on
 vbell off
 autodetach on
 startup_message off
-shell "-/bin/bash"
+#shell "-/bin/bash"
+shell "/bin/bash"
 
 #caption always "window %3n (%t) %u%? | system load: %l | %D, %d %M %Y %C%a"
 #caption always "%{Yb} %D %Y-%02m-%02d %0c:%s %{k}|%{G} %l %{k}|%{W} %-w%{+u}%n %t%{-u}%+w"

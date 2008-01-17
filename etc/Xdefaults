@@ -21,12 +21,12 @@ Xcursor.theme: whiteglass
 
 #{ xterm
 
-#{{ scroll
-	XTerm*saveLines: 5000
-	XTerm*scrollBar: false
-	XTerm*rightScrollBar: true
-	XTerm*scrollTtyOutput: false
-	XTerm*scrollKey: true
+#{ scroll
+	xterm*saveLines: 5000
+	xterm*scrollBar: false
+	xterm*rightScrollBar: true
+	xterm*scrollTtyOutput: false
+	xterm*scrollKey: true
 #}
 
 #{ font
@@ -34,13 +34,13 @@ Xcursor.theme: whiteglass
 	xterm*utf8: 1
 #}
 
-#{{ color
-	XTerm*background: black
-	XTerm*foreground: grey
-	Xterm*cursorColor: yellow
+#{ color
+	xterm*background: black
+	xterm*foreground: grey
+	xterm*cursorColor: yellow
 #}
 
-#{{ selection
+#{ selection
 	xterm*charClass: 35:48,37-38:48,45-47:48,58:48,61:48,63-64:48,124:48,126:48
 	xterm*cutNewline: false
 #	xterm*cutToBeginningOfLine: false
@@ -49,7 +49,7 @@ Xcursor.theme: whiteglass
 	xterm*loginShell: true
 #}
 
-#{{ coisas
+#{ coisas
 
 #	xterm*cacheDoublesize: 0
 
