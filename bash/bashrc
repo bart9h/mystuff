@@ -14,7 +14,7 @@ function _progress() {
 }
 
 # Default values for some global variables...
-prompt_color=30
+prompt_color='1;30'
 working_dirs=
 # ...that can be overwrited here.
 . "$HOME/src/bash/functions"
@@ -330,7 +330,8 @@ export MANPAGER="$PAGER"
 #export MANPAGER="col -b | view -c 'set ft=man nomod nolist' -"
 [ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
 
-export SVN_EDITOR=vi
+export EDITOR="vim"
+export SVN_EDITOR="$EDITOR"
 export GREP_OPTIONS='--exclude="*.svn-base"'
 
 # paths
