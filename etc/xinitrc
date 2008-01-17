@@ -97,6 +97,13 @@ xinitrc_doti()
 	pidgin --nologin &
 }
 
+xinitrc_eee()
+{
+	#xcompmgr -c &
+	rox -p Default
+	gkrellm -w &
+}
+
 case $( hostname ) in
 	bia-desk*)
 		xinitrc_bia
@@ -104,6 +111,10 @@ case $( hostname ) in
 
 	doti-desk*)
 		xinitrc_doti
+	;;
+
+	doti-lap*)
+		xinitrc_eee
 	;;
 esac
 
@@ -169,11 +180,9 @@ esac
 	if sleep 1s; then
 		dir="$HOME/share/wallpaper/random"
 		file="`find "$dir" -not -type d|rl|head -1`"
-		if !  fbsetbg "$file"; then
-			if ! fbsetbg -l; then
-				xsetroot -solid black
-			fi
-		fi
+		test -r "$file" && fbsetbg "$file" \
+		|| fbsetbg -l \
+		|| xsetroot -solid black
 	fi
 ) & #}
 
