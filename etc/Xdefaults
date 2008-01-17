@@ -29,14 +29,7 @@ Xcursor.theme: whiteglass
 	XTerm*scrollKey: true
 #}
 
-#{{ font
-	xterm*faceSize1: 8
-	xterm*faceSize2: 10
-	xterm*faceSize:  12
-	xterm*faceSize3: 13
-	xterm*faceSize4: 14
-	xterm*faceSize5: 15
-	xterm*faceSize6: 16
+#{ font
 	xterm*faceName: Inconsolata
 	xterm*utf8: 1
 #}
@@ -97,4 +90,4 @@ aterm*fading: 75
 
 #}
 
-#  vim600:ft=xdefaults:fdm=marker:fmr=#{,#}:
+# vim600:ft=xdefaults:fdm=marker:fmr=#{,#}:

@@ -1,0 +1,8 @@
+# vim600:ft=xdefaults:
+xterm*faceSize1: 7
+xterm*faceSize2: 9
+xterm*faceSize:  10
+xterm*faceSize3: 12
+xterm*faceSize4: 13
+xterm*faceSize5: 14
+xterm*faceSize6: 18
