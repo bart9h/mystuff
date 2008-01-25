@@ -107,7 +107,7 @@
 		#	[stylesdir] (/usr/share/fluxbox/styles)
 		#	[stylesdir] (~/.fluxbox/styles)
 		#[end]
-		[include] (/etc/X11/fluxbox/fluxbox-menu)
+		[include] (/etc/X11/fluxbox/system.fluxbox-menu)
 	[end]
 
 	#[exec] (rodar) {/home/doti/src/desktop/x-rotate.sh}

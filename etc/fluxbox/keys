@@ -234,12 +234,12 @@ Control Mod4 b :ExecCommand xmms2 next
 
 
 # media 129
-None 129 :ExecCommand rox /home/media
+#None 129 :ExecCommand rox /home/media
 
 # lua 223
-None 223 :ExecCommand rox /home/media/musicas
+#None 223 :ExecCommand rox /home/media/musicas
 
-None 223 :ToggleCmd {ExecCommand /home/doti/bin/osd putz} {ExecCommand /home/doti/bin/osd blah}
+#None 223 :ToggleCmd {ExecCommand /home/doti/bin/osd putz} {ExecCommand /home/doti/bin/osd blah}
 
 # volume wheel
 #None 176 :ExecCommand aumix -v +4 -w +4

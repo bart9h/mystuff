@@ -8,6 +8,8 @@
 
 =todo
 
+- remove all globals; option to run over existing photos
+
 - ETA
 
 - die if available_disk_space < 2*files_size
@@ -395,7 +397,7 @@ sub main(@)
 main(@ARGV);
 if( $g_dir ) {
 	print "cd \"$g_dir\"";
-	$ENV{DISPLAY} and x("$args{file_manager} \"$g_dir\" &");
+	$ENV{DISPLAY} and x("$args{file_manager} \"$g_dir/..\" &");
 }
 
 

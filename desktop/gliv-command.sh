@@ -5,7 +5,11 @@ dir="$1"; shift
 file="$1"; shift
 
 VERBOSE=1
-dbg() { test -n "$VERBOSE" -a "$VERBOSE" != "0" && echo "$*" |tee -a /tmp/gliv-command.log; }
+dbg() {
+	test -n "$VERBOSE" -a "$VERBOSE" != "0" && echo "$*" |
+	tee -a /tmp/gliv-command.log
+}
+
 dbg "command($command), dir($dir), file($file)"
 
 cr2="$( echo "$file" | sed 's/\.[^.]\+$/.cr2/' )"
