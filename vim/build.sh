@@ -1,7 +1,9 @@
 #!/bin/sh
 
+test -d "$PREFIX" || PREFIX=/usr/local
+
 case "$1" in
-	''|'text')
+	''|'text'|'no-gui'|'nogui')
 		./configure \
 			--prefix="$PREFIX" \
 			--disable-nls \
@@ -22,6 +24,7 @@ case "$1" in
 	;;
 	*)
 		echo '?'
+		exit
 	;;
 esac
 
