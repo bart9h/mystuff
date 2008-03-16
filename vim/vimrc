@@ -46,7 +46,7 @@ endif
 set grepprg=grep\ -nH\ $*
 filetype indent on
 let g:netrw_sort_sequence="[\/]$,*,.bak$,.o$,.swp$,.obj$"
-
+let g:netrw_list_hide= '^\.[^.].*'
 
 " {{{1 filetype
 
