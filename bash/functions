@@ -29,3 +29,11 @@ function add_to_path()
 	done
 }
 
+function eset()
+{
+	tmp=`mktemp /tmp/eset.XXXXXX`
+	echo "${!1}" >| "$tmp"
+	$EDITOR "$tmp"
+	eval "export $1=\"`cat "$tmp"`\""
+}
+
