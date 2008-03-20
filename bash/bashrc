@@ -437,7 +437,12 @@ alias reconnect='sudo ifconfig eth0 down; sudo dhclient'
 
 function crun() {
 	local aout=`mktemp /tmp/crun.XXXXXX`
-	gcc $* -x c -o "$aout" - && "$aout" && rm "$aout"
+	gcc -x c $* -o "$aout" - && "$aout" && rm "$aout"
+}
+
+function Crun() {
+	local aout=`mktemp /tmp/crun.XXXXXX`
+	g++ -x c++ $* -o "$aout" - && "$aout" && rm "$aout"
 }
 
 
