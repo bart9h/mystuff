@@ -25,10 +25,16 @@ if test -r "$HOME/.bashrc_local"; then
 fi
 
 
+#{1 software setup
+
+export DMD_DIR='/opt/dmd'
+
+
 #{1 path
 
 add_to_path \
 		-h "$HOME/bin" \
+		-h "$DMD_DIR/bin" \
 		-t "/usr/sbin" \
 		-t "/sbin" \
 #		-h "/usr/local/lib/cw" \
@@ -267,13 +273,6 @@ function svnci() {
 	/bin/rm "$tmp"
 }
 
-function gitci() {
-	tmp=`mktemp /tmp/gitdif.XXXXXX`
-	git diff "$@" >| "$tmp"
-	GIT_EDITOR="vim -o \"$tmp\" +\"set filetype=diff\"" git commit "$@"
-	/bin/rm "$tmp"
-}
-
 function ci() {
 	if test -d .svn; then
 		svnci "$@"
@@ -320,6 +319,8 @@ function update() {
 	fi
 }
 
+#export CVS_RSH=ssh
+#export CVSROOT=:ext:9h:/home/9hells/cvsroot
 
 #} version control
 
@@ -345,6 +346,8 @@ export SVN_EDITOR="$EDITOR"
 export GREP_OPTIONS='--exclude="*.svn-base"'
 
 # paths
+export DERELICT_DIR='/home/sft/d/derelict'
+export LD_LIBRARY_PATH='.'
 export PKG_CONFIG_PATH='/usr/local/lib/pkgconfig:/usr/lib/pkgconfig'
 export CHOICESPATH="${HOME}/.Choices:/usr/local/share/Choices:/usr/share/Choices"
 
@@ -431,12 +434,7 @@ alias reconnect='sudo ifconfig eth0 down; sudo dhclient'
 
 function crun() {
 	local aout=`mktemp /tmp/crun.XXXXXX`
-	gcc -x c $* -o "$aout" - && "$aout" && rm "$aout"
-}
-
-function Crun() {
-	local aout=`mktemp /tmp/crun.XXXXXX`
-	g++ -x c++ $* -o "$aout" - && "$aout" && rm "$aout"
+	gcc $* -x c -o "$aout" - && "$aout" && rm "$aout"
 }
 
 
@@ -568,9 +566,13 @@ export GDK_USE_XFT=1
 alias fu='du -sc * | sort -n'
 #alias www='webfsd -d -F -p 8080 -r .'
 alias ntop='sudo jnettop'
+#alias w1='cd ~/fotos/incoming && sudo gphoto2 -P'
+#alias w1='source /home/barrett/bin/w1'
 
 #alias osd='osd_cat -p middle -A center -d 1 -s 3 -c yellow -f "-*-helvetica-bold-r-*-*-24-*-*-*-*-*-*-*"'
 
+#alias dif='diff --unified=5 --show-c-function --recursive --ignore-all-space'
+#alias dif='diff --unified=5 --show-c-function --recursive --ignore-space-change --ignore-blank-lines --ignore-all-space'
 alias mpf='mplayer -fs -osdlevel 0'
 alias mpq='mplayer -nosound -osdlevel 0'
 alias mpr='ls -Q | rl | xargs mplayer -fs'
