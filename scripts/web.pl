@@ -64,6 +64,11 @@ my %engines = (
 		args => [ '-img', '--image' ],
 		url => 'http://images.google.com/images?q=',
 	},
+	pbay => {
+		description => 'The Pirate Bay -- torrent search',
+		args => [ '-pbay',  '--piratebay' ],
+		url => 'http://thepiratebay.org/search/',
+	},
 	pkg => {
 		description => 'LinuxPackages.net slackware package',
 		args => [ '-p',  '--linux-packages' ],
@@ -84,6 +89,18 @@ my %engines = (
 		description => 'Slackware.com package',
 		args => [ '-s',  '--slackware' ],
 		url => 'http://slackware.it/en/pb/search.php?v=current&t=1&q=',
+	},
+	ubuntu => {
+		description => 'Ubuntu package',
+		args => [ '-u', '--ubuntu' ],
+		url => 'http://packages.ubuntu.com/cgi-bin/search_contents.pl?searchmode=searchfiles&case=insensitive&word=',
+		
+	},
+	ubuntu_file => {
+		description => 'Ubuntu package (by file)',
+		args => [ '-uf', '--ubuntu-file' ],
+		url => 'http://packages.ubuntu.com/cgi-bin/search_contents.pl?searchmode=searchfiles&case=insensitive&word=',
+		
 	},
 	wiki => {
 		description => 'Wikipedia (english)',
