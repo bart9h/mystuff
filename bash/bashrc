@@ -39,6 +39,18 @@ add_to_path \
 		-t "/sbin" \
 #		-h "/usr/local/lib/cw" \
 
+function call()
+{
+	local f="$1"; shift
+	if test "$(type -t "$f" 2>/dev/null)" != "function"; then	
+		local s="$HOME/etc/bash/$f.sh"
+		if test -r "$s"; then
+			source "$s"
+		fi
+	fi
+	"$f" "$@"
+}
+
 alias dif="$HOME/src/scripts/dif.sh"
 alias path2tag="$HOME/src/scripts/path2tag.pl"
 #alias reconnect="$HOME/src/scripts/reconnect.sh"

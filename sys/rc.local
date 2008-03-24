@@ -1,5 +1,8 @@
 #!/bin/sh -e
 
+source "$HOME/src/bash/functions"
+start_screen -S tor rtorrent
+
 pidof hal | grep -q '[0-9]' ||
 /etc/init.d/hal start
 
