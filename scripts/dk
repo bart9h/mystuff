@@ -12,9 +12,9 @@ mldonkey_ip="127.0.0.1"
 mldonkey_port="4000"
 
 toggle_limits=(
-		low   3  20
-		med   8  40
-		high  12 120
+		low   5  20
+		med   10 90
+		high  20 120
 )
 
 #}
@@ -231,7 +231,7 @@ dk_last_result()
 
 case "$1" in
 	--help|-h|-?)  usage ;;
-	limit)         set_bandwidth_limit "$2" "$3" ;;
+	limit|l)       set_bandwidth_limit "$2" "$3" ;;
 	start)         dk_start ;;
 	.)             exec telnet $mldonkey_ip $mldonkey_port ;;
 	stat)          dk_stat ;;
