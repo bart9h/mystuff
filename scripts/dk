@@ -73,10 +73,15 @@ q
 EOF
 }
 
+function grep_bin()
+{
+	/bin/grep --binary-files=text "$@"
+}
+
 function dk_get_var()
 {
 	dk_tell voo $1 \
-		| grep "$1.*=" \
+		| grep_bin "$1.*=" \
 		| cut -d  -f 4 \
 		| cut -d m -f 2
 }
@@ -190,12 +195,12 @@ function dk_stat()
 		col=131
 	fi
 	local cmd=`printf "set max_name_len %d\nvd" $(( $col - 86 ))`
-	dk_tell "$cmd" | grep "b\ \|Down:\|%" | grep -iv xxx
+	dk_tell "$cmd" | grep_bin "b\ \|Down:\|%" | grep_bin -iv xxx
 
 	printf '\033[32m'
 	find "$incoming_dir" -maxdepth 1 -type f -mtime -1 \
 			-printf "%Tm/%Td %TH:%TM:%TS  %f  (%k Kb)\n" \
-	| grep -iv xxx | sort
+	| grep_bin -iv xxx | sort
 
 	local free=$(
 		echo $( df "$MLNET_HOME/temp" 2>/dev/null | tail -1 | cut -d G -f 3 ) \
