@@ -535,11 +535,17 @@ function mki() {
 	[ "$name" == "src" ] && name="`basename $(cd ..; echo $PWD)`"
 
 	if test -d 'CVS'; then
-		args="--pkgversion=cvs.$date"
+		args="--pkgversion=cvs-$date"
 	elif test -d '.svn'; then
-		args="--pkgversion=svn.$date"
+		rev=$( svn info | grep '^Revision:\ \+[0-9]\+$' | cut -d ' ' -f 2 )
+		if test "$rev" -ge 1; then
+			ver="r$rev"
+		else
+			ver="$date"
+		fi
+		args="--pkgversion=svn-$ver"
 	elif test -d '.git'; then
-		args="--pkgversion=git.$date"
+		args="--pkgversion=git-$date"
 	else
 		name="`echo "$name" | cut -d - -f 1`"
 	fi
