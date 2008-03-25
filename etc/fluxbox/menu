@@ -2,11 +2,15 @@
 
 [begin]
 
-	[exec] (firefox) {/usr/local/bin/firefox -P doti} </opt/firefox/icons/mozicon16.xpm>
+	[exec] (firefox) {/usr/local/bin/firefox -P doti} </usr/local/firefox/icons/mozicon16.xpm>
 
-	[exec] (thunar) {thunar} </usr/lib/perl5/Tk/folder.xpm>
+	#[exec] (pidgin) {pidgin} </usr/share/pixmaps/pidgin/status/48/chat.png>
+	[exec] (pidgin) {pidgin} </home/doti/share/icons/pidgin-icon.png>
 
-	[exec] (xterm) {xterm} </usr/share/WindowMaker/Icons/defaultterm.xpm>
+	#[exec] (thunar) {thunar} </usr/lib/perl5/Tk/folder.xpm>
+	[exec] (pcmanfm) {pcmanfm} </home/doti/share/icons/folder.png>
+
+	[exec] (xterm) {xterm} </home/doti/share/icons/terminal.png>
 
 	[separator]
 	[exec] (wesnoth) {wesnoth}

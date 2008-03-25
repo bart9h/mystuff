@@ -1,13 +1,13 @@
-!mouse actions added by fluxbox-update_configs
-OnWindow Mod1 Mouse1 :StartMoving
-OnWindow Mod1 Mouse3 :StartResizing BottomRight
-
 # ~/.fluxbox/keys
 # {{{1          misc
+
 
 # use Ctrl-Alt-Del to reload this file
 Control Mod1 Delete :MacroCmd {Restart} {Reconfigure} {ExecCommand fbsetbg -l; invalidate}
 
+
+OnWindow Mod4 Mouse1 :StartMoving
+OnWindow Mod4 Mouse3 :StartResizing BottomRight
 
 #Control Mod1 Mod4 p :MacroCmd { SetResourceValue session.screen0.slit.placement TopCenter } { SetResourceValue session.screen0.slit.direction Horizontal }
 Control Mod1 Mod4 p :MacroCmd { SetResourceValue session.screen0.slit.placement TopCenter 1 } { SetResourceValue session.screen0.slit.direction, Horizontal }
