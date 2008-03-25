@@ -442,7 +442,7 @@ function lddr()  # ldd "recursivo": faz ldd das bibliotecas nao-padrao mostradas
 
 # network
 alias pgo='ping google.com'
-alias reconnect='sudo ifconfig eth0 down; sudo dhclient'
+alias reconnect='sudo kill `pidof dhclient`; sudo ifconfig eth0 down; sudo dhclient'
 #alias reconnect='sudo ifconfig eth0 down; sudo ifconfig eth0 192.168.1.4 netmask 255.255.255.0 && route add default gw 192.168.1.1'
 
 function crun() {
