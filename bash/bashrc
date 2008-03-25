@@ -51,11 +51,11 @@ function call()
 	"$f" "$@"
 }
 
-alias dif="$HOME/src/scripts/dif.sh"
-alias undeaf="$HOME/src/util/undeaf.sh"
-alias path2tag="$HOME/src/scripts/path2tag.pl"
-alias vimv="$HOME/src/scripts/vimv.sh"
-alias web="$HOME/src/scripts/web.pl"
+alias dif="$HOME/etc/scripts/dif.sh"
+alias undeaf="$HOME/etc/util/undeaf.sh"
+alias path2tag="$HOME/etc/scripts/path2tag.pl"
+alias vimv="$HOME/etc/scripts/vimv.sh"
+alias web="$HOME/etc/scripts/web.pl"
 
 
 
