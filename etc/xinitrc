@@ -91,10 +91,10 @@ xinitrc_bia()
 
 xinitrc_doti()
 {
-	xcompmgr -c &
+	#xcompmgr -c -f -C -I .1 -O .1 &
 	gkrellm -w &
-	wmtop -c "xterm -geometry 90x24 -e htop" &
-	pidgin --nologin &
+	#wmtop -c "xterm -geometry 90x24 -e htop" &
+	#pidgin --nologin &
 }
 
 xinitrc_eee()

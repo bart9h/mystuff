@@ -1,8 +1,12 @@
 #!/bin/sh -e
 
-source "$HOME/src/bash/functions"
+source "$HOME/etc/bash/functions"
+log "etc/sys"
+
+# rtorrent
 start_screen -S tor rtorrent
 
+# hal
 pidof hal | grep -q '[0-9]' ||
 /etc/init.d/hal start
 
@@ -10,9 +14,11 @@ if mount | grep "/var/log type tmpfs"; then
 	/bin/mkdir -pv /var/log/apt
 fi
 
+# dhcp
+pidof dhclient | grep -q '[0-9]' ||
 ( dhclient 2>&1 >/dev/null )&
 
-if ! test -x /etc/init.d/xdm; then
+if test ! ( -x /etc/init.d/xdm || -x /etc/init.d/gdm ); then
 	/bin/echo -e "\r\n"
 	/bin/echo -e "#####################################\r"
 	/bin/echo -e "#  Please <ENTER> to login.\r"
