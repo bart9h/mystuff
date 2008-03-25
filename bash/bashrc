@@ -592,6 +592,7 @@ alias ntop='sudo jnettop'
 
 #alias dif='diff --unified=5 --show-c-function --recursive --ignore-all-space'
 #alias dif='diff --unified=5 --show-c-function --recursive --ignore-space-change --ignore-blank-lines --ignore-all-space'
+alias mp='mplayer'
 alias mpf='mplayer -fs -osdlevel 0'
 alias mpq='mplayer -nosound -osdlevel 0'
 alias mpr='ls -Q | rl | xargs mplayer -fs'
