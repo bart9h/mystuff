@@ -766,33 +766,36 @@ set -o noclobber
 
 #{ ulimit
 
+ MemTotal=$( cat /proc/meminfo | sed  '/^MemTotal/!d;s/^[^0-9]*\([0-9]\+\).*/\1/' )
+SwapTotal=$( cat /proc/meminfo | sed '/^SwapTotal/!d;s/^[^0-9]*\([0-9]\+\).*/\1/' )
+
 # core file size          (blocks, -c) 0
 ulimit -c $(( 32 * 1024 ))
 
 # max locked memory       (kbytes, -l) unlimited
 ulimit -l $(( 512 * 1024 )) 2>/dev/null  #FIXME: check if I can
 
-case $OSTYPE in
+case "$OSTYPE" in
 	*linux*)
-		# data seg size           (kbytes, -d) unlimited
-		ulimit -d $(( 800 * 1024 ))
-
 		# file size               (blocks, -f) unlimited
 		ulimit -f $(( 20 * 1024*1024 ))
 
-		# max memory size         (kbytes, -m) unlimited
-		ulimit -m $(( 800 * 1024 ))
-
 		# max user processes              (-u) unlimited
 		ulimit -u 1024
-
-		# virtual memory          (kbytes, -v) unlimited
-		ulimit -v $(( 1500 * 1024 ))
 
 		# file locks                      (-x) unlimited
 		if [ $BASH_VERSINFO -ge 3 ]; then
 			ulimit -x 128
 		fi
+
+		# data seg size           (kbytes, -d) unlimited
+		ulimit -d $(( $MemTotal / 2 ))
+
+		# max memory size         (kbytes, -m) unlimited
+		ulimit -m $(( $MemTotal / 2 ))
+
+		# virtual memory          (kbytes, -v) unlimited
+		ulimit -v $(( $SwapTotal + $MemTotal / 2 ))
 	;;
 esac
 
