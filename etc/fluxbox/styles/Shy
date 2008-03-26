@@ -13,11 +13,19 @@
 
 ! ///1  window
 
-window.label.focus: Raised
+window.title.height: 16
+window.label.focus: Raised Interlaced
 *.focus.textColor: #eec
 *.unfocus.textColor: #dcb
-window.label.focus.color: #633
-window.label.unfocus.color: #433
+window.label.focus.color: #733
+window.label.focus.colorTo: #611
+window.title.unfocus.color: #32f
+window.label.unfocus.color: #32f
+
+window.button.focus: Flat
+window.button.focus.color: #987
+window.button.*.picColor: #000
+window.label.unfocus.color: #322
 
 window.button.focus: Raised
 window.button.focus.color: #987
@@ -40,6 +48,7 @@ handleWidth: 4
 
 ! ///1  toolbar
 
+toolbar.height: 14
 toolbar.*.color: #433
 toolbar.*.textColor: #dcb
 toolbar.iconbar.*.justify: left
