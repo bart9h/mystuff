@@ -444,9 +444,21 @@ alias pgo='ping google.com'
 alias reconnect='sudo kill `pidof dhclient`; sudo ifconfig eth0 down; sudo dhclient'
 #alias reconnect='sudo ifconfig eth0 down; sudo ifconfig eth0 192.168.1.4 netmask 255.255.255.0 && route add default gw 192.168.1.1'
 
-function crun() {
+function do_crun() {
+	local cc="$1"; shift
 	local aout=`mktemp /tmp/crun.XXXXXX`
-	gcc $* -x c -o "$aout" - && "$aout" && rm "$aout"
+	if $cc "$@" -o "$aout" -; then
+		"$aout"
+		rm "$aout"
+	fi
+}
+
+function crun() {
+	do_crun "gcc -x c" "$@"
+}
+
+function Crun() {
+	do_crun "g++ -x c++" "$@"
 }
 
 
