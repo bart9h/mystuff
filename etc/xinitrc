@@ -11,7 +11,7 @@ echo '# ~/.xinitrc'
 	export GTK_IM_MODULE='cedilla'
 }
 
-~/src/bash/Xdefaults.sh
+"$HOME/etc/bash/Xdefaults.sh"
 
 #xhost localhost
 #aumix -L

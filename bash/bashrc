@@ -17,7 +17,7 @@ function _progress() {
 prompt_color='1;30'
 working_dirs=
 # ...that can be overwrited here.
-. "$HOME/src/bash/functions"
+. "$HOME/etc/bash/functions"
 
 if test -r "$HOME/.bashrc_local"; then
 	_progress '~/.bashrc_local'
