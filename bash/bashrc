@@ -255,6 +255,8 @@ function x()
 
 _progress 'version control frontend'
 
+alias gci='git commit --interactive'
+
 alias svnbk='svnadmin dump /home/svn | bzip2 -9 > bart.svndump.`date +%Y-%m-%d`.bz2'
 
 function svndiff() {
