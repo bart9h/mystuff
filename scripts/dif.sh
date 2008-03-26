@@ -9,7 +9,7 @@
 
 #{{{1 configurable variables
 
-diff='/usr/bin/diff -U 5 -rpbB --ignore-all-space --ignore-blank-lines --exclude=.svn --exclude=CVS'
+diff='/usr/bin/diff -U 5 -rpbB --ignore-all-space --ignore-blank-lines --exclude=.git --exclude=.svn --exclude=CVS'
 
 
 #{{{1 argument handling
