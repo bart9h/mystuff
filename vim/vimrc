@@ -50,6 +50,7 @@ let g:netrw_list_hide= '^\.[^.].*'
 
 " {{{1 filetype
 
+filetype plugin on
 autocmd! FileType c,cpp setlocal cindent
 autocmd! FileType tex setlocal makeprg=pdflatex\ %\ &&\ xpdf\ -remote\ vim\ -reload
 autocmd! FileType perl FileTypePerl
