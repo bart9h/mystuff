@@ -91,6 +91,7 @@ set winminheight=0
 set hlsearch
 set scrolloff=5
 set foldmethod=syntax
+set foldnestmax=1
 set number
 set showcmd
 
@@ -111,6 +112,7 @@ if has("gui_running")
 	colo blue
 else
 	set background=dark
+	hi Cursor ctermbg=yellow ctermfg=black
 endif
 
 " hi link cComment Comment
@@ -132,11 +134,11 @@ nmap <space> za
 nmap <F9> @q
 
 " search for current word on all source files
-nmap <C-c> :!cd "`dirname "%:p"`"; grep "\<<cword>\>" *.[cChd] *.cpp *.cxx *.pl *.pm 2> /dev/null; true<CR>
+nmap <C-c> :!cd "`dirname "%:p"`"; grep "\<<cword>\>" *.[cChd] *.cpp *.cxx *.pl *.pm *.pc 2> /dev/null; true<CR>
 
 " makes * highlight the word, but don't jump to next occurrence
-map <silent> * yiw:let @/="\\<".@0."\\>"<CR>:set hls<CR>
-"map <silent> * *N
+"map <silent> * yiw:let @/="\\<".@0."\\>"<CR>:set hls<CR>
+map <silent> * *N
 
 " save
 if has("gui_running")  " Ctrl-S don't work on terminals
@@ -166,8 +168,8 @@ nmap <+> <C-W>+
 nmap <-> <C-W>-
 
 " make
-nmap <C-n> :wall<CR>:make<CR>
-"nmap <C-n> :update<CR>:make %:r.o<CR>
+"nmap <C-n> :wall<CR>:make<CR>
+nmap <C-n> :update<CR>:make %:r.o<CR>
 "TODO: se terminar sem arquivo carregado, :q<CR>
 imap <C-n> <ESC><C-n>
 
