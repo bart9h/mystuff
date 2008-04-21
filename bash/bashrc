@@ -387,7 +387,7 @@ function q4() {
 		(sleep 90s; sudo mv $b $a) &
 	else
 		sudo ifconfig eth0 down || return
-		(sleep 90s; sudo ~/src/etc/neton) &
+		(sleep 90s; sudo ~/etc/etc/neton) &
 	fi
 	/home/games/quake4/quake4
 }
@@ -407,7 +407,7 @@ alias raw2jpg='rawbatch --size=`show res` --out-path=.. *'
 #TODO: move this to foto.pl
 alias jpg2raw='test -d shot && cd shot; for z in *; do test -f ../`echo $z|sed "s/.cr2$/.jpg/"` || mv -v $z ../.qiv-trash/; done'
 
-alias kb='~/src/desktop/switch-kbmap'
+alias kb='~/etc/desktop/switch-kbmap.sh'
 
 job()  # manage background jobs
 { #{
@@ -493,7 +493,7 @@ if test -e /etc/slackware-version; then
 	alias sl='web --slackware'
 fi
 
-alias t='source ~/src/scripts/untar.sh'
+alias t='source ~/etc/scripts/untar.sh'
 alias l='less'
 alias grepsmallnear='find . -type f -maxdepth 2 -size -10k -not -name "* *" | xargs grep'
 #alias r='xset r'
@@ -504,7 +504,7 @@ alias data='date +%Y-%m-%d'
 alias geom="xwininfo -root | sed -rn '/-geometry/s/[^0-9]*([0-9]+x[0-9]+).*/\1/p'"
 alias 2view='convert -quality 80 -resize `geom`'
 alias cn='cat > /dev/null' # quick volatile writepad
-alias dt='~/src/scripts/dtool.pl'
+alias dt='~/etc/scripts/dtool.pl'
 alias vd='dt vd'
 
 function waitload() {
@@ -619,7 +619,6 @@ alias treo='nice lame -m j -v -f'
 #alias v='gvim -geom 80x50 +"set guioptions-=T" +"set guioptions-=m" -font "-misc-fixed-medium-r-semicondensed-*-*-120-*-*-c-*-iso8859-1"'
 
 alias mame='xmame.x11 -rompath .'
-alias bkp='cd ~/src; for z in ~/BACKUP /d/backup /d/tmp ; do echo $z ; tar cfz $z/palito.$(data).tgz palito ; done ; cd -'
 
 alias p='ps -AH --format "%U %p %a"'
 
