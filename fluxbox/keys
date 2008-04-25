@@ -354,6 +354,4 @@ OnDesktop Mouse5 :prevWorkspace
 
 
 #}}}
-# vim:set fdm=marker:%foldc!:
-
-
+# vim:fdm=marker:
