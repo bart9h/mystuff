@@ -202,8 +202,14 @@ function s() {
 		screen -wipe | grep '([AD][te]tached)'
 
 	# if arg is existing screen, attach
-	elif test "$1" != "." && screen -ls | grep "\<[0-9]*\.$1\>"; then
-			screen -x "$1"
+	elif test "$1" != "." \
+	&& screen -ls | grep "\<[0-9]*\.$1\>"; then
+		screen -x "$1"
+
+	# if arg is _, create "meta" screen
+	elif test "$1" == "_" \
+	&& ! screen -ls | grep "\<[0-9]*\.$1\>"; then
+		screen -e ^Bb -S _
 
 	else  # create screen
 		local session_name
@@ -212,7 +218,8 @@ function s() {
 		test -d "$1" && cd "$1" || session_name="$1"
 
 		# defult session name is $PWD
-		test "$session_name" -o "$session_name" == "." || session_name="`basename "$PWD"`"
+		test -z "$session_name" -o "$session_name" == "." \
+		&& session_name="`basename "$PWD"`"
 
 		screen -S "$session_name"
 	fi
