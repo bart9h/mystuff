@@ -10,7 +10,8 @@ use Data::Dumper;
 
 #{# global data
 
-my %reqs = (  # required external tools
+my %reqs =
+(	#{# required external tools
 
 	# X11
 	xosd => { bin => 'osd_cat', deb => 'xosd-bin' },
@@ -25,15 +26,17 @@ my %reqs = (  # required external tools
 	gphoto2 => {},
 	ufraw => { bin => 'ufraw-batch' },
 	imagemagick => { bin => 'convert' },
-);
 
-my %files = (
-	'bash/bashrc' => '.bashrc',
+);	#}#
+
+my %files =
+(	#{#
 	'bash/Xdefaults.sh' => 'bin/Xdefaults.sh',
-	'etc/fluxbox/styles' => '.fluxbox/styles',
+	'bash/bashrc' => '.bashrc',
+	'etc/Xdefaults' => '.Xdefaults',
 	'etc/fluxbox/keys' => '.fluxbox/keys',
 	'etc/fluxbox/menu' => '.fluxbox/menu',
-	'etc/Xdefaults' => '.Xdefaults',
+	'etc/fluxbox/styles' => '.fluxbox/styles',
 	'etc/inputrc' => '.inputrc',
 	'etc/rtorrent.rc' => '.rtorrent.rc',
 	'etc/screenrc' => '.screenrc',
@@ -45,7 +48,7 @@ my %files = (
 	'util/foto.pl' => 'bin/foto.pl',
 	'vim/colors' => '.vim/colors',
 	'vim/vimrc' => '.vimrc',
-);
+);	#}#
 
 #}#
 
