@@ -90,6 +90,7 @@ function rm()
 } #}
 
 alias vi='vim -o'
+alias tig='tig --all'
 alias xxd='xxd -c $(( (($COLUMNS - 10)/7)*2 ))'
 alias wget='wget -c --timeout=15 --wait=0 --tries=0'
 alias xpdf='xpdf -z width'
@@ -368,7 +369,6 @@ export GREP_OPTIONS='--exclude="*.svn-base"'
 
 # paths
 export DERELICT_DIR='/home/sft/d/derelict'
-export LD_LIBRARY_PATH='.'
 export PKG_CONFIG_PATH='/usr/local/lib/pkgconfig:/usr/lib/pkgconfig'
 export CHOICESPATH="${HOME}/.Choices:/usr/local/share/Choices:/usr/share/Choices"
 
