@@ -228,7 +228,7 @@ function dk_command()
 
 dk_last_result()
 {
-	local dt="$HOME/src/scripts/dtool.pl"
+	local dt="$HOME/etc/scripts/dtool.pl"
 	local dir="$MLNET_HOME/search/"
 	local file="$dir$( ls --sort=time "$dir" | head -1 )"
 	$dt result "$file"

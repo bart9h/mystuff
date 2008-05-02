@@ -65,8 +65,8 @@ command! FileTypePerl setlocal makeprg=perl\ -c\ %
 \%+C%.%#
 
 "autocmd! BufEnter * resize
-autocmd! BufWritePost ~/.vimrc,$HOME/src/etc/vim/vimrc source ~/.vimrc
-"autocmd! BufWritePost ~/.vim/colors/my-elflord.vim,$HOME/src/etc/vim/colors/my-elflord.vim colo my-elflord
+autocmd! BufWritePost ~/.vimrc,$HOME/etc/vim/vimrc source ~/.vimrc
+"autocmd! BufWritePost ~/.vim/colors/my-elflord.vim,$HOME/etc/vim/colors/my-elflord.vim colo my-elflord
 "autocmd! BufWritePost /etc/apache2/httpd.conf !sudo sh /etc/rc.d/rc.httpd restart
 
 "{{{2 vim -b : edit binary using xxd-format!

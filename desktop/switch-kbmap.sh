@@ -31,9 +31,9 @@ fi
 setxkbmap $kbmap || exit
 
 if test "$HOSTNAME" == "lambda"; then
-	xmodmap "$HOME"/src/etc/Xmodmap.sun
+	xmodmap "$HOME"/etc/etc/Xmodmap.sun
 elif test "$HOME" == "/u/nttx"; then
-	xmodmap "$HOME"/src/etc/Xmodmap.br
+	xmodmap "$HOME"/etc/etc/Xmodmap.br
 else
 	xmodmap -e "remove Lock = Caps_Lock" -e "keysym Caps_Lock = Escape"
 fi

@@ -17,7 +17,7 @@ Control Mod1 Mod4 p :MacroCmd { SetResourceValue session.screen0.slit.placement 
 Control Mod1 Mod4 l :MacroCmd { SetResourceValue session.screen0.slit.placement RightCenter 1 } { SetResourceValue session.screen0.slit.direction Vertical }
 #{ ExecCommand xrandr -o normal }
 
-#	{ ExecCommand $HOME/src/desktop/x-rotate.sh }
+#	{ ExecCommand $HOME/etc/desktop/x-rotate.sh }
 
 
 # {{{1          menu
@@ -193,12 +193,12 @@ Mod4 F12 :ExecCommand ~/bin/shot
 Control Mod4 F12 :ExecCommand ~/bin/shot -n
 None 161 :ExecCommand xcalc
 
-Mod4 h :ExecCommand ~/src/scripts/fluxbox_keys_help.pl
+Mod4 h :ExecCommand ~/etc/scripts/fluxbox_keys_help.pl
 
-Mod4 grave :ExecCommand ~/src/desktop/switch-kbmap.sh
-Mod4 apostrophe :ExecCommand ~/src/desktop/switch-kbmap.sh
-Control Mod1 grave :ExecCommand ~/src/desktop/switch-kbmap.sh
-Control Mod1 apostrophe :ExecCommand ~/src/desktop/switch-kbmap.sh
+Mod4 grave :ExecCommand ~/etc/desktop/switch-kbmap.sh
+Mod4 apostrophe :ExecCommand ~/etc/desktop/switch-kbmap.sh
+Control Mod1 grave :ExecCommand ~/etc/desktop/switch-kbmap.sh
+Control Mod1 apostrophe :ExecCommand ~/etc/desktop/switch-kbmap.sh
 
 # email 236
 #Mod4 None :ExecCommand thunderbird

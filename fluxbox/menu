@@ -17,11 +17,11 @@
 	[exec] (gridwars) {gridwars}
 
 	[submenu] (programas)
-		[exec] (baixar fotos) {xterm -e /home/doti/src/scripts/foto.pl}
+		[exec] (baixar fotos) {xterm -e /home/doti/etc/scripts/foto.pl}
 		[submenu] (terminals)
 			[exec] (utc) {xterm -bg BlackBlue -geometry +360+0 -e ssh -v -X -C -t barrett@utc}
 			#[exec] (utc) {xterm -bg BlackBlue -geometry +360+0 -e ssh -v -X -C -t utc screen -x a}
-			[exec] (Xnest) {/home/doti/src/desktop/xnest.sh}
+			[exec] (Xnest) {/home/doti/etc/desktop/xnest.sh}
 			[exec] (xterm tiny) {xterm -fs 8}
 			[exec] (utc/windows) {rdesktop  -x m -P -a 8 -z  -u rodolfobo utc}
 			#[exec] (9hells) {xterm -bg BlackGreen -geometry 117x24+0+378 -e ssh -v -X -C -t 9h bin/open_screen a}
@@ -114,7 +114,7 @@
 		[include] (/etc/X11/fluxbox/system.fluxbox-menu)
 	[end]
 
-	#[exec] (rodar) {/home/doti/src/desktop/x-rotate.sh}
+	#[exec] (rodar) {/home/doti/etc/desktop/x-rotate.sh}
 
 	[submenu] (DESLIGAR) {===   DESLIGAR O COMPUTADOR ?   ===}
 		[exec] ()
