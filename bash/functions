@@ -1,3 +1,4 @@
+#!/bin/bash
 # vim600:ft=sh:fdm=marker:fmr={,}:
 
 function log()
@@ -48,6 +49,29 @@ function eset()
 	$EDITOR "$tmp" && source "$tmp"
 }
 
+function call()
+{
+	local f="$1"; shift
+	local t="$(type -t "$f" 2>/dev/null)"
+
+	if test "$t" == "alias"; then
+		local a="$( alias "$f" | cut -d "'" -f 2 )"
+		if test "$a" == "call $f"; then
+			unalias "$f"
+			t="$( type -t "$f" 2>/dev/null )"
+		fi
+	fi
+
+	if test "$t" != "function"; then
+		local s="$HOME/etc/bash/$f.sh"
+		if test -r "$s"; then
+			source "$s"
+		fi
+	fi
+
+	"$f" "$@"
+}
+
 function start_screen()
 {
 	if test "$1" == "-S"; then
@@ -77,5 +101,49 @@ EOF
 
 	chmod +x "$tmp"
 	screen -D -m -S "$name" "$tmp" &
+}
+
+function show()
+{
+	case "$1" in
+	ansi|colors)
+		for b in 0 1; do
+			for j in 3 4; do
+				i=0
+				while test $i -le 7; do
+					echo -ne "\e[${b};${j}${i}m [$b;$j$i] "
+					let i=i+1
+				done
+				echo -e "\e[0;0m"
+			done
+		done
+	;;
+	processors|cpus)
+		cat /proc/cpuinfo | grep '^processor\>' | wc -l
+	;;
+	resolution|res|rez)
+		echo $(xwininfo -root|grep Width:|cut -d : -f 2)x$(xwininfo -root|grep Height:|cut -d : -f 2|sed s/\ //g)
+	;;
+	sizeof)
+		shift
+		test -z "$1" && echo "sizeof what?" && return
+		local arg
+		while true; do
+			case "$1" in
+			-*)
+				arg="$arg $1"
+				shift
+				;;
+			*)
+				break
+				;;
+			esac
+		done
+		echo -e "#include <stdio.h>\n#include <time.h>\nint main() { printf(\"%d\\\n\", sizeof($*)); return 0; }" | crun $arg
+	;;
+	*)
+		echo "things to show: colors, cpus, resolution, sizeof"
+	;;
+	esac
 }
 

@@ -1,5 +1,6 @@
+#!/bin/bash
 # ~/.bashrc: executed by bash(1) for non-login shells.
-#{1  prepare the environment, and load local stuff
+#{{{1  prepare the environment, and load local stuff
 
 # escape if environment already loaded
 test -z "$PS1" && return
@@ -24,13 +25,48 @@ if test -r "$HOME/.bashrc_local"; then
 	source "$HOME/.bashrc_local"
 fi
 
+for i in "$HOME/etc/bash/"*.sh; do
+	f="$( basename "$i" | sed 's/\.sh$//' )"
+	alias $f="call $f"
+done
 
-#{1 software setup
+
+#{{{1 software setup
+
+_progress 'software setup'
+
+export LANG="en_US.UTF-8"
+export LANGUAGE="$LANG"
+export LC_COLLATE="C"
+
+export LESS='-X -F -M -R -f -a -j4'
+export PAGER="less $LESS"
+export MANPAGER="$PAGER"
+#export MANPAGER="col -b | view -c 'set ft=man nomod nolist' -"
+[ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
+
+export EDITOR="vim"
+export SVN_EDITOR="$EDITOR"
+export GREP_OPTIONS='--exclude="*.svn-base"'
+
+# paths
+export DERELICT_DIR='/home/sft/d/derelict'
+export PKG_CONFIG_PATH='/usr/local/lib/pkgconfig:/usr/lib/pkgconfig'
+export CHOICESPATH="${HOME}/.Choices:/usr/local/share/Choices:/usr/share/Choices"
+
+# dev
+export ACLOCAL_FLAGS='-I /usr/local/share/aclocal'
+
+# shell
+export INPUTRC="$HOME/.inputrc"
+if false && [ -f /etc/bash_completion ]; then
+	. /etc/bash_completion
+fi
 
 export DMD_DIR='/opt/dmd'
 
 
-#{1 path
+#{{{1 path
 
 add_to_path \
 		-h "$HOME/bin" \
@@ -39,18 +75,6 @@ add_to_path \
 		-t "/sbin" \
 #		-h "/usr/local/lib/cw" \
 
-function call()
-{
-	local f="$1"; shift
-	if test "$(type -t "$f" 2>/dev/null)" != "function"; then	
-		local s="$HOME/etc/bash/$f.sh"
-		if test -r "$s"; then
-			source "$s"
-		fi
-	fi
-	"$f" "$@"
-}
-
 alias dif="$HOME/etc/scripts/dif.sh"
 alias undeaf="$HOME/etc/util/undeaf.sh"
 alias path2tag="$HOME/etc/scripts/path2tag.pl"
@@ -58,20 +82,20 @@ alias vimv="$HOME/etc/scripts/vimv.sh"
 alias web="$HOME/etc/scripts/web.pl"
 
 
-#{1          aliases and functions that mask existing programs
+#{{{1          aliases and functions that mask existing programs
 
 alias cp='cp -i --preserve=timestamps'
 
 alias mv='mv -i'
 
 function rm()
-{ #{
+{ #{{{
 	#set +o functrace
 	file_count=0
 	for i in "$@"; do
 		if ! expr match "$i" "\-*" > /dev/null; then
 			if test -e "$i"; then
-				file_count=$(( $file_count + 1 ))
+				let file_count++
 			else
 				/bin/rm "$i"
 				return
@@ -87,7 +111,7 @@ function rm()
 		test "$answer" == "y" -o "$answer" == "" || return
 	fi
 	/bin/rm "$@"
-} #}
+} #}}}
 
 alias vi='vim -o'
 alias tig='tig --all'
@@ -98,7 +122,7 @@ alias grep='grep --exclude="*.svn-base" --devices=skip'
 #alias tar='tar --exclude=.svn --exclude=CVS'
 
 
-#{1 ls
+#{{{1 ls
 
 _progress 'ls'
 
@@ -108,7 +132,7 @@ if [ "$TERM" != "dumb" ]; then
 fi
 
 alias A='a -A'  # single column if fits screen, multi otherwise
-alias D='d -A'  # ls' long listing format
+alias D='d -A'  # ls long listing format
 alias F='f -A'  # with size/date/time info
 alias Z='Z -A'  # like F, but ordered by date
 
@@ -123,7 +147,7 @@ function a() {
 		fi  
 	fi
 }
-alias c='a *.{c,d,h,sh,pl,java,cpp,cxx,C} 2>/dev/null'
+alias c='a *.{c,d,h,sh,pl,pm,java,cpp,cxx,C} 2>/dev/null'
 alias d='ls -lF'
 function f() {
 	\ls -FGhln --color=always --time-style=long-iso "$@" |
@@ -138,62 +162,16 @@ alias z='f -rt'
 #alias dz='du -shc * | grep -v "^0" | grep "[0-9][MG]"'
 
 
-#{1          info
-
-function show() {
-	case "$1" in
-	ansi|colors)
-		for b in 0 1; do
-			for j in 3 4; do
-				i=0
-				while test $i -le 7; do
-					echo -ne "\e[${b};${j}${i}m [$b;$j$i] "
-					let i=i+1
-				done
-				echo -e "\e[0;0m"
-			done
-		done
-	;;
-	processors|cpus)
-		cat /proc/cpuinfo | grep '^processor\>' | wc -l
-	;;
-	resolution|res|rez)
-		echo $(xwininfo -root|grep Width:|cut -d : -f 2)x$(xwininfo -root|grep Height:|cut -d : -f 2|sed s/\ //g)
-	;;
-	sizeof)
-		shift
-		test -z "$1" && echo "sizeof what?" && return
-		local arg
-		while true; do
-			case "$1" in
-			-*)
-				arg="$arg $1"
-				shift
-				;;
-			*)
-				break
-				;;
-			esac
-		done
-		echo -e "#include <stdio.h>\n#include <time.h>\nint main() { printf(\"%d\\\n\", sizeof($*)); return 0; }" | crun $arg
-	;;
-	*)
-		echo "things to show: colors, cpus, resolution, sizeof"
-	;;
-	esac
-}
-
-
-#{1 abbreviations
+#{{{1 abbreviations
 
 _progress 'abbreviations'
 
 alias apt='sudo aptitude'
 
 
-#{1 frontend functions
+#{{{1 frontend functions
 
-#{ screen
+#{{{ screen
 
 function s() {
 	which screen >/dev/null || return
@@ -226,40 +204,9 @@ function s() {
 	fi
 }
 
-#} screen
+#}}} screen
 
-#{ xmms2
-# With no args, list;
-# if args are files or dirs, add (or radd) them;
-# else pass args to xmms2.
-
-function x()
-{
-	if ! pidof xmms2d >/dev/null; then
-		( exec xmms2d >| $HOME/var/log/xmms2d.log 2>&1 )&
-	fi
-
-	if test "$1" == ""; then
-		xmms2 list
-	else
-		while test "$1"; do
-			if test -d "$1"; then
-				xmms2 radd "$1"
-				shift
-			elif test -e "$1"; then
-				xmms2 add "$1"
-			else
-				xmms2 "$@"
-				break
-			fi
-			shift
-		done
-	fi
-}
-
-#} xmms2
-
-#{  version control
+#{{{  version control
 
 _progress 'version control frontend'
 
@@ -344,43 +291,11 @@ function update() {
 #export CVS_RSH=ssh
 #export CVSROOT=:ext:9h:/home/9hells/cvsroot
 
-#} version control
+#}}} version control
 
 #___
-#}
-#TODO: organizar o resto abaixo..
-#{1 software setup
-
-_progress 'software setup'
-
-export LANG="en_US.UTF-8"
-export LANGUAGE="$LANG"
-export LC_COLLATE="C"
-
-export LESS='-X -F -M -R -f -a -j4'
-export PAGER="less $LESS"
-export MANPAGER="$PAGER"
-#export MANPAGER="col -b | view -c 'set ft=man nomod nolist' -"
-[ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
-
-export EDITOR="vim"
-export SVN_EDITOR="$EDITOR"
-export GREP_OPTIONS='--exclude="*.svn-base"'
-
-# paths
-export DERELICT_DIR='/home/sft/d/derelict'
-export PKG_CONFIG_PATH='/usr/local/lib/pkgconfig:/usr/lib/pkgconfig'
-export CHOICESPATH="${HOME}/.Choices:/usr/local/share/Choices:/usr/share/Choices"
-
-# dev
-export ACLOCAL_FLAGS='-I /usr/local/share/aclocal'
-
-# shell
-export INPUTRC="$HOME/.inputrc"
-if false && [ -f /etc/bash_completion ]; then
-	. /etc/bash_completion
-fi
-
+#}}}
+#{{{ #TODO: organizar o resto abaixo..
 # aliases
 alias vi='vim'
 alias pgr='pgrep -l'
@@ -400,7 +315,7 @@ function q4() {
 }
 
 
-#{1          util
+#{{{1          util
 
 _progress 'util'
 
@@ -417,7 +332,7 @@ alias jpg2raw='test -d shot && cd shot; for z in *; do test -f ../`echo $z|sed "
 alias kb='~/etc/desktop/switch-kbmap.sh'
 
 job()  # manage background jobs
-{ #{
+{ #{{{
 
 	if test -z "$*"; then
 		ls "$spool_dir"
@@ -439,14 +354,14 @@ job()  # manage background jobs
 		"$@"
 		rm "$job"
 	)&
-} #}
+} #}}}
 
 function lddr()  # ldd "recursivo": faz ldd das bibliotecas nao-padrao mostradas pelo ldd
-{ #{
+{ #{{{
 	for z in "$@"; do
 		ldd $( ldd "$z" | cut -d '>' -f 2 | cut -d ' ' -f 2 | grep -v '^/\(usr\|lib\)' )
 	done
-} #}
+} #}}}
 
 # network
 alias pgo='ping google.com'
@@ -471,9 +386,9 @@ function Crun() {
 }
 
 
-#{1          misc
+#{{{1          misc
 
-#{2 warn about uncommited changes
+#{{{2 warn about uncommited changes
 
 uncommited=""
 for dir in $working_dirs; do
@@ -487,7 +402,7 @@ if test -n "$uncommited"; then
 fi
 unset uncommited
 
-#}
+#}}}
 
 _progress 'misc'
 
@@ -653,7 +568,7 @@ function _x() {
 
 function v() {
 	if test "$1"; then
-		vim $@
+		vim -o "$@"
 	else
 		vim .
 	fi
@@ -675,7 +590,7 @@ function cdp() {
 
 function bk() {
 	bkdir="$HOME/BACKUP"
-	n=$(( $( echo $1 | wc -c ) - 1 ))
+	let n=$( echo $1 | wc -c ) - 1
 	if test / == $( echo $1 | cut -b $n ); then
 		dir="$( echo $1 | cut -b 1-$(($n - 1)) )"
 	else
@@ -702,30 +617,6 @@ function bk() {
 	fi
 }
 
-function sortdir() {
-	#FIXME: doesn't work for hidden files/dirs within
-	#TODO: check read-only permission before starting
-	#TODO: recursive
-	local arg
-	if test "$1" == ""; then
-		echo "usage: sortdir [-v] <directory> [<directory> ...]"
-	else
-		while test "$1"; do
-			if test "$1" == "-v"; then
-				arg="-v"
-			elif test -d "$1"; then
-				local tmpdir="_sortdir_tmp"
-				mv $arg "$1" "$tmpdir" && \
-				mkdir $arg "$1" && \
-				mv $arg "$tmpdir"/* "$1" && \
-				rmdir $arg "$tmpdir" \
-				|| return
-			fi
-			shift
-		done
-	fi
-}
-
 
 # TRASH trash
 # which() {
@@ -745,7 +636,7 @@ alias k='sudo kbdrate -r 30 -d 200'
 alias black='xsetroot -solid black'
 
 
-#{1 shell setup
+#{{{1 shell setup
 
 if test -t 0 ; then
 	stty -ixon -ixoff
@@ -770,7 +661,7 @@ set -o vi
 set -o noclobber
 
 
-#{ ulimit
+#{{{ ulimit
 
  MemTotal=$( cat /proc/meminfo | sed  '/^MemTotal/!d;s/^[^0-9]*\([0-9]\+\).*/\1/' )
 SwapTotal=$( cat /proc/meminfo | sed '/^SwapTotal/!d;s/^[^0-9]*\([0-9]\+\).*/\1/' )
@@ -806,9 +697,9 @@ case "$OSTYPE" in
 esac
 
 
-#}
+#}}}
 
-#{ the command prompt
+#{{{ the command prompt
 
 export HISTCONTROL="ignoreboth"
 PS1='\[\e[0;'$prompt_color'm\]\t [`echo $STY|cut -d . -f 2`.$WINDOW] \u@\h \w\n\$\[\e[0m\] '
@@ -823,7 +714,8 @@ fi
 
 if false; then
 
-function titlebar() {
+function titlebar()
+{
 	test "$TERM" == "screen" || return
 	local s="$*"
 	case "$s" in cd|cd\ *|ls\ *) return ;; esac
@@ -838,11 +730,11 @@ fi
 
 fi
 
-#}
+#}}}
 
 
-#{1 host-specific
+#{{{1 host-specific
 
-#}
+#}}}
 _progress ''
-# vim600:foldmethod=marker:foldmarker=#{,#}:
+# vim600:foldmethod=marker:
