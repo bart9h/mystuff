@@ -89,10 +89,10 @@ syntax enable
 set ruler
 set winminheight=0
 set hlsearch
-set scrolloff=5
+set scrolloff=2
 set foldmethod=syntax
 set foldnestmax=1
-set number
+set nonumber
 set showcmd
 
 " nao pisca sobre ([{pares}])
@@ -126,6 +126,9 @@ endif
 
 
 " {{{1 key mappings
+
+" toggle spell cheching
+nmap <F8> :set spelllang=en spell!<CR>
 
 " close/open folders
 nmap <space> za
