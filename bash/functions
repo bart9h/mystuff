@@ -1,5 +1,5 @@
 #!/bin/bash
-# vim600:ft=sh:fdm=marker:fmr={,}:
+# vim600:ft=sh:foldmethod=marker:foldmarker={,}:
 
 function log()
 {
