@@ -10,7 +10,7 @@ case "$HOSTNAME" in
 esac
 
 test -n "$hostfile" &&
-files="$HOME/etc/etc/Xdefaults.$hostfile"
-files="$HOME/etc/etc/Xdefaults $files"
+files="$HOME/etc/x11/Xdefaults.$hostfile"
+files="$HOME/etc/x11/Xdefaults $files"
 cat $files | sed ';s/^[\ \t]\+//;/^\#/d' | xrdb
 

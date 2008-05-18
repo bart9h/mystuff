@@ -31,7 +31,7 @@ echo '# ~/.xinitrc'
 { # mouse
 
 	# mouse accel and it's movement threshold
-	xset m 2 32
+	xset m 1/1 40
 
 	# on logitec lx700, use thumb button (button 8) to paste (button 2)
 	#xmodmap -e "pointer = 1 8 3 4 5 6 7 2 9"
