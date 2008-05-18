@@ -2,8 +2,8 @@
 # {{{1          misc
 
 
-# use Ctrl-Alt-Del to reload this file
-Control Mod1 Delete :MacroCmd {Restart} {Reconfigure} {ExecCommand fbsetbg -l; invalidate}
+# use Ctrl-Alt-backslash to reload this file
+Control Mod1 backslash :MacroCmd {Reconfigure} {ExecCommand fbsetbg -l; invalidate}
 
 
 OnWindow Mod4 Mouse1 :StartMoving
