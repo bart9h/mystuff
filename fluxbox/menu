@@ -2,19 +2,16 @@
 
 [begin]
 
-	[exec] (firefox) {/usr/local/bin/firefox -P doti} </usr/local/firefox/icons/mozicon16.xpm>
+	[exec] (firefox) {firefox -P beta} </usr/lib/firefox-3.0b5/icons/mozicon16.xpm>
 
-	#[exec] (pidgin) {pidgin} </usr/share/pixmaps/pidgin/status/48/chat.png>
-	[exec] (pidgin) {pidgin} </home/doti/share/icons/pidgin-icon.png>
+	[exec] (pidgin) {pidgin} <share/icons/pidgin-icon.png>
 
-	#[exec] (thunar) {thunar} </usr/lib/perl5/Tk/folder.xpm>
-	[exec] (pcmanfm) {pcmanfm} </home/doti/share/icons/folder.png>
+	[exec] (pcmanfm) {pcmanfm} <share/icons/folder.png>
 
-	[exec] (xterm) {xterm} </home/doti/share/icons/terminal.png>
+	[exec] (xterm) {xterm} <share/icons/terminal.png>
 
+	[include] (.fluxbox/menu_local)
 	[separator]
-	[exec] (wesnoth) {wesnoth}
-	[exec] (gridwars) {gridwars}
 
 	[submenu] (programas)
 		[exec] (baixar fotos) {xterm -e /home/doti/etc/scripts/foto.pl}

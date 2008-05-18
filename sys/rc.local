@@ -1,13 +1,13 @@
-#!/bin/sh -e
+#!/bin/bash
 
-source "$HOME/etc/bash/functions"
-log "etc/sys"
+log="/tmp/etc-sys-rc.local"
+echo "`date`: start" >> $log
 
-# rtorrent
-start_screen -S tor rtorrent
+source "/home/doti/etc/bash/functions"
+log "$USER@etc/sys"
 
 # hal
-pidof hal | grep -q '[0-9]' ||
+pidof hald | grep -q '[0-9]' ||
 /etc/init.d/hal start
 
 if mount | grep "/var/log type tmpfs"; then
@@ -17,6 +17,14 @@ fi
 # dhcp
 pidof dhclient | grep -q '[0-9]' ||
 ( dhclient 2>&1 >/dev/null )&
+
+# rtorrent
+if false; then
+	#FIXME: su -c
+	echo "`date`: tor.." >> $log
+	start_screen -S tor rtorrent
+	echo "`date`: ..rot" >> $log
+fi
 
 if test ! ( -x /etc/init.d/xdm || -x /etc/init.d/gdm ); then
 	/bin/echo -e "\r\n"
