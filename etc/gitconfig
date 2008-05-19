@@ -20,3 +20,11 @@
 [status]
     color = auto
 
+[color]
+	ui = always
+	interactive = always
+	branch = always
+	diff = auto
+	pager = true
+	status = always
+
