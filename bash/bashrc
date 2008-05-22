@@ -10,25 +10,52 @@ unalias -a
 # for profiling and debugging
 function _progress() {
 	if false; then
+		#echo -- "$@"; return
+		test "$COLUMNS" -gt 0 || COLUMNS=80
 		printf "\r%-*s" $COLUMNS "$*"
 	fi
 }
 
-# Default values for some global variables...
-prompt_color='1;30'
-working_dirs=
-# ...that can be overwrited here.
-. "$HOME/etc/bash/functions"
+function _load() {
+	if test -r "$1"; then
+		_progress "$1"
+		source "$1"
+	fi
+}
+_load "$HOME/etc/bash/functions"
+prompt_color="1;37"
+_load "$HOME/.bashrc_local"
 
-if test -r "$HOME/.bashrc_local"; then
-	_progress '~/.bashrc_local'
-	source "$HOME/.bashrc_local"
-fi
+
+#{{{1 lazy-loading of functions
 
 for i in "$HOME/etc/bash/"*.sh; do
 	f="$( basename "$i" | sed 's/\.sh$//' )"
 	alias $f="call $f"
 done
+
+function call()
+{
+	local f="$1"; shift
+	local t="$(type -t "$f" 2>/dev/null)"
+
+	if test "$t" == "alias"; then
+		local a="$( alias "$f" | cut -d "'" -f 2 )"
+		if test "$a" == "call $f"; then
+			unalias "$f"
+			t="$( type -t "$f" 2>/dev/null )"
+		fi
+	fi
+
+	if test "$t" != "function"; then
+		local s="$HOME/etc/bash/$f.sh"
+		if test -r "$s"; then
+			source "$s"
+		fi
+	fi
+
+	"$f" "$@"
+}
 
 
 #{{{1 software setup
