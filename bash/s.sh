@@ -18,6 +18,7 @@ function s()
 
 	# if arg is existing screen, attach
 	if screen -ls | grep "\<[0-9]*\.$name\>"; then
+		test -n "$WINDOW" && screen -X title "$session_name"
 		screen -x "$name"
 
 	# if arg is _, create "meta" screen
@@ -36,6 +37,7 @@ function s()
 		test -z "$session_name" -o "$session_name" == "." \
 		&& session_name="`basename "$PWD"`"
 
+		test -n "$WINDOW" && screen -X title "$session_name"
 		screen -S "$session_name"
 	fi
 }

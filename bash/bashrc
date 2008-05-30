@@ -602,7 +602,6 @@ set -o vi
 # use '>|' to force overwriting.
 set -o noclobber
 
-
 #{{{ ulimit
 
  MemTotal=$( cat /proc/meminfo | sed  '/^MemTotal/!d;s/^[^0-9]*\([0-9]\+\).*/\1/' )
@@ -641,28 +640,27 @@ esac
 
 #}}}
 
+
+#}}}
+_progress ''
 #{{{ the command prompt
 
 export HISTCONTROL="ignoreboth"
 PS1='\[\e[0;'$prompt_color'm\]\t [`echo $STY|cut -d . -f 2`.$WINDOW] \u@\h \w\n\$\[\e[0m\] '
 export PS1
 export THE_PS1=$PS1
-#export PROMPT_COMMAND='echo -ne "\033]0;[`echo $STY|cut -d . -f 2`.${WINDOW}] ${PWD}\007"'
-#PROMPT_COMMAND='test "$TERM" == "screen" && echo -ne "\ek`basename "$PWD"`/\e\\"'
 
-if test -n "$DISPLAY"; then
-	PROMPT_COMMAND='echo -ne "\033]0;${PWD/$HOME/~}\007"'
+if test -n "$WINDOW"; then
+	PROMPT_COMMAND='screen -X title "${PWD/$HOME/~}"'
 fi
-
-if false; then
 
 function titlebar()
 {
 	test "$TERM" == "screen" || return
 	local s="$*"
-	case "$s" in cd|cd\ *|ls\ *) return ;; esac
+	case "$s" in cd|cd\ *|ls|ls\ *|screen|screen\ *) return ;; esac
 	s="`echo $s | cut -d \  -f 1`"
-	echo -ne "\ek$s\e\\"
+	screen -X title "$s"
 }
 
 if echo "$BASH_VERSION" |  grep -q '^3\.1\..*'; then
@@ -670,13 +668,5 @@ if echo "$BASH_VERSION" |  grep -q '^3\.1\..*'; then
 	trap 'titlebar $BASH_COMMAND' DEBUG
 fi
 
-fi
-
 #}}}
-
-
-#{{{1 host-specific
-
-#}}}
-_progress ''
 # vim600:foldmethod=marker:
