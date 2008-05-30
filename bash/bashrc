@@ -7,18 +7,9 @@ test -z "$PS1" && return
 
 unalias -a
 
-# for profiling and debugging
-function _progress() {
-	if false; then
-		#echo -- "$@"; return
-		test "$COLUMNS" -gt 0 || COLUMNS=80
-		printf "\r%-*s" $COLUMNS "$*"
-	fi
-}
 
 function _load() {
 	if test -r "$1"; then
-		_progress "$1"
 		source "$1"
 	fi
 }
@@ -28,7 +19,6 @@ _load "$HOME/.bashrc_local"
 
 
 #{{{1 lazy-loading of functions
-
 for i in "$HOME/etc/bash/"*.sh; do
 	f="$( basename "$i" | sed 's/\.sh$//' )"
 	alias $f="call $f"
@@ -59,8 +49,6 @@ function call()
 
 
 #{{{1 software setup
-
-_progress 'software setup'
 
 export LANG="en_US.UTF-8"
 export LANGUAGE="$LANG"
@@ -151,8 +139,6 @@ alias grep='grep --exclude="*.svn-base" --devices=skip'
 
 #{{{1 ls
 
-_progress 'ls'
-
 if [ "$TERM" != "dumb" ]; then
 	eval "`dircolors -b`"
 	alias ls='ls --color=auto'
@@ -191,8 +177,6 @@ alias z='f -rt'
 
 #{{{1 abbreviations
 
-_progress 'abbreviations'
-
 alias apt='sudo aptitude'
 alias links='which links >/dev/null && links || elinks'
 
@@ -200,8 +184,6 @@ alias links='which links >/dev/null && links || elinks'
 #___
 #}}}
 #{{{  version control
-
-_progress 'version control frontend'
 
 alias gc='git commit'
 alias gca='git commit -a'
@@ -311,8 +293,6 @@ function q4() {
 
 #{{{1          util
 
-_progress 'util'
-
 # quick edit&reload this file
 alias ea='vi ~/.bashrc && source ~/.bashrc'
 
@@ -397,8 +377,6 @@ fi
 unset uncommited
 
 #}}}
-
-_progress 'misc'
 
 alias ph='vi ~/src/txt/phonebook.txt'
 
@@ -584,8 +562,6 @@ if test -t 0 ; then
 	stty -ixon -ixoff
 fi
 
-_progress 'shell setup'
-
 #test "$TERM" == "vt100" && export TERM="xterm"
 
 # append on history, instead of overwriting
@@ -642,7 +618,6 @@ esac
 
 
 #}}}
-_progress ''
 #{{{ the command prompt
 
 export HISTCONTROL="ignoreboth"
