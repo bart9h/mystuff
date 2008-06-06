@@ -11,21 +11,26 @@ function s()
 	fi
 
 	local name="$1"
+	local ctrlB=""
 	shift
+
+	# if arg is _, create "meta" screen
+	if test "$name" == "_"; then
+		ctrlB="-e ^Bb"
+		if test -n "$1"; then
+			name="$1"
+			shift
+		fi
+	fi
+
 	if test "$name" == "."; then
 		name="$(basename "$PWD")"
 	fi
 
 	# if arg is existing screen, attach
-	if screen -ls | grep "\<[0-9]*\.$name\>"; then
+	if test -z "$1" && screen -ls | grep "\<[0-9]*\.$name\>"; then
 		test -n "$WINDOW" && screen -X title "$name"
 		screen -x "$name"
-
-	# if arg is _, create "meta" screen
-	elif test "$name" == "_" \
-	&& ! screen -ls | grep "\<[0-9]*\.$name\>"; then
-		test -n "$1" && name="$1" || name="_"
-		screen -e ^Bb -S "$name"
 
 	else  # create screen
 		local session_name
@@ -38,7 +43,7 @@ function s()
 		&& session_name="`basename "$PWD"`"
 
 		test -n "$WINDOW" && screen -X title "$session_name"
-		screen -S "$session_name"
+		screen $ctrlB -S "$session_name"
 	fi
 }
 
