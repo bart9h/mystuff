@@ -626,12 +626,12 @@ export PS1
 export THE_PS1=$PS1
 
 if test -n "$WINDOW"; then
-	PROMPT_COMMAND='screen -X title "${PWD/$HOME/~}"'
+	PROMPT_COMMAND='test -n "$WINDOW" && screen -X title "${PWD/$HOME/~}"'
 fi
 
 function titlebar()
 {
-	test "$TERM" == "screen" || return
+	test -n "$WINDOW" || return
 	local s="$*"
 	case "$s" in cd|cd\ *|ls|ls\ *|screen|screen\ *) return ;; esac
 	s="`echo $s | cut -d \  -f 1`"
