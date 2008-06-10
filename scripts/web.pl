@@ -6,7 +6,7 @@ use warnings;
 
 # Unless set by --browser argument, or WEB_BROWSER environg variable,
 # the first one avaiable from the list bellow will be used.
-my @browsers = qw/ links elinks lynx firefox opera /;
+my @browsers = qw/ links elinks lynx /;
 
 
 # Definitions of search engines.
