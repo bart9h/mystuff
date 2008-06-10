@@ -1,5 +1,6 @@
 #!/usr/bin/perl
-# {{{1        heading
+sub TODO { die; }
+#{#1          comments
 
 =description
 
@@ -34,32 +35,57 @@ $|=1;
 $\="\n";
 
 
-# {{{1        parameters
+#{#1          parameters
 
 my %args = (
 
-		source => undef,
+		files => [],
 		tag => undef,
 		sudo => 'sudo',
 		do_gray => 0,
 
 		basedir => '/home/fotos/archive',
+		tempdir => '/home/fotos/tmp',
 		max_block_mb => 256,
 		max_file_mb => 600,
 		gray_dir => '../gray',
 		keep_temp_files => 1,
 		nop => 0,
-		file_manager => 'Thunar',
 
 		width => 1024,
 		height => 768,
 		jpeg_quality => 80,
+
+		file_managers => [ 'nautilus', 'Thunar', 'pcmanfm', 'ROX-Filer' ],
+		file_manager => undef,
 );
 
-# {{{1        code
-# {{{2         parameters handling
+#{#1          code
 
-sub read_args(@) {
+sub read_args(@)
+{#
+	sub set_filesize_limit()
+	{# set max_block_mb and max_file_mb args
+
+# Guess nice values for memory usage limit based on avaiable memory:
+# max block size (soft limit) = 1/4 system memory
+# max file size (hard limit) = 3/4 system memory
+#TODO: check also if it will fit on available mem+swap
+		sub file_read($;$);
+		my $mem_total_kb = 0;
+		foreach( file_read( '/proc/meminfo' ) ) {
+			if( m/^MemTotal:\s+(\d+)\s+kB$/ ) {
+				$mem_total_kb = $1;
+				last;
+			}
+		}
+
+		if( $mem_total_kb ) {
+			$args{max_block_mb} = int( (1/4)*$mem_total_kb/1024 );
+			$args{max_file_mb}  = int( (3/4)*$mem_total_kb/1024 );
+		}
+	}#
+
 	if( scalar @_ == 1 ) {
 		$args{source} = shift;
 	}
@@ -95,47 +121,19 @@ sub read_args(@) {
 		}
 	}
 	1;
-}
+}#
 
-# Guess nice values for memory usage limit based on avaiable memory:
-# max block size (soft limit) = 1/4 system memory
-# max file size (hard limit) = 3/4 system memory
-#TODO: check also if it will fit on available mem+swap
-{
-	sub file_read($;$);
-	my $mem_total_kb = 0;
-	foreach( file_read( '/proc/meminfo' ) ) {
-		if( m/^MemTotal:\s+(\d+)\s+kB$/ ) {
-			$mem_total_kb = $1;
-			last;
-		}
-	}
-
-	if( $mem_total_kb ) {
-		$args{max_block_mb} = int( (1/4)*$mem_total_kb/1024 );
-		$args{max_file_mb}  = int( (3/4)*$mem_total_kb/1024 );
-	}
-}
-
-# {{{2         global variables
-
-my $g_list;         # output of gphoto2 -L
-my @g_ranges = ();  # list of ranges to download
-my %g_files = ();   # file information table (num: name, kb)
-my $g_dir;          # dir to save files to
-
-
-# {{{2         system utils
+#{#2           system utils
 
 sub x($)
-{
+{#
 	my $cmd = shift;
 	print $cmd;
 	system( $cmd )  unless $args{nop};
-}
+}#
 
 sub file_read($;$)
-{
+{#
 	my( $filename, $die ) = @_;
 
 	unless( open F, $filename ) {
@@ -155,82 +153,175 @@ sub file_read($;$)
 		close F;
 		return $s;
 	}
-}
+}#
 
 sub file_ok($)
-{
+{#
 	my $file = shift;
 	my( undef, undef, undef, undef, undef, undef, undef, $bytes )
 			= stat( $file->{name} )  or die "stat( $file->{name} ): $!";
 	return( (1024*$file->{size_kb} - $bytes) < 1024 );
-}
+}#
 
 sub do_mkdir($)
-{
-	-d $_[0]  and return;
+{#
+	-d $_[0]  and return $_[0];
 
-	my $msg = "mkdir( $_[0] )";
-	if( $args{nop} ) {
+	my $msg = "mkdir ($_[0])";
+	if ($args{nop}) {
 		print $msg;
 	}
 	else {
 		mkdir $_[0]  or die "$msg: $!";
 	}
-}
+}#
 
-sub mkchdir()
-{
+#}#
+
+sub file_mkdir($)
+{#
+	my ($file) = @_;
 	-d $args{basedir}  or die "$args{basedir}: $!";
-	my( undef, undef, undef, $mday, $mon, $year )= localtime;
-	$g_dir = sprintf '%s/%04d-%02d-%02d', $args{basedir}, $year+1900, $mon+1, $mday;
-	$g_dir .= '.'.$args{tag}  if $args{tag};
-	do_mkdir $g_dir;
-	$g_dir .= '/shot';
-	do_mkdir $g_dir;
-	chdir $g_dir  or die "chdir( $g_dir ): $!";
-}
 
+	my ($mday, $mon, $year) = TODO;
 
-# {{{2         gphoto2 interface
+	my $dir = $args{basedir};
+	$dir .= '/'.sprintf '%04d-%02d-%02d', $year+1900, $mon+1, $mday;
+	$dir .= '.'.$args{tag}  if $args{tag};
 
-sub get_file_list()
-{
-	print "getting file list";
+	$file->{dir} = $dir;
 
-	my $temp_file = '/tmp/foto.pl.list';
-	my $cmd;
-	if( ! $args{nop} ) {
-		$cmd = "$args{sudo} gphoto2 -L | grep '^\#'";
-		if( $args{keep_temp_files} ) {
-			$cmd .= " | tee /tmp/foto.pl.list";
-		}
-	}
-	else {
-		$cmd = "cat $temp_file";
-	}
-
-	print $cmd;
-	$g_list = `$cmd`  or die;
-	1;
-}
-
+	do_mkdir $dir;
+	$dir .= '/shot';
+	do_mkdir $dir;
+}#
 
 sub download()
-{
+{#
+	my ($files, $ranges, $total_kb)  = eval
+	{#
+		my %files = ();
+		my @ranges = ();
+		my $total_kb = 0;
+
+		my $range_itr = '';
+		my $range_kb = 0;
+
+		my @file_list = eval
+		{#
+			print "getting file list";
+
+			my $temp_file = '/tmp/foto.pl.list';
+			my $cmd;
+			if( ! $args{nop} ) {
+				$cmd = "$args{sudo} gphoto2 -L | grep '^\#'";
+				if( $args{keep_temp_files} ) {
+					$cmd .= " | tee /tmp/foto.pl.list";
+				}
+			}
+			else {
+				$cmd = "cat $temp_file";
+			}
+
+			print $cmd;
+			`$cmd`  or die;
+		}#
+		;
+
+		foreach( split /\n/, @file_list )
+		{#  populate @ranges
+
+			chomp;
+			my( $num, $name, $size_kb ) =
+				/\A\#(\d+)\s+([^\s]+)\s+(\d+).*/
+				or next;
+
+			$files{$num} = {
+				name => $name,
+				size_kb => $size_kb
+			};
+
+#TODO
+
+			$total_kb += $size_kb;
+
+			if(-e $name) { # check existing files
+				if( file_ok( $files{$num} ) ) {
+					print "skiping $name: file exists";
+
+					# skipping breaks ranges
+					if($range_itr) {
+						#aki
+						push @ranges, $range_itr;
+						$range_itr = '';
+						$range_kb = 0;
+					}
+					next;
+				}
+				else { # not ok (too small?), re-download
+					print "overwriting $name";
+				}
+			}
+
+			if( $range_kb + $size_kb > 1024*$args{max_block_mb} ) { # se passou do limite
+				if( $range_itr ) {
+					#aki
+					push @ranges, $range_itr;
+
+					$range_itr = $num; # .'-'.$num ?
+					$range_kb = $size_kb;
+				}
+				else {
+					if( $size_kb > 1024*$args{max_file_mb} and not $ENV{FOTO_FORCE} ) {
+						print "WARNING: won't download big file $name ($size_kb kb). limit=$args{max_file_mb}MB";
+					}
+					else {
+						print "warning: file $name too big ($size_kb kb)";
+						push @ranges, "$num-$num";
+					}
+					$range_itr = '';
+					$range_kb = 0;
+				}
+			}
+			else {
+				$range_kb += $size_kb;
+				$range_itr = $num;
+			}
+		}#
+
+		#aki
+		push @ranges, $range_itr
+			if $range_itr;
+
+		return \%files, \@ranges, $total_kb;
+	}#
+	;
+
+	{# check if disk has enough free space
+
+		my @df = split /\s+/, `df -k $args{base_dir} | tail -1`;
+		my $free_space_kb = $df[3];
+		if( $total_kb > 2*$free_space_kb ) {
+			print "NOT ENOUGH DISK SPACE!";
+			return ();
+		}
+
+	}#
+
 	my $count = 0;
 	my $step = 0;
 
-	foreach my $range (@g_ranges) {
-		my ($first, $last) = $range =~ /(\d+)-(\d+)/  or die;
+	foreach my $range_itr (@$ranges) {
+		my ($first, $last) = $range_itr =~ /(\d+)-(\d+)/  or die;
 		++$step;
-		print "downloading $range of ".( scalar keys %g_files )." files, step $step of ".(scalar @g_ranges);
-		x "$args{sudo} gphoto2 -p $range";
+		print "downloading $range_itr of ".( scalar keys %$files )." files, step $step of ".(scalar @$ranges);
+		x "$args{sudo} gphoto2 -p $range_itr";
 		my @files_to_chown = ();
 		for( $first .. $last ) {
-			my $name = $g_files{$_}->{name};
+			my $name = $files->{$_}{name};
 			if( -e $name ) {
 				push @files_to_chown, $name;
-				if( file_ok( $g_files{$_} ) ) {
+				if( file_ok( $files->{$_} ) ) {
 					++$count;
 				}
 				else {
@@ -243,89 +334,15 @@ sub download()
 		}
 		x "$args{sudo} chown $ENV{USER}.users ".join(' ', @files_to_chown);
 	}
-	return $count > 0;
-}
 
+	return $files;
+}#
 
-# {{{2         collect
+sub post_process ($)
+{#
+	my ($files) = @_;
+	-d $args{temp_dir}  or die $!;
 
-sub collect()
-{
-	my $first = -1;
-	my $last;
-	my $range_kb = 0;
-	my $total_kb = 0;
-
-	foreach( split /\n/, $g_list ) {
-		chomp;
-		my( $num, $name, $size_kb ) = /\A\#(\d+)\s+([^\s]+)\s+(\d+).*/
-			or next;
-
-		$g_files{$num} = { name => $name, size_kb => $size_kb };
-
-#TODO
-
-		my @tmp = split( /\s+/, `df -k $g_dir | tail -1` );
-		my $free_space_kb = $tmp[3];
-
-		if( ( $total_kb += $size_kb ) > 2*$free_space_kb ) {
-			print "NOT ENOUGH DISK SPACE!";
-			@g_ranges = ();
-			last;
-		}
-
-		if(-e $name) { # check existing files
-			if( file_ok( $g_files{$num} ) ) {
-				print "skiping $name: file exists";
-				if($first != -1) {
-					push @g_ranges, "$first-$last";
-					$first = -1;
-					$range_kb = 0;
-				}
-				next;
-			}
-			else { # too small, re-download
-				print "overwriting $name";
-			}
-		}
-
-		if( $range_kb + $size_kb > 1024*$args{max_block_mb} ) { # se passou do limite
-			if( $first != -1 ) {
-				push @g_ranges, "$first-$last";
-				$first = $num;
-				$last = $num;
-				$range_kb = $size_kb;
-			}
-			else {
-				if( $size_kb > 1024*$args{max_file_mb} and not $ENV{FOTO_FORCE} ) {
-					print "WARNING: won't download big file $name ($size_kb kb). limit=$args{max_file_mb}MB";
-				}
-				else {
-					print "warning: file $name too big ($size_kb kb)";
-					push @g_ranges, "$num-$num";
-				}
-				$first = -1;
-				$range_kb = 0;
-			}
-		}
-		else {
-			$range_kb += $size_kb;
-			$first = $num if $first == -1;
-			$last = $num;
-		}
-	}
-
-	push @g_ranges, "$first-$last"
-		if( $first != -1 );
-
-	return( @g_ranges ? 1 : 0 );
-}
-
-
-# {{{2         post_process
-
-sub post_process()
-{
 	my( $width, $height ) = ( 1024, 768 );
 #TODO keep cache of this value, in case of xwininfo failing
 #     (that is: no X running => use previous geometry)
@@ -335,13 +352,13 @@ sub post_process()
 		( $width, $height ) = ( $1, $2 );
 	}
 
-	my( $count, $total ) = ( 0, scalar keys %g_files );
-	foreach( sort keys %g_files ) {
+	my( $count, $total ) = ( 0, scalar keys %$files );
+	foreach( sort keys %$files ) {
 		++$count;
-		my $name = $g_files{$_}->{name};
+		my $name = $files->{$_}{name};
 		if( -e $name  or  $args{nop} ) {
 			if( $name =~ /^(.*)\.([^\.]+)$/ ) {
-				my( $base, $ext ) = ( $1, lc( $2 ) );
+				my ($base, $ext) = ($1, lc $2);
 				my $shot = "$base.$ext";
 
 				if( $name ne $shot ) {
@@ -356,13 +373,13 @@ sub post_process()
 
 				print "$count/$total\n";
 				if( $ext eq 'cr2' ) {
-					x "nice ufraw-batch --wb=camera --exposure=auto --size=${width}x${height} --out-type=jpeg --compression=$args{jpeg_quality} --out-path=\"$g_dir/..\" \"$shot\"";
+					x "nice ufraw-batch --wb=camera --exposure=auto --size=${width}x${height} --out-type=jpeg --compression=$args{jpeg_quality} --out-path=\"$args{temp_dir}/..\" \"$shot\"";
 				}
 				elsif( $ext eq 'jpg' ) {
-					x "nice convert -quality $args{jpeg_quality} -resize ${width}x${height} \"$shot\" \"../$base.jpg\"";
+					x "nice convert -quality $args{jpeg_quality} -resize $args{width}x$args{height} \"$shot\" \"../$base.jpg\"";
 					if( $args{do_gray} ) {
 						do_mkdir $args{gray_dir};
-						x "nice convert -colorspace gray -quality 80 -resize ${width}x${height} \"$shot\" \"$args{gray_dir}/$base.jpg\"";
+						x "nice convert -colorspace gray -quality 80 -resize $args{width}x$args{height} \"$shot\" \"$args{gray_dir}/$base.jpg\"";
 					}
 				}
 				elsif( $ext eq 'mpg' ) {
@@ -379,27 +396,36 @@ sub post_process()
 			}
 		}
 	}
+}#
+
+sub browse_results($)
+{#
+	my ($files) = @_;
+
+	my %dirs = ();
+	$dirs{$files->{$_}{dir}} = 1
+		foreach keys %$files;
+
+	my $common_dir = eval
+	{#
+		TODO;
+	}#
+	;
+	if( $common_dir ) {
+		print "cd \"$common_dir\"";
+		$ENV{DISPLAY} and x("$args{file_manager} \"$common_dir/..\" &");
 }
-
-
-# {{{2         main
+}#
 
 sub main(@)
-{
-	read_args(@ARGV) &&
-	get_file_list() &&
-	mkchdir() &&
-	collect() &&
-	download() &&
-	post_process();
-}
+{#
+	read_args (@ARGV);
+	my $files = download();
+	post_process ($files);
+	browse_results ($files);
+}#
 
 main(@ARGV);
-if( $g_dir ) {
-	print "cd \"$g_dir\"";
-	$ENV{DISPLAY} and x("$args{file_manager} \"$g_dir/..\" &");
-}
 
-
-#}}}1
+#}#1
 # vim600:fdm=marker:
