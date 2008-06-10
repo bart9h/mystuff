@@ -14,8 +14,8 @@ my %reqs =
 (	#{# required external tools
 
 	# X11
-	xosd => { bin => 'osd_cat', deb => 'xosd-bin' },
-	xwit => {},
+	#xosd => { bin => 'osd_cat', deb => 'xosd-bin' },
+	#xwit => {},
 
 	# tag
 	id3v2 => {},
@@ -31,23 +31,17 @@ my %reqs =
 
 my %files =
 (	#{#
-	'bash/Xdefaults.sh' => 'bin/Xdefaults.sh',
 	'bash/bashrc' => '.bashrc',
-	'etc/Xdefaults' => '.Xdefaults',
-	'etc/fluxbox/keys' => '.fluxbox/keys',
-	'etc/fluxbox/menu' => '.fluxbox/menu',
-	'etc/fluxbox/styles' => '.fluxbox/styles',
+	#'etc/Xdefaults' => '.Xdefaults',
 	'etc/inputrc' => '.inputrc',
-	'etc/rtorrent.rc' => '.rtorrent.rc',
+	#'etc/rtorrent.rc' => '.rtorrent.rc',
 	'etc/screenrc' => '.screenrc',
-	'etc/xorg.conf' => '/etc/X11/xorg.conf',
-	'scripts/dif.sh' => 'bin/dif',
-	'scripts/path2tag.pl' => 'bin/path2tag.pl',
-	'scripts/vimv.sh' => 'bin/vimv',
-	'scripts/web.pl' => 'bin/web',
-	'util/foto.pl' => 'bin/foto.pl',
-	'vim/colors' => '.vim/colors',
+	#'etc/xorg.conf' => '/etc/X11/xorg.conf',
+	'vim/' => '.vim/',
 	'vim/vimrc' => '.vimrc',
+	#'fluxbox/keys' => '.fluxbox/keys',
+	#'fluxbox/menu' => '.fluxbox/menu',
+	#'fluxbox/styles' => '.fluxbox/styles',
 );	#}#
 
 #}#
