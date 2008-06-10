@@ -194,6 +194,7 @@ alias z='f -rt'
 _progress 'abbreviations'
 
 alias apt='sudo aptitude'
+alias links='which links >/dev/null && links || elinks'
 
 
 #{{{1 frontend functions
