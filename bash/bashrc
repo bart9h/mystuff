@@ -238,7 +238,11 @@ function s() {
 
 _progress 'version control frontend'
 
+alias gc='git commit'
 alias gci='git commit --interactive'
+alias gco='git checkout'
+alias gs='git status -a'
+alias gd='git diff'
 
 alias svnbk='svnadmin dump /home/svn | bzip2 -9 > bart.svndump.`date +%Y-%m-%d`.bz2'
 
