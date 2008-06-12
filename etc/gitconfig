@@ -3,8 +3,11 @@
 	email = rodolfo.borges@gmail.com
 
 [alias]
-    ci = commit -a
+    c  = commit
+    ca = commit -a
+    ci = commit --interactive
     co = checkout
+	d  = diff
     st = status -a
 
 [apply]

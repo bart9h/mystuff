@@ -239,6 +239,7 @@ function s() {
 _progress 'version control frontend'
 
 alias gc='git commit'
+alias gca='git commit -a'
 alias gci='git commit --interactive'
 alias gco='git checkout'
 alias gs='git status -a'
