@@ -37,6 +37,7 @@ my %files =
 	#'etc/rtorrent.rc' => '.rtorrent.rc',
 	'etc/screenrc' => '.screenrc',
 	#'etc/xorg.conf' => '/etc/X11/xorg.conf',
+	'mplayer/config' => '.mplayer/config',
 	'vim/' => '.vim/',
 	'vim/vimrc' => '.vimrc',
 	#'fluxbox/keys' => '.fluxbox/keys',
