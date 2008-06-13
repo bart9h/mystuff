@@ -62,67 +62,6 @@ my %args = (
 
 #{#1          code
 
-sub read_args(@)
-{#
-	sub set_filesize_limit()
-	{# set max_block_mb and max_file_mb args
-
-# Guess nice values for memory usage limit based on avaiable memory:
-# max block size (soft limit) = 1/4 system memory
-# max file size (hard limit) = 3/4 system memory
-#TODO: check also if it will fit on available mem+swap
-		sub file_read($;$);
-		my $mem_total_kb = 0;
-		foreach( file_read( '/proc/meminfo' ) ) {
-			if( m/^MemTotal:\s+(\d+)\s+kB$/ ) {
-				$mem_total_kb = $1;
-				last;
-			}
-		}
-
-		if( $mem_total_kb ) {
-			$args{max_block_mb} = int( (1/4)*$mem_total_kb/1024 );
-			$args{max_file_mb}  = int( (3/4)*$mem_total_kb/1024 );
-		}
-	}#
-
-	if( scalar @_ == 1 ) {
-		$args{source} = shift;
-	}
-	else {
-		while( $_ = shift ) {
-			if( exists $args{$_} ) {
-				if( not defined ($args{$_} = shift) ) {
-					print STDERR "missing argument for $_";
-					exit 1;
-				}
-			}
-			elsif( $_ eq '--help' ) {
-				#{{{
-				#TODO: better %args, to contain description
-				#      (borrow from other script I wrote..)
-				my $max_len = 0;
-				foreach( keys %args) {
-					$max_len = length $_
-						if length $_ > $max_len;
-				}
-				print "arguments".(' ' x ($max_len - 7))."[defaults]:\n";
-				foreach( sort keys %args ) {
-					my $arg = defined $args{$_} ? $args{$_} : '<empty>';
-					print $_.(' ' x (2 + $max_len - length $_))."[$arg]"
-				}
-				exit 0;
-				#}}}
-			}
-			else {
-				print STDERR "unknown arg ($_)";
-				exit 1;
-			}
-		}
-	}
-	1;
-}#
-
 #{#2           system utils
 
 sub x($)
@@ -177,6 +116,83 @@ sub do_mkdir($)
 }#
 
 #}#
+
+sub default_args()
+{#
+	{#  max_block_mb and max_file_mb
+
+		# Guess nice values for memory usage limit based on avaiable memory:
+		# max block size (soft limit) = 1/4 system memory
+		# max file size (hard limit) = 3/4 system memory
+		#TODO: check also if it will fit on available mem+swap
+
+		my $mem_total_kb = 0;
+		foreach( file_read( '/proc/meminfo' ) ) {
+			if( m/^MemTotal:\s+(\d+)\s+kB$/ ) {
+				$mem_total_kb = $1;
+				last;
+			}
+		}
+
+		if( $mem_total_kb ) {
+			$args{max_block_mb} = int( (1/4)*$mem_total_kb/1024 );
+			$args{max_file_mb}  = int( (3/4)*$mem_total_kb/1024 );
+		}
+	}#
+
+	{#  width, height
+
+		sub cached_resolution {
+			#TODO:  "width %d height %d"  in  ~/etc/var/screen-pixels
+			(1024, 768)
+		}
+		($args{width}, $args{height}) =
+			`xwininfo -root` =~ /\bWidth:\s+(\d+)\b.*\bHeight:\s+(\d+)\b/s
+			? ($1, $2)
+			: cached_resolution();
+
+	}#
+}#
+
+sub read_args(@)
+{#
+	if( scalar @_ == 1 ) {
+		$args{source} = shift;
+	}
+	else {
+		while( $_ = shift ) {
+			s/^--//;
+			if (exists $args{$_}) {
+				if (not defined ($args{$_} = shift)) {
+					print STDERR "missing argument for $_";
+					exit 1;
+				}
+			}
+			elsif ($_ eq '--help') {
+				#{#
+				#TODO: better %args, to contain description
+				#      (borrow from other script I wrote..)
+				my $max_len = 0;
+				foreach (keys %args) {
+					$max_len = length $_
+						if length $_ > $max_len;
+				}
+				print "arguments".(' ' x ($max_len - 7))."[defaults]:\n";
+				foreach (sort keys %args) {
+					my $arg = defined $args{$_} ? $args{$_} : '<empty>';
+					print $_.(' ' x (2 + $max_len - length $_))."[$arg]"
+				}
+				exit 0;
+				#}#
+			}
+			else {
+				print STDERR "unknown arg ($_)";
+				exit 1;
+			}
+		}
+	}
+	1;
+}#
 
 sub file_mkdir($)
 {#
@@ -343,26 +359,17 @@ sub post_process ($)
 	my ($files) = @_;
 	-d $args{temp_dir}  or die $!;
 
-	my( $width, $height ) = ( 1024, 768 );
-#TODO keep cache of this value, in case of xwininfo failing
-#     (that is: no X running => use previous geometry)
-#     "width %d height %d"  in  ~/var/screen-pixels
-	$ENV{DISPLAY}  or  $ENV{DISPLAY} = ':0';
-	if( `xwininfo -root` =~ /\bWidth:\s+(\d+)\b.*\bHeight:\s+(\d+)\b/s ) {
-		( $width, $height ) = ( $1, $2 );
-	}
-
-	my( $count, $total ) = ( 0, scalar keys %$files );
-	foreach( sort keys %$files ) {
+	my ($count, $total) = (0, scalar keys %$files);
+	foreach (sort keys %$files) {
 		++$count;
 		my $name = $files->{$_}{name};
-		if( -e $name  or  $args{nop} ) {
-			if( $name =~ /^(.*)\.([^\.]+)$/ ) {
+		if (-e $name  or  $args{nop}) {
+			if ($name =~ /^(.*)\.([^\.]+)$/) {
 				my ($base, $ext) = ($1, lc $2);
 				my $shot = "$base.$ext";
 
-				if( $name ne $shot ) {
-					if( ! $args{nop} ) {
+				if ($name ne $shot) {
+					if(!$args{nop}) {
 						rename $name, $shot  or die;
 						x "chmod -w $shot";
 					}
@@ -372,18 +379,19 @@ sub post_process ($)
 				}
 
 				print "$count/$total\n";
-				if( $ext eq 'cr2' ) {
-					x "nice ufraw-batch --wb=camera --exposure=auto --size=${width}x${height} --out-type=jpeg --compression=$args{jpeg_quality} --out-path=\"$args{temp_dir}/..\" \"$shot\"";
+				if ($ext eq 'cr2') {
+					x "nice ufraw-batch --wb=camera --exposure=auto --size=$args{width}x$args{height} --out-type=jpeg --compression=$args{jpeg_quality} --out-path=\"$args{temp_dir}/..\" \"$shot\"";
 				}
-				elsif( $ext eq 'jpg' ) {
+				elsif ($ext eq 'jpg') {
 					x "nice convert -quality $args{jpeg_quality} -resize $args{width}x$args{height} \"$shot\" \"../$base.jpg\"";
-					if( $args{do_gray} ) {
+					if ($args{do_gray}) {
+						#TODO: move this after this if's, to make gray version of raw images
 						do_mkdir $args{gray_dir};
 						x "nice convert -colorspace gray -quality 80 -resize $args{width}x$args{height} \"$shot\" \"$args{gray_dir}/$base.jpg\"";
 					}
 				}
-				elsif( $ext eq 'mpg' ) {
-					if( ! $args{nop} ) {
+				elsif ($ext eq 'mpg') {
+					if (!$args{nop}) {
 						symlink "shot/$shot", "../$shot";
 					}
 					else {
@@ -419,6 +427,8 @@ sub browse_results($)
 
 sub main(@)
 {#
+	$ENV{DISPLAY}  or  $ENV{DISPLAY} = ':0';
+	default_args();
 	read_args (@ARGV);
 	my $files = download();
 	post_process ($files);
