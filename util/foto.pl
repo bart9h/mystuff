@@ -199,7 +199,10 @@ sub file_mkdir($)
 	my ($file) = @_;
 	-d $args{basedir}  or die "$args{basedir}: $!";
 
-	my ($mday, $mon, $year) = TODO;
+	my ($year, $mon, $mday) =
+		`exiv2 $file->{path}`
+		=~ /^Image timestamp : \d{4}:\d{2}:\d{2} \d{2}:\d{2}:\d{2}$/
+		or die "no exif info for file $file->{path}";
 
 	my $dir = $args{basedir};
 	$dir .= '/'.sprintf '%04d-%02d-%02d', $year+1900, $mon+1, $mday;
@@ -330,15 +333,16 @@ sub download()
 	foreach my $range_itr (@$ranges) {
 		my ($first, $last) = $range_itr =~ /(\d+)-(\d+)/  or die;
 		++$step;
-		print "downloading $range_itr of ".( scalar keys %$files )." files, step $step of ".(scalar @$ranges);
+		print "downloading $range_itr of ".(scalar keys %$files)." files, step $step of ".(scalar @$ranges);
 		x "$args{sudo} gphoto2 -p $range_itr";
 		my @files_to_chown = ();
-		for( $first .. $last ) {
+		for ($first .. $last) {
 			my $name = $files->{$_}{name};
-			if( -e $name ) {
+			if (-e $name) {
 				push @files_to_chown, $name;
-				if( file_ok( $files->{$_} ) ) {
+				if (file_ok ($files->{$_})) {
 					++$count;
+					$files->{$_}{path} = "$ENV{PWD}/$name";
 				}
 				else {
 					print "warning: $name too small"
@@ -357,7 +361,6 @@ sub download()
 sub post_process ($)
 {#
 	my ($files) = @_;
-	-d $args{temp_dir}  or die $!;
 
 	my ($count, $total) = (0, scalar keys %$files);
 	foreach (sort keys %$files) {
@@ -416,13 +419,19 @@ sub browse_results($)
 
 	my $common_dir = eval
 	{#
-		TODO;
+		if (scalar keys %dirs == 1) {
+			return $dirs{(keys %dirs)[0]};
+		}
+		else {
+			#TODO: find common dir, if any
+			return $args{base_dir};
+		}
 	}#
 	;
-	if( $common_dir ) {
+	if ($common_dir) {
 		print "cd \"$common_dir\"";
 		$ENV{DISPLAY} and x("$args{file_manager} \"$common_dir/..\" &");
-}
+	}
 }#
 
 sub main(@)
