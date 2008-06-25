@@ -1,0 +1,438 @@
+set show-rev-graph = yes
+set tab-size = 4
+set author-width = 5
+#set encoding = "UTF-8"
+
+###########
+# tigrc(5)
+# ========
+#
+# NAME
+# ----
+# tigrc - tig user configuration file
+#
+#
+# SYNOPSIS
+# --------
+# [verse]
+# .............................................................................
+# *set*   'variable' *=* 'value'
+# *bind*  'keymap' 'key' 'action'
+# *color* 'area' 'fgcolor' 'bgcolor' '[attributes]'
+# .............................................................................
+#
+#
+# DESCRIPTION
+# -----------
+#
+# You can permanently set an option by putting it in the `~/.tigrc` file.  The
+# file consists of a series of 'commands'.  Each line of the file may contain
+# only one command.
+#
+# The hash mark ('#') is used as a 'comment' character. All text after the
+# comment character to the end of the line is ignored. You can use comments to
+# annotate your initialization file.
+#
+#
+# Set command
+# -----------
+#
+# A few selective variables can be configured via the set command. The syntax
+# is:
+#
+# [verse]
+# ..............................................................................
+# *set* variables *=* value
+# ..............................................................................
+#
+# Examples:
+#
+# --------------------------------------------------------------------------
+# set show-author = yes		# Show author?
+# set show-date = yes		# Show commit date?
+# set show-rev-graph = yes	# Show revision graph?
+# set show-refs = yes		# Show references?
+# set show-line-numbers = no	# Show line numbers?
+# set line-number-interval = 5	# Interval between line numbers
+# set tab-size = 8		# Number of spaces per tab
+# set encoding = "UTF-8"		# Commit encoding
+# --------------------------------------------------------------------------
+#
+# The type of variables are either bool, int, and string.
+#
+# Valid bool values::
+#
+# 	To set a bool variable to true use either "1", "true", or "yes".
+# 	Any other value will set the variable to false.
+#
+# Valid int values::
+#
+# 	A non-negative integer.
+#
+# Valid string values::
+#
+# 	A string of characters. Optionally, use either ' or " as delimiters.
+#
+# Variables
+# ~~~~~~~~~
+#
+# The following variables can be set:
+#
+# 'show-author' (bool)::
+# 'show-date' (bool)::
+# 'show-rev-graph' (bool)::
+# 'show-refs' (bool)::
+#
+# 	Whether to show author, date, revision graph, and references
+# 	(branches, tags, and remotes) in the main view on start-up. Can all be
+# 	toggled.
+#
+# 'line-number-interval' (int)::
+#
+# 	Interval between line numbers. Note, you have to toggle on line
+# 	numbering with 'n' or the `-n` command line option.  The default is to
+# 	number every line.
+#
+# 'tab-size' (int)::
+#
+# 	Number of spaces per tab. The default is 8 spaces.
+#
+# 'commit-encoding' (string)::
+#
+# 	The encoding used for commits. The default is UTF-8. Not this option
+# 	is shadowed by the "i18n.commitencoding" option in `.git/config`.
+#
+#
+# Bind command
+# ------------
+#
+# Using bind commands keys can be mapped to an action when pressed in a given
+# key map. The syntax is:
+#
+# [verse]
+# ..............................................................................
+# *bind* 'keymap' 'key' 'action'
+# ..............................................................................
+#
+# Examples:
+#
+# --------------------------------------------------------------------------
+# # A few keybindings
+# bind main w scroll-line-up
+# bind main s scroll-line-down
+# bind main space enter
+# bind diff a previous
+# bind diff d next
+# bind diff b move-first-line
+# # 'unbind' the default quit key binding
+# bind main Q none
+# # An external command to update from upstream
+# bind generic F !git fetch
+# # Cherry-pick current commit unto current branch
+# bind generic C !git cherry-pick %(commit)
+# --------------------------------------------------------------------------
+#
+# Keys are mapped by first searching the keybindings for the current view, then
+# the keybindings for the *generic* keymap, and last the default keybindings.
+# Thus, the view keybindings shadow the generic keybindings which Shadow the
+# built-in keybindings.
+#
+# --
+#
+# Keymaps::
+#
+# Valid keymaps are: *main*, *diff*, *log*, *help*, *pager*, *status*, *stage*,
+# and *generic*.  Use *generic* to set key mapping in all keymaps.
+#
+# Key values::
+#
+# Key values should never be quoted. Use either the ASCII value or one of the
+# following symbolic key names. Symbolic key names are case insensitive, Use
+# *Hash* to bind to the `#` key, since the hash mark is used as a comment
+# character.
+#
+# *Enter*, *Space*, *Backspace*, *Tab*, *Escape*, *Left*, *Right*, *Up*, *Down*,
+# *Insert*, *Delete*, *Hash*, *Home*, *End*, *PageUp*, *PageDown*, *F1*, *F2*, *F3*,
+# *F4*, *F5*, *F6*, *F7*, *F8*, *F9*, *F10*, *F11*, *F12*.
+#
+# Action names::
+#
+# Valid action names are described below. Note, all names are
+# case-insensitive, and you may use '-', '_', and '.' interchangeably,
+# e.g. "view-main", "View.Main", and "VIEW_MAIN" are the same.
+#
+# --
+#
+# Actions
+# ~~~~~~~
+#
+# Apart from the action names listed below, all actions starting with a '!' will
+# be available as an external command. External commands can contain variable
+# names that will be substituted before the command is run. Valid variable names
+# are "%(head)", "%(commit)", and "%(blob)".
+#
+# As an example, the following external command will save the current commit as
+# a patch file: "!git format-patch %(commit)^..%(commit)".
+#
+# ifdef::backend-xhtml11[]
+# [frame="none"]
+# `-----------------------`-----------------------------------------------------
+# endif::backend-xhtml11[]
+# View switching:
+# ------------------------------------------------------------------------------
+# view-main		Show main view
+# view-diff		Show diff view
+# view-log		Show log view
+# view-tree		Show tree view
+# view-blob		Show blob view
+# view-blame		Show blame view
+# view-status		Show status view
+# view-stage		Show stage view
+# view-pager		Show pager view
+# view-help		Show help page
+# ------------------------------------------------------------------------------
+#
+# ifdef::backend-xhtml11[]
+# [frame="none"]
+# `-----------------------`-----------------------------------------------------
+# endif::backend-xhtml11[]
+# View manipulation:
+# ------------------------------------------------------------------------------
+# enter			Enter current line and scroll
+# next			Move to next
+# previous		Move to previous
+# view-next		Move focus to next view
+# refresh			Reload and refresh view
+# maximize		Maximize the current view
+# view-close		Close the current view
+# quit			Close all views and quit
+# ------------------------------------------------------------------------------
+#
+# ifdef::backend-xhtml11[]
+# [frame="none"]
+# `-----------------------`-----------------------------------------------------
+# endif::backend-xhtml11[]
+# Cursor navigation:
+# ------------------------------------------------------------------------------
+# move-up			Move cursor one line up
+# move-down		Move cursor one line down
+# move-page-down		Move cursor one page down
+# move-page-up		Move cursor one page up
+# move-first-line		Move cursor to first line
+# move-last-line		Move cursor to last line
+# ------------------------------------------------------------------------------
+#
+# ifdef::backend-xhtml11[]
+# [frame="none"]
+# `-----------------------`-----------------------------------------------------
+# endif::backend-xhtml11[]
+# Scrolling:
+# ------------------------------------------------------------------------------
+# scroll-line-up		Scroll one line up
+# scroll-line-down	Scroll one line down
+# scroll-page-eup		Scroll one page up
+# scroll-page-down	Scroll one page down
+# ------------------------------------------------------------------------------
+#
+# ifdef::backend-xhtml11[]
+# [frame="none"]
+# `-----------------------`-----------------------------------------------------
+# endif::backend-xhtml11[]
+# Searching:
+# ------------------------------------------------------------------------------
+# search			Search the view
+# search-back		Search backwards in the view
+# find-next		Find next search match
+# find-prev		Find previous search match
+# ------------------------------------------------------------------------------
+#
+# ifdef::backend-xhtml11[]
+# [frame="none"]
+# `-----------------------`-----------------------------------------------------
+# endif::backend-xhtml11[]
+# Misc:
+# ------------------------------------------------------------------------------
+# none			Do nothing
+# prompt			Bring up the prompt
+# screen-redraw		Redraw the screen
+# screen-resize		Resize the screen
+# show-version		Show version information
+# stop-loading		Stop all loading views
+# toggle-lineno		Toggle line numbers
+# toggle-date		Toggle date display
+# toggle-author		Toggle author display
+# toggle-rev-graph	Toggle revision graph visualization
+# toggle-refs		Toggle reference display
+# status-update		Update file status
+# status-merge		Resolve unmerged file
+# tree-parent		Switch to parent directory in tree view
+# edit			Open in editor
+# ------------------------------------------------------------------------------
+#
+#
+# Color command
+# -------------
+#
+# Color commands control highlighting and the user interface styles. If your
+# terminal supports color, these commands can be used to assign foreground and
+# background combinations to certain areas. Optionally, an attribute can be
+# given as the last parameter. The syntax is:
+#
+# [verse]
+# ..............................................................................
+# *color* 'area' 'fgcolor' 'bgcolor' '[attributes]'
+# ..............................................................................
+#
+# Examples:
+#
+# ------------------------------------------------------------------------------
+# # Overwrite the default terminal colors to white on black.
+# color default		white	black
+# # Diff colors
+# color diff-header	yellow	default
+# color diff-index	blue	default
+# color diff-chunk	magenta	default
+# # A strange looking cursor line
+# color cursor		red	default underline
+# # UI colors
+# color title-blur	white	blue
+# color title-focus	white	blue	bold
+# ------------------------------------------------------------------------------
+#
+# Area names::
+#
+# 	Valid area names are described below. Note, all names are
+# 	case-insensitive, and you may use '-', '_', and '.' interchangeably,
+# 	e.g. "Diff-Header", "DIFF_HEADER", and "diff.header" are the same.
+#
+# Color names::
+#
+# 	Valid colors include: *white*, *black*, *green*, *magenta*, *blue*,
+# 	*cyan*, *yellow*, *red*, *default*. Use *default* to refer to the
+# 	default terminal colors.
+#
+# Attribute names::
+#
+# 	Valid attributes include: *normal*, *blink*, *bold*, *dim*, *reverse*,
+# 	*standout*, and *underline*. Note, not all attributes may be supported
+# 	by the terminal.
+#
+# UI colors
+# ~~~~~~~~~
+#
+# --
+#
+# Default terminal colors::
+#
+# The colors and attributes to be used for the text that is not highlighted or
+# that specify the use of the default terminal colors can be controlled by
+# setting the *default* color option.
+#
+# Use the *default* color to use the colors configured for the terminal. This is
+# the default and recommended if you are using a terminal with a transparent
+# background.
+#
+# Status window colors::
+#
+# Appearance of the bottom window showing info messages.
+#
+# *status*
+#
+# Title window colors::
+#
+# Appearance of the title windows when they are attached
+# to any backgrounded windows and the current window.
+#
+# *title-blur*, *title-focus*
+#
+# Misc colors::
+#
+# Colors for the cursor line, line numbers, and delimiter shown for truncated
+# lines.
+#
+# *cursor*, *delimiter*, *line-number*
+#
+# Main view specific::
+#
+# Appearance of the various columns in the main view, including labels for tag
+# and branch references.
+#
+# *main-date*, *main-author*, *main-commit*, *main-tag*, *main-local-tag*,
+# *main-ref*, *main-remote*, *main-head*, *main-revgraph*
+#
+# Blame view colors::
+#
+# The colors used for the blame view are similar to those in the main view.
+# The commit ID color can be colored using *blame-id*.
+#
+# *blame-date*, *blame-author*, *blame-commit*, *blame-id*
+#
+# --
+#
+# Highlighting
+# ~~~~~~~~~~~~
+#
+# --
+#
+# Diff markup::
+#
+# Options concerning diff start, chunks and lines added and deleted.
+#
+# *diff-header*, *diff-chunk*, *diff-add*, *diff-del*
+#
+# Enhanced git diff markup::
+#
+# Extra diff information emitted by the git diff machinery, such as mode
+# changes, rename detection, and similarity.
+#
+# *diff-oldmode*, *diff-newmode*, *diff-copy-from*, *diff-copy-to*,
+# *diff-rename-from*, *diff-rename-to*, *diff-similarity*, *diff-dissimilarity*
+# *diff-tree*, *diff-index*
+#
+# Pretty print commit headers::
+#
+# Commit diffs and the revision logs are usually formatted using pretty printed
+# headers , unless `--pretty=raw` was given. This includes lines, such as merge
+# info, commit ID, and author and committer date.
+#
+# *pp-author*, *pp-commit*, *pp-merge*, *pp-date*, *pp-adate*, *pp-cdate*,
+# *pp-refs*
+#
+# Raw commit header::
+#
+# Usually shown when `--pretty=raw` is given, however 'commit' is pretty much
+# omnipresent.
+#
+# *commit*, *parent*, *tree*, *author*, *committer*
+#
+# Commit message::
+#
+# For now only `Signed-off-by` and `Acked-by` lines are colorized.
+#
+# *signoff*, *acked*
+#
+# Tree markup::
+#
+# Colors for information of the tree view.
+#
+# *tree-dir*, *tree-file*
+#
+# Status markup::
+#
+# Colors used in the status view for coloring the "On branch"-line, sections,
+# "no file" lines and the various file status groups.
+#
+# *stat-head*, *stat-section*, *stat-none*, *stat-staged*, *stat-unstaged*,
+# *stat-untracked*
+#
+# --
+#
+# COPYRIGHT
+# ---------
+# Copyright (c) 2006-2007 Jonas Fonseca <fonseca@diku.dk>
+#
+# Licensed under the terms of the GNU General Public License.
+#
+# SEE ALSO
+# --------
+# gitlink:tig[1] and the http://jonas.nitro.dk/tig/manual.html[tig manual].
