@@ -9,7 +9,7 @@ sub TODO { die; }
 
 =todo
 
-- remove all globals; option to run over existing photos
+- option to run over existing photos
 
 - ETA
 
@@ -38,14 +38,12 @@ $\="\n";
 #{#1          parameters
 
 my %args = (
-
 		files => [],
 		tag => undef,
 		sudo => 'sudo',
 		do_gray => 0,
 
 		basedir => '/home/fotos/archive',
-		tempdir => '/home/fotos/tmp',
 		max_block_mb => 256,
 		max_file_mb => 600,
 		gray_dir => '../gray',
@@ -327,6 +325,8 @@ sub download()
 
 	}#
 
+	TODO; # mkchtempdir
+
 	my $count = 0;
 	my $step = 0;
 
@@ -447,4 +447,4 @@ sub main(@)
 main(@ARGV);
 
 #}#1
-# vim600:fdm=marker:
+# vim600:fdm=marker:fmr={#,}#:
