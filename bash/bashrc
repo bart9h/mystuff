@@ -193,7 +193,7 @@ alias cn='cat > /dev/null' # quick volatile writepad
 alias data='date +%Y-%m-%d'
 
 alias ponte='mplayer mms://200.246.9.2/pontelive'
-alias u='if test -e *.rar; then rar x *.rar && rm *.rar; elif test -e *.zip; then unzip *.zip && rm *.zip; fi'
+alias u='if test $( ls *.rar 2>/dev/null | wc -l ) == 1; then rar x *.rar && rm *.rar; elif test $( ls *.zip 2>/dev/null | wc -l ) == 1; then unzip *.zip && rm *.zip; else echo \?; fi'
 
 alias pgw='ping gw'
 alias pgo='ping google.com'
