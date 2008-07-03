@@ -43,7 +43,16 @@ function s()
 		&& session_name="`basename "$PWD"`"
 
 		test -n "$WINDOW" && screen -X title "$session_name"
-		screen $ctrlB -S "$session_name"
+		TERM=xterm screen $ctrlB -S "$session_name"
+
+		# Forcing TERM=xterm is a workaround to support 256-colors
+		# in a screen inside another screen.
+		# (Looks like screen only supports 256-colors if TERM=xterm).
+		#
+		# But what if you open a screen in the text console?
+		# Even if there is a check for that, it won't solve the problem,
+		# as one can open a screen in one environment,
+		# then re-attach in another.
 	fi
 }
 

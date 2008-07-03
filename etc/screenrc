@@ -20,3 +20,14 @@ shell "/bin/bash"
 #caption always "%{Yb} %Y-%02m-%02d %0c %{k}|%{C} %LD %{k}|%{G} %l %{k}|%{W} %-Lw%{+u}%n %f %t%{-u}%+Lw"
 #hardstatus alwayslastline "%{wk}%H %{wk}%?%-Lw%?%{wb}%n*%f %t%?(%u)%?%{wk}%?%+Lw%? %{dk}%= %{ck}%Y-%m-%d %{ck}%c"
 bind 'w' windowlist -b
+
+
+# terminfo and termcap for nice 256 color terminal
+# allow bold colors - necessary for some reason
+attrcolor b ".I"
+# tell screen how to set colors. AB = background, AF=foreground
+termcapinfo xterm 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+termcapinfo screen 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+# erase background with current bg color
+defbce "on"
+

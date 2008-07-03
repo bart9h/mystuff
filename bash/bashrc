@@ -639,7 +639,7 @@ function titlebar()
 }
 
 if echo "$BASH_VERSION" |  grep -q '^3\.1\..*'; then
-	set -o functrace
+	#set -o functrace
 	trap 'titlebar $BASH_COMMAND' DEBUG
 fi
 
