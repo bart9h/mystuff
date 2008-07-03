@@ -92,6 +92,7 @@ set hlsearch
 set scrolloff=2
 set foldmethod=syntax
 set foldnestmax=1
+set foldminlines=2
 set nonumber
 set showcmd
 
