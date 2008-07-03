@@ -26,8 +26,8 @@
 [color]
 	ui = always
 	interactive = always
-	branch = always
+	branch = auto
 	diff = auto
 	pager = true
-	status = always
+	status = auto
 
