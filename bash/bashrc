@@ -103,6 +103,14 @@ alias cp='cp -i --preserve=timestamps'
 
 alias mv='mv -i'
 
+alias vi='vim -o'
+alias tig='tig --all'
+alias xxd='xxd -c $(( (($COLUMNS - 10)/7)*2 ))'
+alias wget='wget -c --timeout=15 --wait=0 --tries=0'
+alias xpdf='xpdf -z width'
+alias grep='grep --exclude="*.svn-base" --devices=skip'
+#alias tar='tar --exclude=.svn --exclude=CVS'
+
 function rm()
 { #{{{
 	#set +o functrace
@@ -128,13 +136,14 @@ function rm()
 	/bin/rm "$@"
 } #}}}
 
-alias vi='vim -o'
-alias tig='tig --all'
-alias xxd='xxd -c $(( (($COLUMNS - 10)/7)*2 ))'
-alias wget='wget -c --timeout=15 --wait=0 --tries=0'
-alias xpdf='xpdf -z width'
-alias grep='grep --exclude="*.svn-base" --devices=skip'
-#alias tar='tar --exclude=.svn --exclude=CVS'
+function head()
+{ #{{{
+	if test "$1" == ""; then
+		`which head` -$(( 2 * $LINES / 3 )) "$@"
+	else
+		`which head` "$@"
+	fi
+} #}}}
 
 
 #{{{1 ls
@@ -177,13 +186,17 @@ alias z='f -rt'
 
 #{{{1 abbreviations
 
-alias apt='sudo aptitude'
 alias links='which links >/dev/null && links || elinks'
+alias p='ps -AH --format "%U %p %a"'
+alias l='less'
+alias cn='cat > /dev/null' # quick volatile writepad
+alias data='date +%Y-%m-%d'
 
+alias ponte='mplayer mms://200.246.9.2/pontelive'
+alias u='if test -e *.rar; then rar x *.rar && rm *.rar; elif test -e *.zip; then unzip *.zip && rm *.zip; fi'
 
-#___
-#}}}
-#{{{  version control
+alias pgw='ping gw'
+alias pgo='ping google.com'
 
 alias gc='git commit'
 alias gca='git commit -a'
@@ -191,6 +204,49 @@ alias gci='git commit --interactive'
 alias gco='git checkout'
 alias gs='git status -a'
 alias gd='git diff'
+
+alias configure='nice ./configure --disable-nls'
+alias mk="nice make -j `show cpus`"
+alias cm='configure && mk'
+alias conf='./configure --help && read a && configure $a'
+alias confh='./configure --help | less'
+alias cmi='conf && mk && mki'
+alias qpro='rm Makefile *.pro; qmake -project && qmake && make clean'
+
+alias mp='mplayer'
+alias mpf='mplayer -fs -osdlevel 0'
+alias mpdvd='mplayer -identify dvd://1 -dvd-device "$PWD"'
+alias mpq='mplayer -nosound -osdlevel 0'
+alias mpr='ls -Q | rl | xargs mplayer -fs'
+alias mprq='ls -Q | rl | xargs mplayer -fs -ao null'
+
+function v() {
+	if test "$1"; then
+		vim -o "$@"
+	else
+		vim .
+	fi
+}
+
+if test -e /etc/debian_version; then
+
+	alias apt='sudo aptitude'
+
+elif test -e /etc/slackware-version; then
+
+	alias pkg='web --linux-packages'
+	alias sl='web --slackware'
+
+	alias sip='sudo installpkg'
+	alias srp='sudo removepkg'
+	alias sup='sudo upgradepkg'
+
+fi
+
+
+#___
+#}}}
+#{{{  version control
 
 alias svnbk='svnadmin dump /home/svn | bzip2 -9 > bart.svndump.`date +%Y-%m-%d`.bz2'
 
@@ -337,9 +393,6 @@ function lddr()  # ldd "recursivo": faz ldd das bibliotecas nao-padrao mostradas
 	done
 } #}}}
 
-# network
-alias pgw='ping gw'
-alias pgo='ping google.com'
 alias reconnect='sudo kill `pidof dhclient`; sudo ifconfig eth0 down; sudo dhclient'
 #alias reconnect='sudo ifconfig eth0 down; sudo ifconfig eth0 192.168.1.4 netmask 255.255.255.0 && route add default gw 192.168.1.1'
 
@@ -381,24 +434,14 @@ unset uncommited
 
 alias ph='vi ~/src/txt/phonebook.txt'
 
-# utils
-
-if test -e /etc/slackware-version; then
-	alias pkg='web --linux-packages'
-	alias sl='web --slackware'
-fi
-
 alias t='source ~/etc/scripts/untar.sh'
-alias l='less'
 alias grepsmallnear='find . -type f -maxdepth 2 -size -10k -not -name "* *" | xargs grep'
 #alias r='xset r'
 #alias k='sudo kbdrate -r 30 -d 250'
 #alias caps='xmodmap -e "keysym Caps_Lock = Escape"'
 alias caps='xmodmap -e "remove Lock = Caps_Lock" -e "keysym Caps_Lock = Escape"'
-alias data='date +%Y-%m-%d'
 alias geom="xwininfo -root | sed -rn '/-geometry/s/[^0-9]*([0-9]+x[0-9]+).*/\1/p'"
 alias 2view='convert -quality 80 -resize `geom`'
-alias cn='cat > /dev/null' # quick volatile writepad
 alias dt='~/etc/scripts/dtool.pl'
 alias vd='dt vd'
 
@@ -419,20 +462,6 @@ function waitload() {
 #alias mem='free; kill `pidof WMxmms`; sleep 1s; WMxmms &; sleep 1s; dk kill; sleep 1s; ml &; sleep 3s; free'
 alias updb='sudo updatedb &'
 
-# build tools
-alias configure='nice ./configure --disable-nls'
-alias mk="nice make -j `show cpus`"
-alias cm='configure && mk'
-alias conf='./configure --help && read a && configure $a'
-alias confh='./configure --help | less'
-alias cmi='conf && mk && mki'
-alias qpro='rm Makefile *.pro; qmake -project && qmake && make clean'
-
-
-# pkgtools
-alias sip='sudo installpkg'
-alias srp='sudo removepkg'
-alias sup='sudo upgradepkg'
 
 
 export GDK_USE_XFT=1
@@ -447,12 +476,6 @@ alias ntop='sudo jnettop'
 
 #alias dif='diff --unified=5 --show-c-function --recursive --ignore-all-space'
 #alias dif='diff --unified=5 --show-c-function --recursive --ignore-space-change --ignore-blank-lines --ignore-all-space'
-alias mp='mplayer'
-alias mpf='mplayer -fs -osdlevel 0'
-alias mpdvd='mplayer -identify dvd://1 -dvd-device "$PWD"'
-alias mpq='mplayer -nosound -osdlevel 0'
-alias mpr='ls -Q | rl | xargs mplayer -fs'
-alias mprq='ls -Q | rl | xargs mplayer -fs -ao null'
 
 alias g9='gkrellm -w -s 9h &'
 alias irc='irssi -n barrett9h -c irc.freenode.net'
@@ -462,16 +485,6 @@ alias treo='nice lame -m j -v -f'
 #alias v='gvim -geom 80x50 +"set guioptions-=T" +"set guioptions-=m" -font "-misc-fixed-medium-r-semicondensed-*-*-120-*-*-c-*-iso8859-1"'
 
 alias mame='xmame.x11 -rompath .'
-
-alias p='ps -AH --format "%U %p %a"'
-
-function head() {
-	if test "$1" == ""; then
-		`which head` -$(( 2 * $LINES / 3 )) "$@"
-	else
-		`which head` "$@"
-	fi
-}
 
 function mkcd() { mkdir "$1" && cd "$1"; }
 function cd..() {
@@ -485,14 +498,6 @@ function cd..() {
 function _x() {
 	echo "$*"
 	echo "$*" | /bin/sh
-}
-
-function v() {
-	if test "$1"; then
-		vim -o "$@"
-	else
-		vim .
-	fi
 }
 
 function Seq() {
@@ -549,10 +554,7 @@ function bk() {
 export LS_COLORS='no=00:fi=00:di=01;31:ln=01;36:pi=40;33:so=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jpg=01;35:*.png=01;35:*.gif=01;35:*.bmp=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.png=01;35:*.mpg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:';
 
 alias tetrinet='tetrinet -noslide -fancy bart9h games03.click21.com.br'
-alias ponte='mplayer mms://200.246.9.2/pontelive'
 
-
-alias u='if test -e *.rar; then rar x *.rar && rm *.rar; elif test -e *.zip; then unzip *.zip && rm *.zip; fi'
 alias k='sudo kbdrate -r 30 -d 200'
 alias black='xsetroot -solid black'
 
