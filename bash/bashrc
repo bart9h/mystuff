@@ -204,6 +204,7 @@ alias gci='git commit --interactive'
 alias gco='git checkout'
 alias gs='git status -a'
 alias gd='git diff'
+alias gk='gitk --all &'
 
 alias configure='nice ./configure --disable-nls'
 alias mk="nice make -j `show cpus`"
