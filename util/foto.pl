@@ -152,7 +152,7 @@ sub default_args()
 	}#
 }#
 
-sub read_args(@)
+sub read_args (@)
 {#
 	if( scalar @_ == 1 ) {
 		$args{source} = shift;
@@ -192,7 +192,7 @@ sub read_args(@)
 	1;
 }#
 
-sub file_mkdir($)
+sub file_mkdir ($)
 {#
 	my ($file) = @_;
 	-d $args{basedir}  or die "$args{basedir}: $!";
@@ -358,14 +358,14 @@ sub download()
 	return $files;
 }#
 
-sub post_process ($)
+sub post_process (@)
 {#
-	my ($files) = @_;
+	my %files = @_;
 
-	my ($count, $total) = (0, scalar keys %$files);
-	foreach (sort keys %$files) {
+	my ($count, $total) = (0, scalar keys %files);
+	foreach (sort keys %files) {
 		++$count;
-		my $name = $files->{$_}{name};
+		my $name = $files{$_}{name};
 		if (-e $name  or  $args{nop}) {
 			if ($name =~ /^(.*)\.([^\.]+)$/) {
 				my ($base, $ext) = ($1, lc $2);
@@ -409,13 +409,13 @@ sub post_process ($)
 	}
 }#
 
-sub browse_results($)
+sub browse_results (@)
 {#
-	my ($files) = @_;
+	my %files = @_;
 
 	my %dirs = ();
-	$dirs{$files->{$_}{dir}} = 1
-		foreach keys %$files;
+	$dirs{$files{$_}{dir}} = 1
+		foreach keys %files;
 
 	my $common_dir = eval
 	{#
@@ -434,14 +434,14 @@ sub browse_results($)
 	}
 }#
 
-sub main(@)
+sub main (@)
 {#
 	$ENV{DISPLAY}  or  $ENV{DISPLAY} = ':0';
 	default_args();
 	read_args (@ARGV);
 	my $files = download();
-	post_process ($files);
-	browse_results ($files);
+	post_process (%$files);
+	browse_results (%$files);
 }#
 
 main(@ARGV);
