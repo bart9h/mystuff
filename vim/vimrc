@@ -35,7 +35,6 @@ set cinoptions=>s,e0,n0,f0,{0,}0,^0,:0,=s,l0,b0,g0,hs,ps,ts,is,+s,c3,C0,/0,(2s,u
 
 " {{{1 options
 
-set hlsearch
 set wildmenu
 set visualbell t_vb=
 if version >= 700
