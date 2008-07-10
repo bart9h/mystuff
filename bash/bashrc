@@ -187,17 +187,16 @@ alias z='f -rt'
 
 #{{{1 abbreviations
 
-alias links='which links >/dev/null && links || elinks'
 alias p='ps -AH --format "%U %p %a"'
 alias l='less'
 alias cn='cat > /dev/null' # quick volatile writepad
 alias data='date +%Y-%m-%d'
 
-alias ponte='mplayer mms://200.246.9.2/pontelive'
 alias u='if test $( ls *.rar 2>/dev/null | wc -l ) == 1; then rar x *.rar && rm *.rar; elif test $( ls *.zip 2>/dev/null | wc -l ) == 1; then unzip *.zip && rm *.zip; else echo \?; fi'
 
 alias pgw='ping gw'
 alias pgo='ping google.com'
+alias links='which links >/dev/null && links || elinks'
 
 alias gc='git commit'
 alias gca='git commit -a'
@@ -221,6 +220,29 @@ alias mpdvd='mplayer -identify dvd://1 -dvd-device "$PWD"'
 alias mpq='mplayer -nosound -osdlevel 0'
 alias mpr='ls -Q | rl | xargs mplayer -fs'
 alias mprq='ls -Q | rl | xargs mplayer -fs -ao null'
+alias ponte='mplayer mms://200.246.9.2/pontelive'
+
+function Xdefaults() {
+	local n="Xdefaults"
+
+	local f="$HOME/.$n"
+	if test -e "$f"; then
+		rm -i "$f" || return
+	fi
+
+	local t
+	case "$HOSTNAME" in
+		doti-lap)
+			t='small'
+			;;
+		*)
+			t='default'
+			;;
+	esac
+
+	local d="$HOME/etc/x11"
+	cat "$d/$n" "$d/$n.$t" > "$f"
+}
 
 function v() {
 	if test "$1"; then
@@ -626,7 +648,7 @@ esac
 #{{{ the command prompt
 
 export HISTCONTROL="ignoreboth"
-PS1='\[\e[0;'$prompt_color'm\]\t [$(echo $STY|cut -d . -f 2).$WINDOW] \u@\h \w $(git-branch 2> /dev/null | grep -e "^\* ")\n\$\[\e[0m\] '
+PS1='\[\e[0;'$prompt_color'm\]\t [$(echo $STY|cut -d . -f 2).$WINDOW] \u@\h \w $(git-branch 2> /dev/null | grep -e "^\* ")\[\e[0m\]\n\$ '
 export PS1
 export THE_PS1=$PS1
 
