@@ -19,6 +19,7 @@ _load "$HOME/.bashrc_local"
 
 
 #{{{1 lazy-loading of functions
+
 for i in "$HOME/etc/bash/"*.sh; do
 	f="$( basename "$i" | sed 's/\.sh$//' )"
 	alias $f="call $f"
