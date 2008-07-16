@@ -10,7 +10,7 @@ function s()
 		return
 	fi
 
-	local name="$(echo "$1" | sed 's/\/$//')"; shift
+	local name="$(basename "$1" | sed 's/\/$//')"; shift
 	local escape=""
 
 	# if arg is _, create "meta" screen
@@ -21,7 +21,9 @@ function s()
 		fi
 	fi
 
+	local is_dot=0
 	if test "$name" == "."; then
+		is_dot=1
 		name="$(basename "$PWD")"
 	fi
 
@@ -34,7 +36,7 @@ function s()
 		local session_name
 
 		# if arg is existing dir, cd into, else arg is session name
-		test -d "$name" && cd "$name" || session_name="$name"
+		test $is_dot == 0 -a -d "$name" && cd "$name" || session_name="$name"
 
 		# defult session name is $PWD
 		test -z "$session_name" -o "$session_name" == "." \
