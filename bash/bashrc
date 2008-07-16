@@ -103,7 +103,6 @@ alias cp='cp -i --preserve=timestamps'
 
 alias mv='mv -i'
 
-alias vi='vim -o'
 alias tig='tig --all'
 alias xxd='xxd -c $(( (($COLUMNS - 10)/7)*2 ))'
 alias wget='wget -c --timeout=15 --wait=0 --tries=0'
@@ -204,6 +203,7 @@ alias gco='git checkout'
 alias gs='git status -a'
 alias gd='git diff'
 alias gk='gitk --all &'
+alias gsd='git stash && git svn dcommit && git stash apply && git stash clear'
 
 alias configure='nice ./configure --disable-nls'
 alias mk="nice make -j `show cpus`"
