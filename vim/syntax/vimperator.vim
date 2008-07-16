@@ -24,6 +24,7 @@ syn keyword vimperatorCommand addo[ns] b[uffer] ba[ck] bd[elete] beep bma[rk] bm
 	\ tabm[ove] tabn[ext] tabnew tabo[nly] tabopen tabp[revious] tabr[ewind] tabs tn[ext] tp[revious] u[ndo] unl[et] unm[ap]
 	\ ve[rsion] viu[sage] w[rite] win[open] wine[dit] wo[pen] wq wqa[ll] xa[ll] zo[om] run
 	\ contained
+	\ au[tocmd]
 
 syn match vimperatorCommand "!" contained
 
