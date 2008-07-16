@@ -19,10 +19,12 @@ _load "$HOME/.bashrc_local"
 
 
 #{{{1 lazy-loading of functions
+
 for i in "$HOME/etc/bash/"*.sh; do
 	f="$( basename "$i" | sed 's/\.sh$//' )"
 	alias $f="call $f"
-done
+	unset f
+done; unset i
 
 function call()
 {
@@ -123,7 +125,7 @@ function rm()
 				return
 			fi
 		fi
-	done
+	done; unset i
 	if test $file_count -eq 0; then
 		echo "no files" > /dev/stderr
 		return
@@ -380,7 +382,7 @@ alias rawbatch='ufraw-batch --wb=camera --exposure=auto --out-type=jpeg --compre
 alias raw2jpg='rawbatch --size=`show res` --out-path=.. *'
 
 #TODO: move this to foto.pl
-alias jpg2raw='test -d shot && cd shot; for z in *; do test -f ../`echo $z|sed "s/.cr2$/.jpg/"` || mv -v $z ../.qiv-trash/; done'
+alias jpg2raw='test -d shot && cd shot; for i in *; do test -f ../`echo $i|sed "s/.cr2$/.jpg/"` || mv -v $i ../.qiv-trash/; done; unset i'
 
 alias kb='~/etc/desktop/switch-kbmap.sh'
 
@@ -411,9 +413,9 @@ job()  # manage background jobs
 
 function lddr()  # ldd "recursivo": faz ldd das bibliotecas nao-padrao mostradas pelo ldd
 { #{{{
-	for z in "$@"; do
-		ldd $( ldd "$z" | cut -d '>' -f 2 | cut -d ' ' -f 2 | grep -v '^/\(usr\|lib\)' )
-	done
+	for i in "$@"; do
+		ldd $( ldd "$i" | cut -d '>' -f 2 | cut -d ' ' -f 2 | grep -v '^/\(usr\|lib\)' )
+	done; unset i
 } #}}}
 
 alias reconnect='sudo kill `pidof dhclient`; sudo ifconfig eth0 down; sudo dhclient'
@@ -447,7 +449,7 @@ for dir in $working_dirs; do
 		uncommited="$uncommited $dir"
 		break
 	fi
-done
+done; unset dir
 if test -n "$uncommited"; then
 	echo "uncommited: $uncommited"
 fi
@@ -503,7 +505,7 @@ alias ntop='sudo jnettop'
 alias g9='gkrellm -w -s 9h &'
 alias irc='irssi -n barrett9h -c irc.freenode.net'
 #alias lm='nice lame -m s -v -h -V 2 -b 32 -B 320'
-alias lm='for z in *.wav; do nice lame -v "$z" "`echo $z | sed s/wav$/mp3/`"; done'
+alias lm='for i in *.wav; do nice lame -v "$i" "`echo $i | sed s/wav$/mp3/`"; done; unset i'
 alias treo='nice lame -m j -v -f'
 #alias v='gvim -geom 80x50 +"set guioptions-=T" +"set guioptions-=m" -font "-misc-fixed-medium-r-semicondensed-*-*-120-*-*-c-*-iso8859-1"'
 
@@ -530,11 +532,11 @@ function Seq() {
 alias cdq='cdparanoia -Q'
 function cdp() {
 	test "$1" -gt 1 && (
-		for z in $(seq $* | sed s/^[0-9]$/0\&/); do
-			cdparanoia -z $z $z.wav
-		done
+		for i in $(seq $* | sed s/^[0-9]$/0\&/); do
+			cdparanoia -z $i $i.wav
+		done; unset i
 		cdeject
-			)
+	)
 }
 
 function bk() {
@@ -550,13 +552,13 @@ function bk() {
 		basename="$bkdir/$dir.`date +%Y-%m-%d`"
 		name="$basename.tgz"
 		if test -e "$name"; then
-			for z in a b c d e f g h i j; do
-				name="$basename$z".tgz
+			for i in a b c d e f g h i j; do
+				name="$basename$i".tgz
 				if test ! -e "$name"; then
 					_x " tar cfz \"$name\" \"$dir\" "
 					break
 				fi
-			done
+			done; unset i
 		else
 			_x " tar cfz \"$name\" \"$dir\" "
 		fi

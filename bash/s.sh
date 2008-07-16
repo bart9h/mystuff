@@ -10,16 +10,14 @@ function s()
 		return
 	fi
 
-	local name="$1"
-	local ctrlB=""
-	shift
+	local name="$(echo "$1" | sed 's/\/$//')"; shift
+	local escape=""
 
 	# if arg is _, create "meta" screen
 	if test "$name" == "_"; then
-		ctrlB="-e ^Bb"
+		escape="-e ^Bb"
 		if test -n "$1"; then
-			name="$1"
-			shift
+			name="$1"; shift
 		fi
 	fi
 
@@ -43,7 +41,7 @@ function s()
 		&& session_name="`basename "$PWD"`"
 
 		test -n "$WINDOW" && screen -X title "$session_name"
-		TERM=xterm screen $ctrlB -S "$session_name"
+		TERM=xterm screen $escape -S "$session_name"
 
 		# Forcing TERM=xterm is a workaround to support 256-colors
 		# in a screen inside another screen.
