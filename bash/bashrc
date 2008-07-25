@@ -418,7 +418,7 @@ function lddr()  # ldd "recursivo": faz ldd das bibliotecas nao-padrao mostradas
 	done; unset i
 } #}}}
 
-alias reconnect='sudo kill `pidof dhclient`; sudo ifconfig eth0 down; sudo dhclient'
+alias reconnect='sudo killall dhclient && sleep 1s; sudo ifconfig eth0 down; sudo dhclient -d'
 #alias reconnect='sudo ifconfig eth0 down; sudo ifconfig eth0 192.168.1.4 netmask 255.255.255.0 && route add default gw 192.168.1.1'
 
 function do_crun() {
