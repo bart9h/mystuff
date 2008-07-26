@@ -43,9 +43,8 @@ my %args = (
 		sudo => 'sudo',
 		do_gray => 0,
 
-		basedir => '/home/fotos/archive',
-		max_block_mb => 256,
-		max_file_mb => 600,
+		#basedir => '/home/fotos/archive',
+		basedir => '/tmp/archive',
 		gray_dir => '../gray',
 		keep_temp_files => 1,
 		nop => 0,
@@ -54,6 +53,7 @@ my %args = (
 		height => 768,
 		jpeg_quality => 80,
 
+		gui_mode => 0,
 		file_managers => [ 'nautilus', 'Thunar', 'pcmanfm', 'ROX-Filer' ],
 		file_manager => undef,
 );
@@ -66,7 +66,7 @@ sub x($)
 {#
 	my $cmd = shift;
 	print $cmd;
-	system( $cmd )  unless $args{nop};
+	system $cmd  unless $args{nop};
 }#
 
 sub file_read($;$)
@@ -215,120 +215,32 @@ sub file_mkdir ($)
 
 sub download()
 {#
-	my ($files, $ranges, $total_kb)  = eval
-	{#
-		my %files = ();
-		my @ranges = ();
+	{# check if disk has enough free space
+
 		my $total_kb = 0;
-
-		my $range_itr = '';
-		my $range_kb = 0;
-
-		my @file_list = eval
-		{#
-			print "getting file list";
-
-			my $temp_file = '/tmp/foto.pl.list';
-			my $cmd;
-			if( ! $args{nop} ) {
-				$cmd = "$args{sudo} gphoto2 -L | grep '^\#'";
-				if( $args{keep_temp_files} ) {
-					$cmd .= " | tee /tmp/foto.pl.list";
-				}
-			}
-			else {
-				$cmd = "cat $temp_file";
-			}
-
-			print $cmd;
-			`$cmd`  or die;
-		}#
-		;
-
-		foreach( split /\n/, @file_list )
-		{#  populate @ranges
-
+		foreach (split /\n/, `$args{sudo} gphoto2 -L | grep '^\#'`) {
 			chomp;
-			my( $num, $name, $size_kb ) =
+			my ($num, $name, $size_kb) =
 				/\A\#(\d+)\s+([^\s]+)\s+(\d+).*/
 				or next;
-
-			$files{$num} = {
-				name => $name,
-				size_kb => $size_kb
-			};
-
-#TODO
-
 			$total_kb += $size_kb;
-
-			if(-e $name) { # check existing files
-				if( file_ok( $files{$num} ) ) {
-					print "skiping $name: file exists";
-
-					# skipping breaks ranges
-					if($range_itr) {
-						#aki
-						push @ranges, $range_itr;
-						$range_itr = '';
-						$range_kb = 0;
-					}
-					next;
-				}
-				else { # not ok (too small?), re-download
-					print "overwriting $name";
-				}
-			}
-
-			if( $range_kb + $size_kb > 1024*$args{max_block_mb} ) { # se passou do limite
-				if( $range_itr ) {
-					#aki
-					push @ranges, $range_itr;
-
-					$range_itr = $num; # .'-'.$num ?
-					$range_kb = $size_kb;
-				}
-				else {
-					if( $size_kb > 1024*$args{max_file_mb} and not $ENV{FOTO_FORCE} ) {
-						print "WARNING: won't download big file $name ($size_kb kb). limit=$args{max_file_mb}MB";
-					}
-					else {
-						print "warning: file $name too big ($size_kb kb)";
-						push @ranges, "$num-$num";
-					}
-					$range_itr = '';
-					$range_kb = 0;
-				}
-			}
-			else {
-				$range_kb += $size_kb;
-				$range_itr = $num;
-			}
-		}#
-
-		#aki
-		push @ranges, $range_itr
-			if $range_itr;
-
-		return \%files, \@ranges, $total_kb;
-	}#
-	;
-
-	{# check if disk has enough free space
+		}
 
 		my @df = split /\s+/, `df -k $args{base_dir} | tail -1`;
 		my $free_space_kb = $df[3];
-		if( $total_kb > 2*$free_space_kb ) {
+		if ($total_kb > 2*$free_space_kb) {
 			print "NOT ENOUGH DISK SPACE!";
 			return ();
 		}
-
 	}#
 
-	TODO; # mkchtempdir
+	# make temp dir to download files into
+	my $dir = "$args{basedir}/temp";
+	-d $dir and die "$dir exists. Interrupted download?";
+	mkdir $dir  or die "mkdir $dir: $!";
 
-	my $count = 0;
-	my $step = 0;
+	chdir $dir  or die "chdir $dir: $!";
+	x "$args{sudo} gphoto2 -P";
 
 	foreach my $range_itr (@$ranges) {
 		my ($first, $last) = $range_itr =~ /(\d+)-(\d+)/  or die;
@@ -436,12 +348,12 @@ sub browse_results (@)
 
 sub main (@)
 {#
-	$ENV{DISPLAY}  or  $ENV{DISPLAY} = ':0';
+	$ENV{DISPLAY} = ':0'  unless defined $ENV{DISPLAY};
 	default_args();
 	read_args (@ARGV);
-	my $files = download();
-	post_process (%$files);
-	browse_results (%$files);
+	-d $args{basedir}  || die "$args{basedir}: $!";
+	post_process (@$args{files}  or  download());
+	browse_results (%$files)  if $args{gui_mode};
 }#
 
 main(@ARGV);
