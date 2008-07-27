@@ -97,14 +97,10 @@ sub file_ok($)
 sub do_mkdir($)
 {#
 	-d $_[0]  and return $_[0];
-
-	my $msg = "mkdir ($_[0])";
-	if ($args{nop}) {
-		print $msg;
-	}
-	else {
-		mkdir $_[0]  or die "$msg: $!";
-	}
+	my $cmd = "mkdir -p $_[0]";
+	x $cmd;
+	$args{nop}  or -d $_[0]  or die "$cmd: $!";
+	return $_[0];
 }#
 
 #}#
@@ -191,25 +187,34 @@ sub read_args (@)
 	1;
 }#
 
-sub file_mkdir ($)
+sub move_file ($)
 {#
-	my ($file) = @_;
-	-d $args{basedir}  or die "$args{basedir}: $!";
+	# get timestamp from EXIF data
+	my ($year, $mon, $mday, $hour, $min, $sec) =
+		`exiv2 $_[0]`
+		=~ /^Image timestamp : (\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})$/m
+		or die "no exif info for file $_[0]";
 
-	my ($year, $mon, $mday) =
-		`exiv2 $file->{path}`
-		=~ /^Image timestamp : \d{4}:\d{2}:\d{2} \d{2}:\d{2}:\d{2}$/
-		or die "no exif info for file $file->{path}";
-
-	my $dir = $args{basedir};
-	$dir .= '/'.sprintf '%04d-%02d-%02d', $year+1900, $mon+1, $mday;
-	$dir .= '.'.$args{tag}  if $args{tag};
-
-	$file->{dir} = $dir;
-
+	# basedir/shot/YYYY/MM/DD/
+	my $dir = $args{basedir}.'/shot/'
+		.sprintf '%04d/%02d/%02d', $year, $mon, $mday;
 	do_mkdir $dir;
-	$dir .= '/shot';
-	do_mkdir $dir;
+
+	my $path = "$dir/"
+		#.sprintf ('%04d%02d%02d-', $year, $mon, $mday)
+		.sprintf ('%02d:%02d:%02d-', $hour, $min, $sec)
+		.lc $_[0];
+
+	# move the file to it's new place/name
+	my $msg = "mv $_[0] $path";
+	if ($args{nop}) {
+		print $msg;
+	}
+	else {
+		rename $_[0], $path  or die "mv $_[0] $path: $!";
+	}
+
+	return $path;
 }#
 
 sub download()
@@ -233,88 +238,66 @@ sub download()
 		}
 	}#
 
-	# make temp dir to download files into
-	my $dir = "$args{basedir}/temp";
-	-d $dir and die "$dir exists. Interrupted download?";
-	mkdir $dir  or die "mkdir $dir: $!";
+	# make and change to temporary dir to download files into
+	my $download_dir = do_mkdir $args{basedir}.'/download';
+	$download_dir = File::Temp::tempdir (DIR => $download_dir)  or die $!;
+	chdir $download_dir  or die "chdir $download_dir: $!";
 
-	chdir $dir  or die "chdir $dir: $!";
+
 	x "$args{sudo} gphoto2 -P";
+	my @files = glob '*.*';
+	x "$args{sudo} chown $ENV{USER}.users ".join(' ', @files);
 
-	foreach my $range_itr (@$ranges) {
-		my ($first, $last) = $range_itr =~ /(\d+)-(\d+)/  or die;
-		++$step;
-		print "downloading $range_itr of ".(scalar keys %$files)." files, step $step of ".(scalar @$ranges);
-		x "$args{sudo} gphoto2 -p $range_itr";
-		my @files_to_chown = ();
-		for ($first .. $last) {
-			my $name = $files->{$_}{name};
-			if (-e $name) {
-				push @files_to_chown, $name;
-				if (file_ok ($files->{$_})) {
-					++$count;
-					$files->{$_}{path} = "$ENV{PWD}/$name";
-				}
-				else {
-					print "warning: $name too small"
-				}
-			}
-			else {
-				print "warning: $name: $!";
-			}
-		}
-		x "$args{sudo} chown $ENV{USER}.users ".join(' ', @files_to_chown);
-	}
-
-	return $files;
+	@files = map { "$download_dir/$_" } @files;
+	return \@files;
 }#
 
-sub post_process (@)
+sub post_process ($)
 {#
-	my %files = @_;
-
-	my ($count, $total) = (0, scalar keys %files);
-	foreach (sort keys %files) {
+	my ($count, $total) = (0, scalar @{$_[0]});
+	foreach (@{$_[0]}) {
 		++$count;
-		my $name = $files{$_}{name};
-		if (-e $name  or  $args{nop}) {
-			if ($name =~ /^(.*)\.([^\.]+)$/) {
-				my ($base, $ext) = ($1, lc $2);
-				my $shot = "$base.$ext";
+		my $path = $_;
 
-				if ($name ne $shot) {
-					if(!$args{nop}) {
-						rename $name, $shot  or die;
-						x "chmod -w $shot";
-					}
-					else {
-						print "mv $name $shot";
-					}
-				}
+		if (-e $path  or  $args{nop}) {
+			my $shot = move_file ($path);
+
+			if ($shot =~ /^(.*)\.([^\.]+)$/) {
+				my ($base, $ext) = ($1, $2);
+				my $view = "$base.jpg";
+				my $res = "$args{width}x$args{height}";
+				$view =~ s{/shot/}{/$res/};
 
 				print "$count/$total\n";
 				if ($ext eq 'cr2') {
-					x "nice ufraw-batch --wb=camera --exposure=auto --size=$args{width}x$args{height} --out-type=jpeg --compression=$args{jpeg_quality} --out-path=\"$args{temp_dir}/..\" \"$shot\"";
+					my $dir = `dirname "$view"`;
+					chomp $dir;
+					do_mkdir $dir;
+					x "nice ufraw-batch --wb=camera --exposure=auto --size=$res --out-type=jpeg --compression=$args{jpeg_quality} --out-path=\"$dir\" \"$shot\"";
 				}
 				elsif ($ext eq 'jpg') {
-					x "nice convert -quality $args{jpeg_quality} -resize $args{width}x$args{height} \"$shot\" \"../$base.jpg\"";
+					x "nice convert -quality $args{jpeg_quality} -resize $res \"$shot\" \"$view\"";
 				}
 				elsif ($ext eq 'mpg') {
 					if (!$args{nop}) {
-						symlink "shot/$shot", "../$shot";
+						symlink $shot, $view;
 					}
 					else {
-						print "ln -s shot/$shot ../$shot";
+						print "ln -s $shot $view";
 					}
 				}
 				else {
-					print "warning: $name: unknown file type";
+					print "warning: $shot: unknown file type";
 				}
 			}
+		}
+		else {
+			print STDERR "$path not found";
 		}
 	}
 }#
 
+=nao
 sub browse_results (@)
 {#
 	my %files = @_;
@@ -339,15 +322,19 @@ sub browse_results (@)
 		$ENV{DISPLAY} and x("$args{file_manager} \"$common_dir/..\" &");
 	}
 }#
+=cut
 
 sub main (@)
 {#
 	$ENV{DISPLAY} = ':0'  unless defined $ENV{DISPLAY};
 	default_args();
 	read_args (@ARGV);
-	-d $args{basedir}  || die "$args{basedir}: $!";
-	post_process (@$args{files}  or  download());
-	browse_results (%$files)  if $args{gui_mode};
+	-d $args{basedir}  or die "$args{basedir}: $!";
+
+	my $files = $args{files};
+	scalar @{$args{files}}  or $files = download();
+	post_process ($files);
+	#browse_results $files  if $args{gui_mode};
 }#
 
 main(@ARGV);
