@@ -201,7 +201,7 @@ sub download()
 			$total_kb += $size_kb;
 		}
 
-		my @df = split /\s+/, `df -k $args{base_dir} | tail -1`;
+		my @df = split /\s+/, `df -k $args{basedir} | tail -1`;
 		my $free_space_kb = $df[3];
 		if ($total_kb > 2*$free_space_kb) {
 			print "NOT ENOUGH DISK SPACE!";
@@ -210,14 +210,14 @@ sub download()
 	}#
 
 	# make and change to temporary dir to download files into
-	my $download_dir = do_mkdir $args{basedir}.'/download';
-	$download_dir = File::Temp::tempdir (DIR => $download_dir)  or die $!;
+	use File::Temp;
+	my $download_dir = tempdir (DIR => $args{basedir})  or die $!;
 	chdir $download_dir  or die "chdir $download_dir: $!";
 
 
 	x "$args{sudo} gphoto2 -P";
 	my @files = glob '*.*';
-	x "$args{sudo} chown $ENV{USER}.$ENV{GROUPS} ".join(' ', @files);
+	x "$args{sudo} chown $ENV{USER} ".join(' ', @files);
 
 	@files = map { "$download_dir/$_" } @files;
 	return \@files;
