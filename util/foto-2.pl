@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-sub TODO { die; }
 #{#1          comments
 
 =description
@@ -22,43 +21,38 @@ sub TODO { die; }
 
 - OSD (maybe external lib to manage output messages in general).
 
-- Optimize by running gphoto2 in interactive shell mode,
-  instead of calling it multiple times.
-  (Must check if it will release memory after each download.)
+- Run gphoto2 in interactive shell mode, show download progress.
+
+- Fix ufraw rotation+scale order.
 
 =cut
 
+
+#{#1          parameters
 
 use strict;
 use warnings;
 $|=1;
 $\="\n";
 
-
-#{#1          parameters
-
 my %args = (
 		files => [],
-		tag => undef,
 		sudo => 'sudo',
-		do_gray => 0,
 
-		#basedir => '/home/fotos/archive',
-		basedir => '/tmp/archive',
-		gray_dir => '../gray',
-		keep_temp_files => 1,
+		basedir => '/home/fotos',
 		nop => 0,
 
 		width => 1024,
 		height => 768,
 		jpeg_quality => 80,
 
-		gui_mode => 0,
-		file_managers => [ 'nautilus', 'Thunar', 'pcmanfm', 'ROX-Filer' ],
-		file_manager => undef,
+		#gui_mode => 0,
+		#file_managers => [ 'nautilus', 'Thunar', 'pcmanfm', 'ROX-Filer' ],
+		#file_manager => undef,
 );
 
 #{#1          code
+sub TODO { die; }
 
 #{#2           system utils
 
@@ -154,17 +148,12 @@ sub default_args()
 
 sub read_args (@)
 {#
-	if( scalar @_ == 1 ) {
-		$args{source} = shift;
-	}
-	else {
-		while( $_ = shift ) {
-			s/^--//;
-			if (exists $args{$_}) {
-				if (not defined ($args{$_} = shift)) {
-					print STDERR "missing argument for $_";
-					exit 1;
-				}
+	my $process_args = 1;
+	foreach (@_) {
+		if ($process_args) {
+			if (/^--$/) {
+				$process_args = 0;
+				next;
 			}
 			elsif ($_ eq '--help') {
 				#{#
@@ -183,11 +172,21 @@ sub read_args (@)
 				exit 0;
 				#}#
 			}
-			else {
-				print STDERR "unknown arg ($_)";
-				exit 1;
+			elsif (m/^--(.*?)(=(.*))?$/) {
+				my ($arg, $has_val, $val) = ($1, $2, $3);
+				$arg =~ s/-/_/g;
+				if (exists $args{$arg}) {
+					$args{$arg} = $has_val ? $val : 1;
+					next;
+				}
+				else {
+					print STDERR "unknown arg ($_)";
+					exit 1;
+				}
 			}
 		}
+
+		push @{$args{files}}, $_;
 	}
 	1;
 }#
@@ -299,11 +298,6 @@ sub post_process (@)
 				}
 				elsif ($ext eq 'jpg') {
 					x "nice convert -quality $args{jpeg_quality} -resize $args{width}x$args{height} \"$shot\" \"../$base.jpg\"";
-					if ($args{do_gray}) {
-						#TODO: move this after this if's, to make gray version of raw images
-						do_mkdir $args{gray_dir};
-						x "nice convert -colorspace gray -quality 80 -resize $args{width}x$args{height} \"$shot\" \"$args{gray_dir}/$base.jpg\"";
-					}
 				}
 				elsif ($ext eq 'mpg') {
 					if (!$args{nop}) {
