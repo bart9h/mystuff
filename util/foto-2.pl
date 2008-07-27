@@ -246,7 +246,7 @@ sub download()
 
 	x "$args{sudo} gphoto2 -P";
 	my @files = glob '*.*';
-	x "$args{sudo} chown $ENV{USER}.users ".join(' ', @files);
+	x "$args{sudo} chown $ENV{USER}.$ENV{GROUPS} ".join(' ', @files);
 
 	@files = map { "$download_dir/$_" } @files;
 	return \@files;
