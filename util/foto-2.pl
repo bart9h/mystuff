@@ -8,22 +8,17 @@
 
 =todo
 
-- option to run over existing photos
-
-- ETA
-
-- die if available_disk_space < 2*files_size
-
 - Check existence of required external tools.
 
-- Download to a fixed spool dir, move to right dir later.
-  Get date for dir name from exif info (exiv2).
-
-- OSD (maybe external lib to manage output messages in general).
-
-- Run gphoto2 in interactive shell mode, show download progress.
-
 - Fix ufraw rotation+scale order.
+
+- GUI, or at leasst OSD.
+
+- Show post-processing ETA.
+
+- Run gphoto2 in interactive shell mode, show download progress, ETA.
+
+- Parallel post-processing.
 
 =cut
 
@@ -42,8 +37,7 @@ my %args = (
 		basedir => '/home/fotos',
 		nop => 0,
 
-		width => 1024,
-		height => 768,
+		res => '1024x768',
 		jpeg_quality => 80,
 
 		#gui_mode => 0,
@@ -99,7 +93,7 @@ sub do_mkdir($)
 	-d $_[0]  and return $_[0];
 	my $cmd = "mkdir -p $_[0]";
 	x $cmd;
-	$args{nop}  or -d $_[0]  or die "$cmd: $!";
+	-d $_[0]  or die "$cmd: $!"  unless $args{nop};
 	return $_[0];
 }#
 
@@ -107,39 +101,16 @@ sub do_mkdir($)
 
 sub default_args()
 {#
-	{#  max_block_mb and max_file_mb
+	sub cached_resolution {
+		#TODO:  "cache in ~/etc/var/screen-pixels
+		'1024x768'
+	}
 
-		# Guess nice values for memory usage limit based on avaiable memory:
-		# max block size (soft limit) = 1/4 system memory
-		# max file size (hard limit) = 3/4 system memory
-		#TODO: check also if it will fit on available mem+swap
-
-		my $mem_total_kb = 0;
-		foreach( file_read( '/proc/meminfo' ) ) {
-			if( m/^MemTotal:\s+(\d+)\s+kB$/ ) {
-				$mem_total_kb = $1;
-				last;
-			}
-		}
-
-		if( $mem_total_kb ) {
-			$args{max_block_mb} = int( (1/4)*$mem_total_kb/1024 );
-			$args{max_file_mb}  = int( (3/4)*$mem_total_kb/1024 );
-		}
-	}#
-
-	{#  width, height
-
-		sub cached_resolution {
-			#TODO:  "width %d height %d"  in  ~/etc/var/screen-pixels
-			(1024, 768)
-		}
-		($args{width}, $args{height}) =
-			`xwininfo -root` =~ /\bWidth:\s+(\d+)\b.*\bHeight:\s+(\d+)\b/s
-			? ($1, $2)
-			: cached_resolution();
-
-	}#
+	#TODO: use xdpyinfo instead
+	$args{res} =
+		`xwininfo -root` =~ /\bWidth:\s+(\d+)\b.*\bHeight:\s+(\d+)\b/s
+		? "$1x$2"
+		: cached_resolution();
 }#
 
 sub read_args (@)
@@ -261,22 +232,22 @@ sub post_process ($)
 
 		if (-e $path  or  $args{nop}) {
 			my $shot = move_file ($path);
+			next if $args{mv};
 
 			if ($shot =~ /^(.*)\.([^\.]+)$/) {
 				my ($base, $ext) = ($1, $2);
 				my $view = "$base.jpg";
-				my $res = "$args{width}x$args{height}";
-				$view =~ s{/shot/}{/$res/};
+				$view =~ s{/shot/}{/$args{res}/};
 
 				print "$count/$total\n";
 				if ($ext eq 'cr2') {
 					my $dir = `dirname "$view"`;
 					chomp $dir;
 					do_mkdir $dir;
-					x "nice ufraw-batch --wb=camera --exposure=auto --size=$res --out-type=jpeg --compression=$args{jpeg_quality} --out-path=\"$dir\" \"$shot\"";
+					x "nice ufraw-batch --wb=camera --exposure=auto --size=$args{res} --out-type=jpeg --compression=$args{jpeg_quality} --out-path=\"$dir\" \"$shot\"";
 				}
 				elsif ($ext eq 'jpg') {
-					x "nice convert -quality $args{jpeg_quality} -resize $res \"$shot\" \"$view\"";
+					x "nice convert -quality $args{jpeg_quality} -resize $args{res} \"$shot\" \"$view\"";
 				}
 				elsif ($ext eq 'mpg') {
 					if (!$args{nop}) {
