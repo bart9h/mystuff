@@ -1,0 +1,12 @@
+If you're familiar with Vimperator, just put gvimail.js in [VIMPERATOR]/plugin, and gvimail.css in [VIMPERATOR]/colors, where [VIMPERATOR] is ~/.vimperator or %HOMEPATH%\vimperator. Edit the file to see if you can customize.
+
+If you're not familiar with Vimperator, read the pages 
+http://code.google.com/p/gvimail/ ,
+http://code.google.com/p/gvimail/wiki/Installation and 
+http://vimperator.mozdev.org to know what to do.
+
+Post issues to 
+http://code.google.com/p/gvimail/issues/list
+or mail it to me (dotmg/at/users.sourceforge.net)
+
+Happy GViMail-ing.
