@@ -216,7 +216,7 @@ sub download()
 	x "$args{sudo} chown $ENV{USER} ".join(' ', @files);
 
 	@files = map { "$download_dir/$_" } @files;
-	return \@files;
+	return ($download_dir, \@files);
 }#
 
 sub post_process ($)
