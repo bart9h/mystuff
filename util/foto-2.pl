@@ -31,14 +31,13 @@ $|=1;
 $\="\n";
 
 my %args = (
-		files => [],
-		sudo => 'sudo',
-
-		basedir => '/home/fotos',
-		nop => 0,
 
 		res => '1024x768',
 		jpeg_quality => 80,
+
+		basedir => '/home/fotos',
+		nop => 0,
+		sudo => 'sudo',
 
 		#gui_mode => 0,
 		#file_managers => [ 'nautilus', 'Thunar', 'pcmanfm', 'ROX-Filer' ],
@@ -126,20 +125,16 @@ sub read_args (@)
 				#{#
 				#TODO: better %args, to contain description
 				#      (borrow from other script I wrote..)
-				my $max_len = 0;
-				foreach (keys %args) {
-					$max_len = length $_
-						if length $_ > $max_len;
-				}
-				print "arguments".(' ' x ($max_len - 7))."[defaults]:\n";
+				print 'arguments and their defaults:';
 				foreach (sort keys %args) {
-					my $arg = defined $args{$_} ? $args{$_} : '<empty>';
-					print $_.(' ' x (2 + $max_len - length $_))."[$arg]"
+					my $val = $args{$_};
+					s/_/-/;
+					print '--'.$_.(defined $val ? "=$val" : '');
 				}
 				exit 0;
 				#}#
 			}
-			elsif (m/^--(.*?)(=(.*))?$/) {
+			elsif (m/^--(..*?)(=(.*))?$/) {
 				my ($arg, $has_val, $val) = ($1, $2, $3);
 				$arg =~ s/-/_/g;
 				if (exists $args{$arg}) {
@@ -153,6 +148,7 @@ sub read_args (@)
 			}
 		}
 
+		$args{files} = []  if not exists $args{files};
 		push @{$args{files}}, $_;
 	}
 	1;
