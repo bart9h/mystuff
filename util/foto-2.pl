@@ -207,7 +207,7 @@ sub download()
 
 	# make and change to temporary dir to download files into
 	use File::Temp;
-	my $download_dir = tempdir (DIR => $args{basedir})  or die $!;
+	my $download_dir = tempdir ('download-XXXXX', DIR => $args{basedir})  or die $!;
 	chdir $download_dir  or die "chdir $download_dir: $!";
 
 
@@ -298,9 +298,15 @@ sub main (@)
 	read_args (@ARGV);
 	-d $args{basedir}  or die "$args{basedir}: $!";
 
-	my $files = $args{files};
-	scalar @{$args{files}}  or $files = download();
-	post_process ($files);
+	if (scalar @{$args{files}}) {
+		post_process ($args{files});
+	}
+	else {
+		my ($dir, $files) = download();
+		post_process ($files);
+		rmdir $dir;
+	}
+
 	#browse_results $files  if $args{gui_mode};
 }#
 
