@@ -167,10 +167,11 @@ sub move_file ($)
 		.sprintf '%04d/%02d/%02d', $year, $mon, $mday;
 	do_mkdir $dir;
 
+	my $name = lc $_[0];  $name =~ s{^.*/([^/]+)$}{$1};
 	my $path = "$dir/"
 		#.sprintf ('%04d%02d%02d-', $year, $mon, $mday)
 		.sprintf ('%02d:%02d:%02d-', $hour, $min, $sec)
-		.lc $_[0];
+		.$name;
 
 	# move the file to it's new place/name
 	my $msg = "mv $_[0] $path";
@@ -197,6 +198,11 @@ sub download()
 			$total_kb += $size_kb;
 		}
 
+		if ($total_kb == 0) {
+			print "nothing found from the camera";
+			return ();
+		}
+
 		my @df = split /\s+/, `df -k $args{basedir} | tail -1`;
 		my $free_space_kb = $df[3];
 		if ($total_kb > 2*$free_space_kb) {
@@ -207,9 +213,8 @@ sub download()
 
 	# make and change to temporary dir to download files into
 	use File::Temp;
-	my $download_dir = tempdir ('download-XXXXX', DIR => $args{basedir})  or die $!;
+	my $download_dir = File::Temp::tempdir ('download-XXXXX', DIR => $args{basedir})  or die $!;
 	chdir $download_dir  or die "chdir $download_dir: $!";
-
 
 	x "$args{sudo} gphoto2 -P";
 	my @files = glob '*.*';
@@ -235,7 +240,7 @@ sub post_process ($)
 				my $view = "$base.jpg";
 				$view =~ s{/shot/}{/$args{res}/};
 
-				print "$count/$total\n";
+				print "\n$count/$total";
 				if ($ext eq 'cr2') {
 					my $dir = `dirname "$view"`;
 					chomp $dir;
@@ -264,9 +269,9 @@ sub post_process ($)
 	}
 }#
 
-=nao
 sub browse_results (@)
 {#
+=nao
 	my %files = @_;
 
 	my %dirs = ();
@@ -288,8 +293,8 @@ sub browse_results (@)
 		print "cd \"$common_dir\"";
 		$ENV{DISPLAY} and x("$args{file_manager} \"$common_dir/..\" &");
 	}
-}#
 =cut
+}#
 
 sub main (@)
 {#
@@ -298,13 +303,15 @@ sub main (@)
 	read_args (@ARGV);
 	-d $args{basedir}  or die "$args{basedir}: $!";
 
-	if (scalar @{$args{files}}) {
+	if (exists $args{files}) {
 		post_process ($args{files});
 	}
 	else {
 		my ($dir, $files) = download();
-		post_process ($files);
-		rmdir $dir;
+		if ($dir) {
+			post_process ($files);
+			rmdir $dir  or die "rmdir $dir: $!";
+		}
 	}
 
 	#browse_results $files  if $args{gui_mode};
