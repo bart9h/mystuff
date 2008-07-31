@@ -39,8 +39,8 @@ my %args = (
 		sudo => 'sudo',
 		max_tasks => 1,
 		mv => 0,
+		gui_mode => 0,
 
-		#gui_mode => 0,
 		#file_managers => [ 'nautilus', 'Thunar', 'pcmanfm', 'ROX-Filer' ],
 		#file_manager => undef,
 );
@@ -339,25 +339,41 @@ sub browse_results (@)
 =cut
 }#
 
+sub main_gui()
+{#
+	use Gtk2 '-init';
+
+	my $window = Gtk2::Window->new;
+	$window->signal_connect (delete_event => sub {Gtk2->main_quit; 1});
+	$window->set_title ("foto.pl");
+	$window->add (Gtk2::Label->new ('This is starting to get too big for my taste  :('));
+	$window->show_all();
+
+	Gtk2->main();
+}#
+
 sub main (@)
 {#
 	$ENV{DISPLAY} = ':0'  unless defined $ENV{DISPLAY};
 	default_args();
 	read_args (@ARGV);
-	-d $args{basedir}  or die "$args{basedir}: $!";
-
-	if (exists $args{files}) {
-		post_process ($args{files});
+	if ($args{gui_mode}) {
+		main_gui();
 	}
 	else {
-		my ($dir, $files) = download();
-		if ($dir) {
-			post_process ($files);
-			rmdir $dir  or die "rmdir $dir: $!";
+		-d $args{basedir}  or die "$args{basedir}: $!";
+
+		if (exists $args{files}) {
+			post_process ($args{files});
+		}
+		else {
+			my ($dir, $files) = download();
+			if ($dir) {
+				post_process ($files);
+				rmdir $dir  or die "rmdir $dir: $!";
+			}
 		}
 	}
-
-	#browse_results $files  if $args{gui_mode};
 }#
 
 main(@ARGV);
