@@ -8,7 +8,8 @@
 
 =todo
 
-- Check existence of required external tools.
+- Check existence of required external tools
+  (gphoto2, exiv2, ufraw-batch, convert (or gm), xwininfo).
 
 - Fix ufraw rotation+scale order.
 
@@ -17,8 +18,6 @@
 - Show post-processing ETA.
 
 - Run gphoto2 in interactive shell mode, show download progress, ETA.
-
-- Parallel post-processing.
 
 =cut
 
@@ -38,6 +37,8 @@ my %args = (
 		basedir => '/home/fotos',
 		nop => 0,
 		sudo => 'sudo',
+		max_tasks => 1,
+		mv => 0,
 
 		#gui_mode => 0,
 		#file_managers => [ 'nautilus', 'Thunar', 'pcmanfm', 'ROX-Filer' ],
@@ -58,15 +59,15 @@ sub x($)
 
 sub file_read($;$)
 {#
-	my( $filename, $die ) = @_;
+	my ($filename, $die) = @_;
 
-	unless( open F, $filename ) {
+	unless (open F, $filename) {
 		my $msg = "open($filename): $!";
 		$die ? die $msg : warn $msg;
 		return undef;
 	};
 
-	if( wantarray ) {
+	if (wantarray) {
 		my @a = <F>;
 		close F;
 		return @a;
@@ -110,6 +111,13 @@ sub default_args()
 		`xwininfo -root` =~ /\bWidth:\s+(\d+)\b.*\bHeight:\s+(\d+)\b/s
 		? "$1x$2"
 		: cached_resolution();
+
+
+	my $cpu_count = 0;
+	foreach (file_read ('/proc/cpuinfo')) {
+		++$cpu_count  if /^processor\s*:\s*\d+$/;
+	}
+	$args{max_tasks} = $cpu_count ? $cpu_count : 1;
 }#
 
 sub read_args (@)
@@ -224,49 +232,84 @@ sub download()
 	return ($download_dir, \@files);
 }#
 
+my $task_count = 0;
 sub post_process ($)
 {#
-	my ($count, $total) = (0, scalar @{$_[0]});
-	foreach (@{$_[0]}) {
-		++$count;
+	my @files = ();
+	foreach (@{$_[0]})
+	{#  move photos to dir based on exif data
+
 		my $path = $_;
 
 		if (-e $path  or  $args{nop}) {
 			my $shot = move_file ($path);
-			next if $args{mv};
-
-			if ($shot =~ /^(.*)\.([^\.]+)$/) {
-				my ($base, $ext) = ($1, $2);
-				my $view = "$base.jpg";
-				$view =~ s{/shot/}{/$args{res}/};
-
-				print "\n$count/$total";
-				if ($ext eq 'cr2') {
-					my $dir = `dirname "$view"`;
-					chomp $dir;
-					do_mkdir $dir;
-					x "nice ufraw-batch --wb=camera --exposure=auto --size=$args{res} --out-type=jpeg --compression=$args{jpeg_quality} --out-path=\"$dir\" \"$shot\"";
-				}
-				elsif ($ext eq 'jpg') {
-					x "nice convert -quality $args{jpeg_quality} -resize $args{res} \"$shot\" \"$view\"";
-				}
-				elsif ($ext eq 'mpg') {
-					if (!$args{nop}) {
-						symlink $shot, $view;
-					}
-					else {
-						print "ln -s $shot $view";
-					}
-				}
-				else {
-					print "warning: $shot: unknown file type";
-				}
-			}
+			chmod 0444, $shot;
+			push @files, $shot;
 		}
 		else {
 			print STDERR "$path not found";
 		}
+	}#
+	return if $args{mv};
+
+	sub mkview($)
+	{#  convert original photo to jpeg of screen size
+
+		my $shot = $_[0];
+		if ($shot =~ /^(.*)\.([^\.]+)$/) {
+			my ($base, $ext) = ($1, $2);
+			my $view = "$base.jpg";
+			$view =~ s{/shot/}{/$args{res}/};
+
+			if ($ext eq 'cr2') {
+				my $dir = `dirname "$view"`;
+				chomp $dir;
+				do_mkdir $dir;
+				x "nice ufraw-batch --wb=camera --exposure=auto --size=$args{res} --out-type=jpeg --compression=$args{jpeg_quality} --out-path=\"$dir\" \"$shot\"";
+			}
+			elsif ($ext eq 'jpg') {
+				x "nice convert -quality $args{jpeg_quality} -resize $args{res} \"$shot\" \"$view\"";
+			}
+			elsif ($ext eq 'mpg') {
+				if (!$args{nop}) {
+					symlink $shot, $view;
+				}
+				else {
+					print "ln -s $shot $view";
+				}
+			}
+			else {
+				print "warning: $shot: unknown file type";
+			}
+		}
+	}#
+
+	#{#  manage $args{max_tasks} parallel mkview() tasks
+
+	sub signal_handler($) { --$task_count  if $_[0] eq 'CHLD' }
+	$SIG{CHLD} = \&signal_handler;
+
+	my ($count, $total) = (0, scalar @files);
+	while (@files) {
+		while ($task_count < $args{max_tasks}) {
+			++$count;
+			print "\n$count/$total";
+
+			# launch new task
+			++$task_count;
+			my $file = shift @files;
+			my $pid = fork;
+			if ($pid eq 0) {
+				mkview ($file);
+				exit 0;
+			}
+		}
+		my $child = wait;
 	}
+
+	wait while ($task_count);
+
+	#}#
 }#
 
 sub browse_results (@)
