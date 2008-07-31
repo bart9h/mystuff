@@ -1,6 +1,6 @@
 " vim:ft=vimperator:
 
-set guioptions+=mT
+set guioptions+=m
 
 map \ :set invum<CR>
 map r :echo "reload?"<CR>
