@@ -8,7 +8,8 @@
 
 =todo
 
-- Check existence of required external tools.
+- Check existence of required external tools
+  (gphoto2, exiv2, ufraw-batch, convert (or gm), xwininfo).
 
 - Fix ufraw rotation+scale order.
 
@@ -17,8 +18,6 @@
 - Show post-processing ETA.
 
 - Run gphoto2 in interactive shell mode, show download progress, ETA.
-
-- Parallel post-processing.
 
 =cut
 
@@ -38,8 +37,10 @@ my %args = (
 		basedir => '/home/fotos',
 		nop => 0,
 		sudo => 'sudo',
+		max_tasks => 1,
+		mv => 0,
+		gui_mode => 0,
 
-		#gui_mode => 0,
 		#file_managers => [ 'nautilus', 'Thunar', 'pcmanfm', 'ROX-Filer' ],
 		#file_manager => undef,
 );
@@ -58,15 +59,15 @@ sub x($)
 
 sub file_read($;$)
 {#
-	my( $filename, $die ) = @_;
+	my ($filename, $die) = @_;
 
-	unless( open F, $filename ) {
+	unless (open F, $filename) {
 		my $msg = "open($filename): $!";
 		$die ? die $msg : warn $msg;
 		return undef;
 	};
 
-	if( wantarray ) {
+	if (wantarray) {
 		my @a = <F>;
 		close F;
 		return @a;
@@ -110,6 +111,13 @@ sub default_args()
 		`xwininfo -root` =~ /\bWidth:\s+(\d+)\b.*\bHeight:\s+(\d+)\b/s
 		? "$1x$2"
 		: cached_resolution();
+
+
+	my $cpu_count = 0;
+	foreach (file_read ('/proc/cpuinfo')) {
+		++$cpu_count  if /^processor\s*:\s*\d+$/;
+	}
+	$args{max_tasks} = $cpu_count ? $cpu_count : 1;
 }#
 
 sub read_args (@)
@@ -167,10 +175,11 @@ sub move_file ($)
 		.sprintf '%04d/%02d/%02d', $year, $mon, $mday;
 	do_mkdir $dir;
 
+	my $name = lc $_[0];  $name =~ s{^.*/([^/]+)$}{$1};
 	my $path = "$dir/"
 		#.sprintf ('%04d%02d%02d-', $year, $mon, $mday)
 		.sprintf ('%02d:%02d:%02d-', $hour, $min, $sec)
-		.lc $_[0];
+		.$name;
 
 	# move the file to it's new place/name
 	my $msg = "mv $_[0] $path";
@@ -197,6 +206,11 @@ sub download()
 			$total_kb += $size_kb;
 		}
 
+		if ($total_kb == 0) {
+			print "nothing found from the camera";
+			return ();
+		}
+
 		my @df = split /\s+/, `df -k $args{basedir} | tail -1`;
 		my $free_space_kb = $df[3];
 		if ($total_kb > 2*$free_space_kb) {
@@ -207,66 +221,100 @@ sub download()
 
 	# make and change to temporary dir to download files into
 	use File::Temp;
-	my $download_dir = tempdir ('download-XXXXX', DIR => $args{basedir})  or die $!;
+	my $download_dir = File::Temp::tempdir ('download-XXXXX', DIR => $args{basedir})  or die $!;
 	chdir $download_dir  or die "chdir $download_dir: $!";
-
 
 	x "$args{sudo} gphoto2 -P";
 	my @files = glob '*.*';
 	x "$args{sudo} chown $ENV{USER} ".join(' ', @files);
 
 	@files = map { "$download_dir/$_" } @files;
-	return \@files;
+	return ($download_dir, \@files);
 }#
 
+my $task_count = 0;
 sub post_process ($)
 {#
-	my ($count, $total) = (0, scalar @{$_[0]});
-	foreach (@{$_[0]}) {
-		++$count;
+	my @files = ();
+	foreach (@{$_[0]})
+	{#  move photos to dir based on exif data
+
 		my $path = $_;
 
 		if (-e $path  or  $args{nop}) {
 			my $shot = move_file ($path);
-			next if $args{mv};
-
-			if ($shot =~ /^(.*)\.([^\.]+)$/) {
-				my ($base, $ext) = ($1, $2);
-				my $view = "$base.jpg";
-				$view =~ s{/shot/}{/$args{res}/};
-
-				print "$count/$total\n";
-				if ($ext eq 'cr2') {
-					my $dir = `dirname "$view"`;
-					chomp $dir;
-					do_mkdir $dir;
-					x "nice ufraw-batch --wb=camera --exposure=auto --size=$args{res} --out-type=jpeg --compression=$args{jpeg_quality} --out-path=\"$dir\" \"$shot\"";
-				}
-				elsif ($ext eq 'jpg') {
-					x "nice convert -quality $args{jpeg_quality} -resize $args{res} \"$shot\" \"$view\"";
-				}
-				elsif ($ext eq 'mpg') {
-					if (!$args{nop}) {
-						symlink $shot, $view;
-					}
-					else {
-						print "ln -s $shot $view";
-					}
-				}
-				else {
-					print "warning: $shot: unknown file type";
-				}
-			}
+			chmod 0444, $shot;
+			push @files, $shot;
 		}
 		else {
 			print STDERR "$path not found";
 		}
+	}#
+	return if $args{mv};
+
+	sub mkview($)
+	{#  convert original photo to jpeg of screen size
+
+		my $shot = $_[0];
+		if ($shot =~ /^(.*)\.([^\.]+)$/) {
+			my ($base, $ext) = ($1, $2);
+			my $view = "$base.jpg";
+			$view =~ s{/shot/}{/$args{res}/};
+
+			if ($ext eq 'cr2') {
+				my $dir = `dirname "$view"`;
+				chomp $dir;
+				do_mkdir $dir;
+				x "nice ufraw-batch --wb=camera --exposure=auto --size=$args{res} --out-type=jpeg --compression=$args{jpeg_quality} --out-path=\"$dir\" \"$shot\"";
+			}
+			elsif ($ext eq 'jpg') {
+				x "nice convert -quality $args{jpeg_quality} -resize $args{res} \"$shot\" \"$view\"";
+			}
+			elsif ($ext eq 'mpg') {
+				if (!$args{nop}) {
+					symlink $shot, $view;
+				}
+				else {
+					print "ln -s $shot $view";
+				}
+			}
+			else {
+				print "warning: $shot: unknown file type";
+			}
+		}
+	}#
+
+	#{#  manage $args{max_tasks} parallel mkview() tasks
+
+	sub signal_handler($) { --$task_count  if $_[0] eq 'CHLD' }
+	$SIG{CHLD} = \&signal_handler;
+
+	my ($count, $total) = (0, scalar @files);
+	while (@files) {
+		while ($task_count < $args{max_tasks}) {
+			++$count;
+			print "\n$count/$total";
+
+			# launch new task
+			++$task_count;
+			my $file = shift @files;
+			my $pid = fork;
+			if ($pid eq 0) {
+				mkview ($file);
+				exit 0;
+			}
+		}
+		my $child = wait;
 	}
+
+	wait while ($task_count);
+
+	#}#
 }#
 
-=nao
 sub browse_results (@)
 {#
+=nao
 	my %files = @_;
 
 	my %dirs = ();
@@ -288,26 +336,44 @@ sub browse_results (@)
 		print "cd \"$common_dir\"";
 		$ENV{DISPLAY} and x("$args{file_manager} \"$common_dir/..\" &");
 	}
-}#
 =cut
+}#
+
+sub main_gui()
+{#
+	use Gtk2 '-init';
+
+	my $window = Gtk2::Window->new;
+	$window->signal_connect (delete_event => sub {Gtk2->main_quit; 1});
+	$window->set_title ("foto.pl");
+	$window->add (Gtk2::Label->new ('This is starting to get too big for my taste  :('));
+	$window->show_all();
+
+	Gtk2->main();
+}#
 
 sub main (@)
 {#
 	$ENV{DISPLAY} = ':0'  unless defined $ENV{DISPLAY};
 	default_args();
 	read_args (@ARGV);
-	-d $args{basedir}  or die "$args{basedir}: $!";
-
-	if (scalar @{$args{files}}) {
-		post_process ($args{files});
+	if ($args{gui_mode}) {
+		main_gui();
 	}
 	else {
-		my ($dir, $files) = download();
-		post_process ($files);
-		rmdir $dir;
-	}
+		-d $args{basedir}  or die "$args{basedir}: $!";
 
-	#browse_results $files  if $args{gui_mode};
+		if (exists $args{files}) {
+			post_process ($args{files});
+		}
+		else {
+			my ($dir, $files) = download();
+			if ($dir) {
+				post_process ($files);
+				rmdir $dir  or die "rmdir $dir: $!";
+			}
+		}
+	}
 }#
 
 main(@ARGV);

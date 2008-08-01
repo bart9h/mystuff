@@ -1,6 +1,6 @@
 " vim:ft=vimperator:
 
-set guioptions+=mT
+set guioptions+=m
 set visualbell
 
 map \ :set invum<CR>
