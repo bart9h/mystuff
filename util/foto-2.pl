@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-sub TODO { die; }
 #{#1          comments
 
 =description
@@ -9,56 +8,45 @@ sub TODO { die; }
 
 =todo
 
-- option to run over existing photos
+- Check existence of required external tools
+  (gphoto2, exiv2, ufraw-batch, convert (or gm), xwininfo).
 
-- ETA
+- Fix ufraw rotation+scale order.
 
-- die if available_disk_space < 2*files_size
+- GUI, or at leasst OSD.
 
-- Check existence of required external tools.
+- Show post-processing ETA.
 
-- Download to a fixed spool dir, move to right dir later.
-  Get date for dir name from exif info (exiv2).
-
-- OSD (maybe external lib to manage output messages in general).
-
-- Optimize by running gphoto2 in interactive shell mode,
-  instead of calling it multiple times.
-  (Must check if it will release memory after each download.)
+- Run gphoto2 in interactive shell mode, show download progress, ETA.
 
 =cut
 
+
+#{#1          parameters
 
 use strict;
 use warnings;
 $|=1;
 $\="\n";
 
-
-#{#1          parameters
-
 my %args = (
-		files => [],
-		tag => undef,
-		sudo => 'sudo',
-		do_gray => 0,
 
-		#basedir => '/home/fotos/archive',
-		basedir => '/tmp/archive',
-		gray_dir => '../gray',
-		keep_temp_files => 1,
-		nop => 0,
-
-		width => 1024,
-		height => 768,
+		res => '1024x768',
 		jpeg_quality => 80,
 
+		basedir => '/home/fotos',
+		nop => 0,
+		sudo => 'sudo',
+		max_tasks => 1,
+		mv => 0,
 		gui_mode => 0,
-		file_managers => [ 'nautilus', 'Thunar', 'pcmanfm', 'ROX-Filer' ],
-		file_manager => undef,
+
+		#file_managers => [ 'nautilus', 'Thunar', 'pcmanfm', 'ROX-Filer' ],
+		#file_manager => undef,
 );
 
 #{#1          code
+sub TODO { die; }
 
 #{#2           system utils
 
@@ -71,15 +59,15 @@ sub x($)
 
 sub file_read($;$)
 {#
-	my( $filename, $die ) = @_;
+	my ($filename, $die) = @_;
 
-	unless( open F, $filename ) {
+	unless (open F, $filename) {
 		my $msg = "open($filename): $!";
 		$die ? die $msg : warn $msg;
 		return undef;
 	};
 
-	if( wantarray ) {
+	if (wantarray) {
 		my @a = <F>;
 		close F;
 		return @a;
@@ -103,114 +91,106 @@ sub file_ok($)
 sub do_mkdir($)
 {#
 	-d $_[0]  and return $_[0];
-
-	my $msg = "mkdir ($_[0])";
-	if ($args{nop}) {
-		print $msg;
-	}
-	else {
-		mkdir $_[0]  or die "$msg: $!";
-	}
+	my $cmd = "mkdir -p $_[0]";
+	x $cmd;
+	-d $_[0]  or die "$cmd: $!"  unless $args{nop};
+	return $_[0];
 }#
 
 #}#
 
 sub default_args()
 {#
-	{#  max_block_mb and max_file_mb
+	sub cached_resolution {
+		#TODO:  "cache in ~/etc/var/screen-pixels
+		'1024x768'
+	}
 
-		# Guess nice values for memory usage limit based on avaiable memory:
-		# max block size (soft limit) = 1/4 system memory
-		# max file size (hard limit) = 3/4 system memory
-		#TODO: check also if it will fit on available mem+swap
+	#TODO: use xdpyinfo instead
+	$args{res} =
+		`xwininfo -root` =~ /\bWidth:\s+(\d+)\b.*\bHeight:\s+(\d+)\b/s
+		? "$1x$2"
+		: cached_resolution();
 
-		my $mem_total_kb = 0;
-		foreach( file_read( '/proc/meminfo' ) ) {
-			if( m/^MemTotal:\s+(\d+)\s+kB$/ ) {
-				$mem_total_kb = $1;
-				last;
-			}
-		}
 
-		if( $mem_total_kb ) {
-			$args{max_block_mb} = int( (1/4)*$mem_total_kb/1024 );
-			$args{max_file_mb}  = int( (3/4)*$mem_total_kb/1024 );
-		}
-	}#
-
-	{#  width, height
-
-		sub cached_resolution {
-			#TODO:  "width %d height %d"  in  ~/etc/var/screen-pixels
-			(1024, 768)
-		}
-		($args{width}, $args{height}) =
-			`xwininfo -root` =~ /\bWidth:\s+(\d+)\b.*\bHeight:\s+(\d+)\b/s
-			? ($1, $2)
-			: cached_resolution();
-
-	}#
+	my $cpu_count = 0;
+	foreach (file_read ('/proc/cpuinfo')) {
+		++$cpu_count  if /^processor\s*:\s*\d+$/;
+	}
+	$args{max_tasks} = $cpu_count ? $cpu_count : 1;
 }#
 
 sub read_args (@)
 {#
-	if( scalar @_ == 1 ) {
-		$args{source} = shift;
-	}
-	else {
-		while( $_ = shift ) {
-			s/^--//;
-			if (exists $args{$_}) {
-				if (not defined ($args{$_} = shift)) {
-					print STDERR "missing argument for $_";
-					exit 1;
-				}
+	my $process_args = 1;
+	foreach (@_) {
+		if ($process_args) {
+			if (/^--$/) {
+				$process_args = 0;
+				next;
 			}
 			elsif ($_ eq '--help') {
 				#{#
 				#TODO: better %args, to contain description
 				#      (borrow from other script I wrote..)
-				my $max_len = 0;
-				foreach (keys %args) {
-					$max_len = length $_
-						if length $_ > $max_len;
-				}
-				print "arguments".(' ' x ($max_len - 7))."[defaults]:\n";
+				print 'arguments and their defaults:';
 				foreach (sort keys %args) {
-					my $arg = defined $args{$_} ? $args{$_} : '<empty>';
-					print $_.(' ' x (2 + $max_len - length $_))."[$arg]"
+					my $val = $args{$_};
+					s/_/-/;
+					print '--'.$_.(defined $val ? "=$val" : '');
 				}
 				exit 0;
 				#}#
 			}
-			else {
-				print STDERR "unknown arg ($_)";
-				exit 1;
+			elsif (m/^--(..*?)(=(.*))?$/) {
+				my ($arg, $has_val, $val) = ($1, $2, $3);
+				$arg =~ s/-/_/g;
+				if (exists $args{$arg}) {
+					$args{$arg} = $has_val ? $val : 1;
+					next;
+				}
+				else {
+					print STDERR "unknown arg ($_)";
+					exit 1;
+				}
 			}
 		}
+
+		$args{files} = []  if not exists $args{files};
+		push @{$args{files}}, $_;
 	}
 	1;
 }#
 
-sub file_mkdir ($)
+sub move_file ($)
 {#
-	my ($file) = @_;
-	-d $args{basedir}  or die "$args{basedir}: $!";
+	# get timestamp from EXIF data
+	my ($year, $mon, $mday, $hour, $min, $sec) =
+		`exiv2 $_[0]`
+		=~ /^Image timestamp : (\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})$/m
+		or die "no exif info for file $_[0]";
 
-	my ($year, $mon, $mday) =
-		`exiv2 $file->{path}`
-		=~ /^Image timestamp : \d{4}:\d{2}:\d{2} \d{2}:\d{2}:\d{2}$/
-		or die "no exif info for file $file->{path}";
-
-	my $dir = $args{basedir};
-	$dir .= '/'.sprintf '%04d-%02d-%02d', $year+1900, $mon+1, $mday;
-	$dir .= '.'.$args{tag}  if $args{tag};
-
-	$file->{dir} = $dir;
-
+	# basedir/shot/YYYY/MM/DD/
+	my $dir = $args{basedir}.'/shot/'
+		.sprintf '%04d/%02d/%02d', $year, $mon, $mday;
 	do_mkdir $dir;
-	$dir .= '/shot';
-	do_mkdir $dir;
+
+	my $name = lc $_[0];  $name =~ s{^.*/([^/]+)$}{$1};
+	my $path = "$dir/"
+		#.sprintf ('%04d%02d%02d-', $year, $mon, $mday)
+		.sprintf ('%02d:%02d:%02d-', $hour, $min, $sec)
+		.$name;
+
+	# move the file to it's new place/name
+	my $msg = "mv $_[0] $path";
+	if ($args{nop}) {
+		print $msg;
+	}
+	else {
+		rename $_[0], $path  or die "mv $_[0] $path: $!";
+	}
+
+	return $path;
 }#
 
 sub download()
@@ -226,7 +206,12 @@ sub download()
 			$total_kb += $size_kb;
 		}
 
-		my @df = split /\s+/, `df -k $args{base_dir} | tail -1`;
+		if ($total_kb == 0) {
+			print "nothing found from the camera";
+			return ();
+		}
+
+		my @df = split /\s+/, `df -k $args{basedir} | tail -1`;
 		my $free_space_kb = $df[3];
 		if ($total_kb > 2*$free_space_kb) {
 			print "NOT ENOUGH DISK SPACE!";
@@ -234,95 +219,102 @@ sub download()
 		}
 	}#
 
-	# make temp dir to download files into
-	my $dir = "$args{basedir}/temp";
-	-d $dir and die "$dir exists. Interrupted download?";
-	mkdir $dir  or die "mkdir $dir: $!";
+	# make and change to temporary dir to download files into
+	use File::Temp;
+	my $download_dir = File::Temp::tempdir ('download-XXXXX', DIR => $args{basedir})  or die $!;
+	chdir $download_dir  or die "chdir $download_dir: $!";
 
-	chdir $dir  or die "chdir $dir: $!";
 	x "$args{sudo} gphoto2 -P";
+	my @files = glob '*.*';
+	x "$args{sudo} chown $ENV{USER} ".join(' ', @files);
 
-	foreach my $range_itr (@$ranges) {
-		my ($first, $last) = $range_itr =~ /(\d+)-(\d+)/  or die;
-		++$step;
-		print "downloading $range_itr of ".(scalar keys %$files)." files, step $step of ".(scalar @$ranges);
-		x "$args{sudo} gphoto2 -p $range_itr";
-		my @files_to_chown = ();
-		for ($first .. $last) {
-			my $name = $files->{$_}{name};
-			if (-e $name) {
-				push @files_to_chown, $name;
-				if (file_ok ($files->{$_})) {
-					++$count;
-					$files->{$_}{path} = "$ENV{PWD}/$name";
+	@files = map { "$download_dir/$_" } @files;
+	return ($download_dir, \@files);
+}#
+
+my $task_count = 0;
+sub post_process ($)
+{#
+	my @files = ();
+	foreach (@{$_[0]})
+	{#  move photos to dir based on exif data
+
+		my $path = $_;
+
+		if (-e $path  or  $args{nop}) {
+			my $shot = move_file ($path);
+			chmod 0444, $shot;
+			push @files, $shot;
+		}
+		else {
+			print STDERR "$path not found";
+		}
+	}#
+	return if $args{mv};
+
+	sub mkview($)
+	{#  convert original photo to jpeg of screen size
+
+		my $shot = $_[0];
+		if ($shot =~ /^(.*)\.([^\.]+)$/) {
+			my ($base, $ext) = ($1, $2);
+			my $view = "$base.jpg";
+			$view =~ s{/shot/}{/$args{res}/};
+
+			if ($ext eq 'cr2') {
+				my $dir = `dirname "$view"`;
+				chomp $dir;
+				do_mkdir $dir;
+				x "nice ufraw-batch --wb=camera --exposure=auto --size=$args{res} --out-type=jpeg --compression=$args{jpeg_quality} --out-path=\"$dir\" \"$shot\"";
+			}
+			elsif ($ext eq 'jpg') {
+				x "nice convert -quality $args{jpeg_quality} -resize $args{res} \"$shot\" \"$view\"";
+			}
+			elsif ($ext eq 'mpg') {
+				if (!$args{nop}) {
+					symlink $shot, $view;
 				}
 				else {
-					print "warning: $name too small"
+					print "ln -s $shot $view";
 				}
 			}
 			else {
-				print "warning: $name: $!";
+				print "warning: $shot: unknown file type";
 			}
 		}
-		x "$args{sudo} chown $ENV{USER}.users ".join(' ', @files_to_chown);
-	}
+	}#
 
-	return $files;
-}#
+	#{#  manage $args{max_tasks} parallel mkview() tasks
 
-sub post_process (@)
-{#
-	my %files = @_;
+	sub signal_handler($) { --$task_count  if $_[0] eq 'CHLD' }
+	$SIG{CHLD} = \&signal_handler;
 
-	my ($count, $total) = (0, scalar keys %files);
-	foreach (sort keys %files) {
-		++$count;
-		my $name = $files{$_}{name};
-		if (-e $name  or  $args{nop}) {
-			if ($name =~ /^(.*)\.([^\.]+)$/) {
-				my ($base, $ext) = ($1, lc $2);
-				my $shot = "$base.$ext";
+	my ($count, $total) = (0, scalar @files);
+	while (@files) {
+		while ($task_count < $args{max_tasks}) {
+			++$count;
+			print "\n$count/$total";
 
-				if ($name ne $shot) {
-					if(!$args{nop}) {
-						rename $name, $shot  or die;
-						x "chmod -w $shot";
-					}
-					else {
-						print "mv $name $shot";
-					}
-				}
-
-				print "$count/$total\n";
-				if ($ext eq 'cr2') {
-					x "nice ufraw-batch --wb=camera --exposure=auto --size=$args{width}x$args{height} --out-type=jpeg --compression=$args{jpeg_quality} --out-path=\"$args{temp_dir}/..\" \"$shot\"";
-				}
-				elsif ($ext eq 'jpg') {
-					x "nice convert -quality $args{jpeg_quality} -resize $args{width}x$args{height} \"$shot\" \"../$base.jpg\"";
-					if ($args{do_gray}) {
-						#TODO: move this after this if's, to make gray version of raw images
-						do_mkdir $args{gray_dir};
-						x "nice convert -colorspace gray -quality 80 -resize $args{width}x$args{height} \"$shot\" \"$args{gray_dir}/$base.jpg\"";
-					}
-				}
-				elsif ($ext eq 'mpg') {
-					if (!$args{nop}) {
-						symlink "shot/$shot", "../$shot";
-					}
-					else {
-						print "ln -s shot/$shot ../$shot";
-					}
-				}
-				else {
-					print "warning: $name: unknown file type";
-				}
+			# launch new task
+			++$task_count;
+			my $file = shift @files;
+			my $pid = fork;
+			if ($pid eq 0) {
+				mkview ($file);
+				exit 0;
 			}
 		}
+		my $child = wait;
 	}
+
+	wait while ($task_count);
+
+	#}#
 }#
 
 sub browse_results (@)
 {#
+=nao
 	my %files = @_;
 
 	my %dirs = ();
@@ -344,6 +336,20 @@ sub browse_results (@)
 		print "cd \"$common_dir\"";
 		$ENV{DISPLAY} and x("$args{file_manager} \"$common_dir/..\" &");
 	}
+=cut
+}#
+
+sub main_gui()
+{#
+	use Gtk2 '-init';
+
+	my $window = Gtk2::Window->new;
+	$window->signal_connect (delete_event => sub {Gtk2->main_quit; 1});
+	$window->set_title ("foto.pl");
+	$window->add (Gtk2::Label->new ('This is starting to get too big for my taste  :('));
+	$window->show_all();
+
+	Gtk2->main();
 }#
 
 sub main (@)
@@ -351,9 +357,23 @@ sub main (@)
 	$ENV{DISPLAY} = ':0'  unless defined $ENV{DISPLAY};
 	default_args();
 	read_args (@ARGV);
-	-d $args{basedir}  || die "$args{basedir}: $!";
-	post_process (@$args{files}  or  download());
-	browse_results (%$files)  if $args{gui_mode};
+	if ($args{gui_mode}) {
+		main_gui();
+	}
+	else {
+		-d $args{basedir}  or die "$args{basedir}: $!";
+
+		if (exists $args{files}) {
+			post_process ($args{files});
+		}
+		else {
+			my ($dir, $files) = download();
+			if ($dir) {
+				post_process ($files);
+				rmdir $dir  or die "rmdir $dir: $!";
+			}
+		}
+	}
 }#
 
 main(@ARGV);
