@@ -162,6 +162,12 @@ sub read_args (@)
 	1;
 }#
 
+sub compare_file ($$)
+{#
+	my ($new, $old) = @_;
+	return 0 if -e $old;
+}#
+
 sub move_file ($)
 {#
 	# get timestamp from EXIF data
@@ -180,6 +186,19 @@ sub move_file ($)
 		#.sprintf ('%04d%02d%02d-', $year, $mon, $mday)
 		.sprintf ('%02d:%02d:%02d-', $hour, $min, $sec)
 		.$name;
+
+	# check for duplicated files
+	if (-e $path) {
+		if (0 == system "cmp \"$_[0]\" \"$path\"") {
+			print "skipping $_[0] == $path\n";
+			unlink $_[0];
+			return $path;
+		}
+		else {
+			print "WARNING: $_[0] != $path\n";
+			return '';
+		}
+	}
 
 	# move the file to it's new place/name
 	my $msg = "mv $_[0] $path";
@@ -243,8 +262,10 @@ sub post_process ($)
 
 		if (-e $path  or  $args{nop}) {
 			my $shot = move_file ($path);
-			chmod 0444, $shot;
-			push @files, $shot;
+			if ($shot) {
+				chmod 0444, $shot;
+				push @files, $shot;
+			}
 		}
 		else {
 			print STDERR "$path not found";
@@ -260,6 +281,8 @@ sub post_process ($)
 			my ($base, $ext) = ($1, $2);
 			my $view = "$base.jpg";
 			$view =~ s{/shot/}{/$args{res}/};
+
+			next if -e $view and `exiv2 "$show"` eq `exiv2 "$view"`;
 
 			if ($ext eq 'cr2') {
 				my $dir = `dirname "$view"`;
