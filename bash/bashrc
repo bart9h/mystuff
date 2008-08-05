@@ -213,7 +213,7 @@ function git_stash_do()
 			git $i || break
 		done
 	else
-		git $i
+		git $1
 	fi
 }
 alias gsd='git_stash_do "svn dcommit"'
