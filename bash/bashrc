@@ -255,7 +255,7 @@ function Xdefaults() {
 	esac
 
 	local d="$HOME/etc/x11"
-	cat "$d/$n" "$d/$n.$t" > "$f"
+	cat "$d/$n" "$d/$n.$t" >| "$f"
 }
 
 function v() {
