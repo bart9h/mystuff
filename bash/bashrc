@@ -198,13 +198,16 @@ alias pgw='ping gw'
 alias pgo='ping google.com'
 alias links='which links >/dev/null && links || elinks'
 
+alias gk='gitk --all &'
 alias gc='git commit'
 alias gca='git commit -a'
 alias gci='git commit --interactive'
 alias gco='git checkout'
 alias gs='git status -a'
 alias gd='git diff'
-alias gk='gitk --all &'
+alias gsac='git stash apply && git stash clear'
+alias gsd='git_stash_do "svn dcommit"'
+alias gsr='git_stash_do "svn rebase"'
 function git_stash_do()
 {
 	if git status | grep -q 'modified:'; then
@@ -216,8 +219,6 @@ function git_stash_do()
 		git $1
 	fi
 }
-alias gsd='git_stash_do "svn dcommit"'
-alias gsr='git_stash_do "svn rebase"'
 
 alias configure='nice ./configure --disable-nls'
 alias mk="nice make -j `show cpus`"
