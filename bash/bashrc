@@ -236,28 +236,6 @@ alias mpr='ls -Q | rl | xargs mplayer -fs'
 alias mprq='ls -Q | rl | xargs mplayer -fs -ao null'
 alias ponte='mplayer mms://200.246.9.2/pontelive'
 
-function Xdefaults() {
-	local n="Xdefaults"
-
-	local f="$HOME/.$n"
-	if test -e "$f"; then
-		rm -i "$f" || return
-	fi
-
-	local t
-	case "$HOSTNAME" in
-		doti-lap)
-			t='small'
-			;;
-		*)
-			t='default'
-			;;
-	esac
-
-	local d="$HOME/etc/x11"
-	cat "$d/$n" "$d/$n.$t" >| "$f"
-}
-
 function v() {
 	if test "$1"; then
 		vim -o "$@"
