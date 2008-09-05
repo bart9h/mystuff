@@ -35,6 +35,7 @@ my %args = (
 		jpeg_quality => 80,
 
 		basedir => '/home/fotos',
+		dir_fmt => '%04d/%02d-%02d',
 		nop => 0,
 		sudo => 'sudo',
 		max_tasks => 1,
@@ -162,13 +163,7 @@ sub read_args (@)
 	1;
 }#
 
-sub compare_file ($$)
-{#
-	my ($new, $old) = @_;
-	return 0 if -e $old;
-}#
-
-sub move_file ($)
+sub exif2path ($)
 {#
 	# get timestamp from EXIF data
 	my ($year, $mon, $mday, $hour, $min, $sec) =
@@ -178,14 +173,19 @@ sub move_file ($)
 
 	# basedir/shot/YYYY/MM/DD/
 	my $dir = $args{basedir}.'/shot/'
-		.sprintf '%04d/%02d/%02d', $year, $mon, $mday;
+		.sprintf $args{dir_fmt}, $year, $mon, $mday;
 	do_mkdir $dir;
 
 	my $name = lc $_[0];  $name =~ s{^.*/([^/]+)$}{$1};
-	my $path = "$dir/"
+	return "$dir/"
 		#.sprintf ('%04d%02d%02d-', $year, $mon, $mday)
 		.sprintf ('%02d:%02d:%02d-', $hour, $min, $sec)
 		.$name;
+}#
+
+sub move_file ($)
+{#
+	my $path = exif2path ($_[0]);
 
 	# check for duplicated files
 	if (-e $path) {
