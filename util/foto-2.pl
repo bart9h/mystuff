@@ -282,7 +282,7 @@ sub post_process ($)
 			my $view = "$base.jpg";
 			$view =~ s{/shot/}{/$args{res}/};
 
-			next if -e $view and `exiv2 "$show"` eq `exiv2 "$view"`;
+			next if -e $view and `exiv2 "$shot"` eq `exiv2 "$view"`;
 
 			if ($ext eq 'cr2') {
 				my $dir = `dirname "$view"`;
