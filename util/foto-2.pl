@@ -293,7 +293,7 @@ sub post_process ($)
 				x "nice ufraw-batch --wb=camera --exposure=auto --size=$args{res} --out-type=jpeg --compression=$args{jpeg_quality} --out-path=\"$dir\" \"$shot\"";
 			}
 			elsif ($ext eq 'jpg') {
-				x "nice convert -quality $args{jpeg_quality} -resize $args{res} \"$shot\" \"$view\""
+				x "nice gm convert -quality $args{jpeg_quality} -resize $args{res} \"$shot\" \"$view\""
 					." && exiv2 insert -l\"`basename \"$shot\"`\" -S.jpg \"$view\"";
 			}
 			elsif ($ext eq 'mpg') {
