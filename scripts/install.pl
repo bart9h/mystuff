@@ -14,8 +14,8 @@ my %reqs =
 (	#{# required external tools
 
 	# X11
-	#xosd => { bin => 'osd_cat', deb => 'xosd-bin' },
-	#xwit => {},
+	xosd => { bin => 'osd_cat', deb => 'xosd-bin' },
+	xwit => {},
 
 	# tag
 	id3v2 => {},
@@ -50,7 +50,7 @@ my %files =
 sub install_files($)
 {#
 	my $files = shift;
-	foreach(sort keys %$files) {
+	foreach (sort keys %$files) {
 		print "TODO: ln -s $_ $files->{$_}";
 	}
 }#
@@ -58,11 +58,11 @@ sub install_files($)
 sub install_packages(@)
 {#
 	my $cmd;
-	if(-e '/etc/debian_version') {
+	if (-e '/etc/debian_version') {
 		my $cmd = `which apt-get`
 			or die 'apt-get not found';
 		chomp $cmd;
-		foreach(@_) {
+		foreach (@_) {
 			$cmd = "sudo $cmd install $_";
 			print "$cmd\n";
 			system $cmd or die;
@@ -70,18 +70,18 @@ sub install_packages(@)
 	}
 	else {
 		print "\nYou have to install the following packages:\n".
-				join("\n", @_)."\n";
+				join ("\n", @_)."\n";
 	}
 }#
 
 sub missing_packages()
 {#
 	my @rc;
-	foreach(sort keys %reqs) {
+	foreach (sort keys %reqs) {
 		my $bin = ($reqs{$_}->{bin} or $_);
 		my $deb = ($reqs{$_}->{deb} or $_);
 		my $cmd = `which $bin`;
-		if($cmd) {
+		if ($cmd) {
 			print "$deb is ok\n";
 			$reqs{$_}->{cmd} = $cmd;
 		}
@@ -92,6 +92,6 @@ sub missing_packages()
 	return @rc;
 }#
 
-install_files( \%files );
-install_packages( missing_packages() );
+install_files (\%files);
+install_packages (missing_packages());
 

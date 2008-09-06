@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # switch-kbmap
 # by Rodolfo Borges <barrett@9hells.org>
@@ -48,9 +48,8 @@ if test "$trayicon_file"; then
 fi
 
 if which osd_cat &>/dev/null; then
-	printf "setxkbmap %s\n" "$kbmap" | osd_cat \
-		-p middle -A center -d 1 -s 3 -c yellow \
-		-f "-*-helvetica-bold-r-*-*-24-*-*-*-*-*-*-*" &
+	source "$HOME/etc/bash/osd.sh"
+	printf "setxkbmap %s\n" "$kbmap" | osd &
 else
 	echo "setxkbmap $kbmap"
 fi
