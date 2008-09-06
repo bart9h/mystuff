@@ -254,6 +254,7 @@ sub download()
 my $task_count = 0;
 sub post_process ($)
 {#
+
 	my @files = ();
 	foreach (@{$_[0]})
 	{#  move photos to dir based on exif data
@@ -282,12 +283,13 @@ sub post_process ($)
 			my $view = "$base.jpg";
 			$view =~ s{/shot/}{/$args{res}/};
 
-			next if -e $view and `exiv2 "$shot"` eq `exiv2 "$view"`;
+			next if -e $view and ($ext eq 'mpg' or `exiv2 "$shot"` eq `exiv2 "$view"`);
+
+			my $dir = `dirname "$view"`;
+			chomp $dir;
+			do_mkdir $dir;
 
 			if ($ext eq 'cr2') {
-				my $dir = `dirname "$view"`;
-				chomp $dir;
-				do_mkdir $dir;
 				x "nice ufraw-batch --wb=camera --exposure=auto --size=$args{res} --out-type=jpeg --compression=$args{jpeg_quality} --out-path=\"$dir\" \"$shot\"";
 			}
 			elsif ($ext eq 'jpg') {
