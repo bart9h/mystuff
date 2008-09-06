@@ -317,7 +317,7 @@ sub post_process ($)
 
 	my ($count, $total) = (0, scalar @files);
 	while (@files) {
-		while ($task_count < $args{max_tasks}) {
+		while (@files and $task_count < $args{max_tasks}) {
 			++$count;
 			print "\n$count/$total";
 
