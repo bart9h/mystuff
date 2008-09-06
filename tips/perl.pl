@@ -3,17 +3,24 @@ use strict;
 use warnings;
 $\ = "\n";
 
-sub autoincrement_filename_suffix()
+sub increment_suffix($;$)
 {#
-	my $a = "filename";
+	my ($ref, $sep) = @_;
+	defined $sep or $sep = '-';
+	$$ref =~ s/^(.*?)(${sep}([0-9]+))?(\.[^.]+)?$/$1.$sep.($2?$3+1:1).(defined $4?$4:'')/e;
+	$$ref;
+}#
+
+sub autoincrement_filename_suffix
+{#
+	print "auto-incrementing a filename suffix:";
+	my $a = "\tfilename.ext";
 	print $a;
-	#while (-e $a)
 	foreach (1 .. 3) {
-		$a =~ s/^(.*?)(-([0-9]+))?$/$1."-".($2?$3+1:1)/e;
-		print "$a";
+		print increment_suffix \$a;
 	}
 }#
 
-autoincrement_filename_suffix();
+autoincrement_filename_suffix;
 
 # vim600:fdm=marker:fmr={#,}#:
