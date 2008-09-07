@@ -123,6 +123,19 @@ sub default_args()
 
 sub read_args (@)
 {#
+	sub usage()
+	{#
+		#TODO: better %args, to contain description
+		#      (borrow from other script I wrote..)
+		print 'arguments and their defaults:';
+		foreach (sort keys %args) {
+			my $val = $args{$_};
+			s/_/-/;
+			print '--'.$_.(defined $val ? "=$val" : '');
+		}
+		exit 0;
+	}#
+
 	my $process_args = 1;
 	foreach (@_) {
 		if ($process_args) {
@@ -131,17 +144,7 @@ sub read_args (@)
 				next;
 			}
 			elsif ($_ eq '--help') {
-				#{#
-				#TODO: better %args, to contain description
-				#      (borrow from other script I wrote..)
-				print 'arguments and their defaults:';
-				foreach (sort keys %args) {
-					my $val = $args{$_};
-					s/_/-/;
-					print '--'.$_.(defined $val ? "=$val" : '');
-				}
-				exit 0;
-				#}#
+				usage;
 			}
 			elsif (m/^--(..*?)(=(.*))?$/) {
 				my ($arg, $has_val, $val) = ($1, $2, $3);
