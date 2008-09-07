@@ -195,12 +195,11 @@ sub move_file ($)
 		if (0 == system "cmp \"$_[0]\" \"$path\"") {
 			print "skipping $_[0] == $path\n";
 			unlink $_[0];
-			return $path;
 		}
 		else {
 			print "WARNING: $_[0] != $path\n";
-			return '';
 		}
+		return undef;
 	}
 
 	# move the file to it's new place/name
@@ -286,7 +285,14 @@ sub post_process ($)
 			my $view = "$base.jpg";
 			$view =~ s{/shot/}{/$args{res}/};
 
-			next if -e $view and ($ext eq 'mpg' or `exiv2 "$shot"` eq `exiv2 "$view"`);
+			sub exif ($)
+			{#
+				local $_ = `exiv2 "$_[0]"`;
+				s/$_[0]//m;
+				$_;
+			}#
+
+			next if -e $view and ($ext eq 'mpg' or exif $shot eq exif $view);
 
 			my $dir = `dirname "$view"`;
 			chomp $dir;
