@@ -34,7 +34,7 @@ my %args = (
 		res => '1024x768',
 		jpeg_quality => 80,
 
-		basedir => '/home/fotos',
+		basedir => $ENV{HOME}.'/fotos',
 		dir_fmt => '%04d/%02d-%02d',
 		nop => 0,
 		sudo => 'sudo',
