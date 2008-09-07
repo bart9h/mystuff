@@ -303,7 +303,7 @@ sub post_process ($)
 			}
 			elsif ($ext eq 'jpg') {
 				x "nice gm convert -quality $args{jpeg_quality} -resize $args{res} \"$shot\" \"$view\""
-					." && exiv2 insert -l\"`basename \"$shot\"`\" -S.jpg \"$view\"";
+					." && exiv2 insert -l\"`dirname \"$shot\"`\" -S.jpg \"$view\"";
 			}
 			elsif ($ext eq 'mpg') {
 				if (!$args{nop}) {
