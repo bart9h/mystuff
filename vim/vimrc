@@ -127,6 +127,8 @@ endif
 
 " {{{1 key mappings
 
+nmap <S-tab> :tabnext<CR>
+
 " toggle spell cheching
 nmap <F8> :set spelllang=en spell!<CR>
 
@@ -159,10 +161,6 @@ nmap <C-k> <C-W>r<C-W>k<C-w>_
 nmap <C-j> <C-W>j<C-W>R<C-w>_
 imap <C-k> <ESC><C-k>
 imap <C-j> <ESC><C-j>
-
-" switch windows
-nmap <C-u> :tabp<CR>
-nmap <C-i> :tabn<CR>
 
 " resize window
 nmap <C-kPlus> <C-W>+
