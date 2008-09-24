@@ -211,7 +211,7 @@ alias gk='gitk --all &'
 function git_stash_do()
 {
 	if git status | grep -q 'modified:'; then
-		for i in stash "$1" "stash apply" "stash clear"; do
+		for i in stash "$1" "stash pop"; do
 			echo "[$i]"
 			git $i || break
 		done
