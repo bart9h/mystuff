@@ -1,16 +1,21 @@
 #!/bin/bash
 
-case "$HOSTNAME" in
-	doti-lap)
-		hostfile='small'
-		;;
-	*)
-		hostfile='default'
-		;;
-esac
+function Xdefaults() {
+	local global="Xdefaults"
 
-test -n "$hostfile" &&
-files="$HOME/etc/x11/Xdefaults.$hostfile"
-files="$HOME/etc/x11/Xdefaults $files"
-cat $files | sed ';s/^[\ \t]\+//;/^\#/d' | xrdb
+	local local
+	case "$HOSTNAME" in
+		doti-lap)
+			local='small'
+			;;
+		*)
+			local='default'
+			;;
+	esac
+
+	local dir="$HOME/etc/x11"
+	cat "$dir/$global" "$dir/$global.$local" \
+	| sed ';s/^[\ \t]\+//;/^\#/d' \
+	| xrdb
+}
 

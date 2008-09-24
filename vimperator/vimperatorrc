@@ -1,6 +1,7 @@
 " vim:ft=vimperator:
 
 set guioptions=m
+set visualbell
 
 map \ :set invum<CR>
 map r :echo "reload?"<CR>

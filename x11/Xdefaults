@@ -11,7 +11,11 @@ Xcursor.theme: whiteglass
 
 #boldFont:         -*-fixed-bold-r-*-*-14-*-*-*-*-*-iso8859-1
 #font:             -*-fixed-bold-r-*-*-14-*-*-*-*-*-iso8859-1
-#visualBell:       false
+*bellIsUrgent:     true
+*visualBell:       true
+*visualBellDelay:  20
+*bellSupressTime:  1000
+*marginBell:       false
 #loginShell:       true
 #saveLines:        5000
 #scrollBar:        false

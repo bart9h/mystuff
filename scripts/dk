@@ -6,8 +6,12 @@
 #{ configuration
 
 test -n "$MLNET_HOME" || MLNET_HOME='/var/lib/mldonkey'
-incoming_dir="$MLNET_HOME/incoming/files"
+if test ! -d "$MLNET_HOME"; then
+	echo "Directory $MLNET_HOME not found. Check \$MLNET_HOME." >/dev/stderr
+	exit 1
+fi
 
+incoming_dir="$MLNET_HOME/incoming/files"
 mldonkey_ip="127.0.0.1"
 mldonkey_port="4000"
 
@@ -17,12 +21,9 @@ toggle_limits=(
 		high  20 120
 )
 
-#}
+source "$HOME/etc/bash/osd.sh"
 
-if test ! -d "$MLNET_HOME"; then
-	echo "Directory $MLNET_HOME not found. Check \$MLNET_HOME." >/dev/stderr
-	exit 1
-fi
+#}
 
 function usage()
 {
@@ -226,7 +227,7 @@ function dk_command()
 	fi
 }
 
-dk_last_result()
+function dk_last_result()
 {
 	local dt="$HOME/etc/scripts/dtool.pl"
 	local dir="$MLNET_HOME/search/"

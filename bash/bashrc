@@ -201,13 +201,16 @@ alias pgw='ping gw'
 alias pgo='ping google.com'
 alias links='which links >/dev/null && links || elinks'
 
+alias gk='gitk --all &'
 alias gc='git commit'
 alias gca='git commit -a'
 alias gci='git commit --interactive'
 alias gco='git checkout'
 alias gs='git status -a'
 alias gd='git diff'
-alias gk='gitk --all &'
+alias gsac='git stash apply && git stash clear'
+alias gsd='git_stash_do "svn dcommit"'
+alias gsr='git_stash_do "svn rebase"'
 function git_stash_do()
 {
 	if git status | grep -q 'modified:'; then
@@ -219,8 +222,6 @@ function git_stash_do()
 		git $1
 	fi
 }
-alias gsd='git_stash_do "svn dcommit"'
-alias gsr='git_stash_do "svn rebase"'
 
 alias configure='nice ./configure --disable-nls'
 alias mk="nice make -j `show cpus`"
@@ -237,28 +238,6 @@ alias mpq='mplayer -nosound -osdlevel 0'
 alias mpr='ls -Q | rl | xargs mplayer -fs'
 alias mprq='ls -Q | rl | xargs mplayer -fs -ao null'
 alias ponte='mplayer mms://200.246.9.2/pontelive'
-
-function Xdefaults() {
-	local n="Xdefaults"
-
-	local f="$HOME/.$n"
-	if test -e "$f"; then
-		rm -i "$f" || return
-	fi
-
-	local t
-	case "$HOSTNAME" in
-		doti-lap)
-			t='small'
-			;;
-		*)
-			t='default'
-			;;
-	esac
-
-	local d="$HOME/etc/x11"
-	cat "$d/$n" "$d/$n.$t" > "$f"
-}
 
 function v() {
 	if test "$1"; then
@@ -511,8 +490,6 @@ alias fu='du -sc * | sort -n'
 alias ntop='sudo jnettop'
 #alias w1='cd ~/fotos/incoming && sudo gphoto2 -P'
 #alias w1='source /home/barrett/bin/w1'
-
-#alias osd='osd_cat -p middle -A center -d 1 -s 3 -c yellow -f "-*-helvetica-bold-r-*-*-24-*-*-*-*-*-*-*"'
 
 #alias dif='diff --unified=5 --show-c-function --recursive --ignore-all-space'
 #alias dif='diff --unified=5 --show-c-function --recursive --ignore-space-change --ignore-blank-lines --ignore-all-space'

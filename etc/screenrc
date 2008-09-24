@@ -8,7 +8,7 @@ msgwait 2
 maptimeout 5
 
 altscreen on
-vbell off
+vbell on
 autodetach on
 startup_message off
 #shell "-/bin/bash"

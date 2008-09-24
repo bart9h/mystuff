@@ -34,7 +34,8 @@ my %args = (
 		res => '1024x768',
 		jpeg_quality => 80,
 
-		basedir => '/home/fotos',
+		basedir => $ENV{HOME}.'/fotos',
+		dir_fmt => '%04d/%02d-%02d',
 		nop => 0,
 		sudo => 'sudo',
 		max_tasks => 1,
@@ -122,6 +123,19 @@ sub default_args()
 
 sub read_args (@)
 {#
+	sub usage()
+	{#
+		#TODO: better %args, to contain description
+		#      (borrow from other script I wrote..)
+		print 'arguments and their defaults:';
+		foreach (sort keys %args) {
+			my $val = $args{$_};
+			s/_/-/;
+			print '--'.$_.(defined $val ? "=$val" : '');
+		}
+		exit 0;
+	}#
+
 	my $process_args = 1;
 	foreach (@_) {
 		if ($process_args) {
@@ -130,17 +144,7 @@ sub read_args (@)
 				next;
 			}
 			elsif ($_ eq '--help') {
-				#{#
-				#TODO: better %args, to contain description
-				#      (borrow from other script I wrote..)
-				print 'arguments and their defaults:';
-				foreach (sort keys %args) {
-					my $val = $args{$_};
-					s/_/-/;
-					print '--'.$_.(defined $val ? "=$val" : '');
-				}
-				exit 0;
-				#}#
+				usage;
 			}
 			elsif (m/^--(..*?)(=(.*))?$/) {
 				my ($arg, $has_val, $val) = ($1, $2, $3);
@@ -162,13 +166,7 @@ sub read_args (@)
 	1;
 }#
 
-sub compare_file ($$)
-{#
-	my ($new, $old) = @_;
-	return 0 if -e $old;
-}#
-
-sub move_file ($)
+sub exif2path ($)
 {#
 	# get timestamp from EXIF data
 	my ($year, $mon, $mday, $hour, $min, $sec) =
@@ -178,26 +176,30 @@ sub move_file ($)
 
 	# basedir/shot/YYYY/MM/DD/
 	my $dir = $args{basedir}.'/shot/'
-		.sprintf '%04d/%02d/%02d', $year, $mon, $mday;
+		.sprintf $args{dir_fmt}, $year, $mon, $mday;
 	do_mkdir $dir;
 
 	my $name = lc $_[0];  $name =~ s{^.*/([^/]+)$}{$1};
-	my $path = "$dir/"
+	return "$dir/"
 		#.sprintf ('%04d%02d%02d-', $year, $mon, $mday)
 		.sprintf ('%02d:%02d:%02d-', $hour, $min, $sec)
 		.$name;
+}#
+
+sub move_file ($)
+{#
+	my $path = exif2path ($_[0]);
 
 	# check for duplicated files
 	if (-e $path) {
 		if (0 == system "cmp \"$_[0]\" \"$path\"") {
 			print "skipping $_[0] == $path\n";
 			unlink $_[0];
-			return $path;
 		}
 		else {
 			print "WARNING: $_[0] != $path\n";
-			return '';
 		}
+		return undef;
 	}
 
 	# move the file to it's new place/name
@@ -254,6 +256,7 @@ sub download()
 my $task_count = 0;
 sub post_process ($)
 {#
+
 	my @files = ();
 	foreach (@{$_[0]})
 	{#  move photos to dir based on exif data
@@ -282,16 +285,25 @@ sub post_process ($)
 			my $view = "$base.jpg";
 			$view =~ s{/shot/}{/$args{res}/};
 
-			next if -e $view and `exiv2 "$show"` eq `exiv2 "$view"`;
+			sub exif ($)
+			{#
+				local $_ = `exiv2 "$_[0]"`;
+				s/$_[0]//m;
+				$_;
+			}#
+
+			next if -e $view and ($ext eq 'mpg' or exif $shot eq exif $view);
+
+			my $dir = `dirname "$view"`;
+			chomp $dir;
+			do_mkdir $dir;
 
 			if ($ext eq 'cr2') {
-				my $dir = `dirname "$view"`;
-				chomp $dir;
-				do_mkdir $dir;
 				x "nice ufraw-batch --wb=camera --exposure=auto --size=$args{res} --out-type=jpeg --compression=$args{jpeg_quality} --out-path=\"$dir\" \"$shot\"";
 			}
 			elsif ($ext eq 'jpg') {
-				x "nice convert -quality $args{jpeg_quality} -resize $args{res} \"$shot\" \"$view\"";
+				x "nice gm convert -quality $args{jpeg_quality} -resize $args{res} \"$shot\" \"$view\""
+					." && exiv2 insert -l\"`dirname \"$shot\"`\" -S.jpg \"$view\"";
 			}
 			elsif ($ext eq 'mpg') {
 				if (!$args{nop}) {
@@ -314,7 +326,7 @@ sub post_process ($)
 
 	my ($count, $total) = (0, scalar @files);
 	while (@files) {
-		while ($task_count < $args{max_tasks}) {
+		while (@files and $task_count < $args{max_tasks}) {
 			++$count;
 			print "\n$count/$total";
 
