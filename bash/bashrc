@@ -687,4 +687,6 @@ if echo "$BASH_VERSION" |  grep -q '^3\.1\..*'; then
 fi
 
 #}}}
+
+_load "$HOME/.bashrc_local_post"
 # vim600:foldmethod=marker:
