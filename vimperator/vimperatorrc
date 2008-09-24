@@ -1,6 +1,6 @@
 " vim:ft=vimperator:
 
-set guioptions+=m
+set guioptions=m
 
 map \ :set invum<CR>
 map r :echo "reload?"<CR>
@@ -19,3 +19,15 @@ set previouspattern+=^\s*anterior\s*$
 """  Use this as a bookmarlet to post to delicious with  :o del tag1 ... tagN
 " javascript: e=%22%22+( window.getSelection ?  window.getSelection() : document.getSelection ?  document.getSelection() : document.selection.createRange().text); void( delicious = open( 'https://api.del.icio.us/v1/posts/add?description='+ encodeURIComponent(document.title)+'&extended='+ encodeURIComponent(e).replace(/ /g, %22+%22)+ '&tags=%s'+'&url='+ encodeURIComponent(window.location.href), 'delicious','toolbar=no,width=500,height=150'), setTimeout('delicious.close()',5000))
 
+
+javascript <<EOM
+(function(){
+var inputElm = document.getElementById('liberator-commandline-command');
+function swapBGColor(event){
+ inputElm.parentNode.style.backgroundColor = event.type=="focus" ?
+"yellow" : "";
+}
+inputElm.addEventListener('focus',swapBGColor,false);
+inputElm.addEventListener('blur', swapBGColor,false);
+})();
+EOM
