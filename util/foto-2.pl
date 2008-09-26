@@ -6,7 +6,7 @@
 # retrieve photos and videos from camera
 # uses gphoto2 as backend
 
-=todo
+=TODO
 
 - Check existence of required external tools
   (gphoto2, exiv2, ufraw-batch, convert (or gm), xwininfo).
@@ -40,6 +40,7 @@ my %args = (
 		sudo => 'sudo',
 		max_tasks => 1,
 		mv => 0,
+		force => 0,
 		gui_mode => 0,
 
 		#file_managers => [ 'nautilus', 'Thunar', 'pcmanfm', 'ROX-Filer' ],
@@ -234,9 +235,17 @@ sub download()
 
 		my @df = split /\s+/, `df -k $args{basedir} | tail -1`;
 		my $free_space_kb = $df[3];
-		if ($total_kb > 2*$free_space_kb) {
+		if ($total_kb > $free_space_kb) {
 			print "NOT ENOUGH DISK SPACE!";
 			return ();
+		}
+		elsif ($total_kb > 2*$free_space_kb) {
+			if ($args{force}) {
+				print "LOW DISK SPACE!";
+			}
+			else {
+				return ();
+			}
 		}
 	}#
 
