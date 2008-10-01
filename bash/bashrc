@@ -116,18 +116,26 @@ alias cp='cp -i --preserve=timestamps'
 
 function rm()
 { #{{{
-	#set +o functrace
-	file_count=0
+
+	local file_count=0
+	local ok=true
 	for i in "$@"; do
 		if ! expr match "$i" "\-*" > /dev/null; then
 			if test -e "$i"; then
 				let file_count++
 			else
 				/bin/rm "$i"
-				return
+				ok=false
 			fi
 		fi
 	done; unset i
+	if ! $ok; then
+		if test $file_count -gt 0; then
+			echo "and $file_count more item(s) not rm'ed"
+		fi
+		return
+	fi
+
 	if test $file_count -eq 0; then
 		echo "no files" > /dev/stderr
 		return
@@ -136,7 +144,9 @@ function rm()
 		read -p "remove $file_count items (y/n) [y]? " answer
 		test "$answer" == "y" -o "$answer" == "" || return
 	fi
+
 	/bin/rm "$@"
+
 } #}}}
 
 fi
