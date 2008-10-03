@@ -651,7 +651,7 @@ esac
 #{{{ the command prompt
 
 export HISTCONTROL="ignoreboth"
-PS1='\[\e[0;'$prompt_color'm\]\t [$(echo $STY|cut -d . -f 2).$WINDOW] \u@\h \w $(git-branch 2> /dev/null | grep -e "^\* ")\[\e[0m\]\n\$ '
+PS1='\[\e[0;'$prompt_color'm\]\t [$(echo $STY|cut -d . -f 2).$WINDOW] \u@\h \w $(git-branch 2>/dev/null | grep -e "^\* ")$(git-status 2>/dev/null | grep -q "^# Change" && echo "[+]")\[\e[0m\]\n\$ '
 export PS1
 export THE_PS1=$PS1
 
