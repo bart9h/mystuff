@@ -149,6 +149,8 @@ function rm()
 
 } #}}}
 
+alias emerge='sudo emerge -v --ask'
+
 fi
 
 function head()
