@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # Linux kernel version: 2.6.25-gentoo-r7
-# Wed Oct 15 17:46:32 2008
+# Wed Oct 15 20:06:37 2008
 #
 CONFIG_64BIT=y
 # CONFIG_X86_32 is not set
@@ -1027,9 +1027,13 @@ CONFIG_SOUND=m
 CONFIG_SND=m
 CONFIG_SND_TIMER=m
 CONFIG_SND_PCM=m
-# CONFIG_SND_SEQUENCER is not set
-# CONFIG_SND_MIXER_OSS is not set
-# CONFIG_SND_PCM_OSS is not set
+CONFIG_SND_SEQUENCER=m
+# CONFIG_SND_SEQ_DUMMY is not set
+CONFIG_SND_OSSEMUL=y
+CONFIG_SND_MIXER_OSS=m
+CONFIG_SND_PCM_OSS=m
+CONFIG_SND_PCM_OSS_PLUGINS=y
+# CONFIG_SND_SEQUENCER_OSS is not set
 # CONFIG_SND_RTCTIMER is not set
 # CONFIG_SND_DYNAMIC_MINORS is not set
 CONFIG_SND_SUPPORT_OLD_API=y
@@ -1041,6 +1045,7 @@ CONFIG_SND_VERBOSE_PROCFS=y
 # Generic devices
 #
 # CONFIG_SND_DUMMY is not set
+# CONFIG_SND_VIRMIDI is not set
 # CONFIG_SND_MTPAV is not set
 # CONFIG_SND_SERIAL_U16550 is not set
 # CONFIG_SND_MPU401 is not set
