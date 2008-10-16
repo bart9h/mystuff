@@ -1,0 +1,8 @@
+www-client/mozilla-firefox
+dev-libs/nspr
+dev-libs/nss
+net-libs/xulrunner
+
+media-fonts/inconsolata
+
+x11-misc/pcmanfm
