@@ -42,7 +42,7 @@ function call()
 	if test "$t" != "function"; then
 		local s="$HOME/etc/bash/$f.sh"
 		if test -r "$s"; then
-			source "$s"
+			source "$s" ""
 		fi
 	fi
 
