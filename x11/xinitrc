@@ -95,6 +95,7 @@ xinitrc_doti()
 {
 	#xcompmgr -c -f -C -I .1 -O .1 &
 	gkrellm -w &
+	wmweather+ --location "22'54'00S 43'10'00W" --station "SBRJ" --metric  &
 	#wmtop -c "xterm -geometry 90x24 -e htop" &
 	#pidgin --nologin &
 }
