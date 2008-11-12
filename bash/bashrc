@@ -102,54 +102,16 @@ alias web="$HOME/etc/scripts/web.pl"
 #{{{1          aliases and functions that mask existing programs
 
 alias mv='mv -i'
+if [ "$OSTYPE" == "linux-gnu" ]; then
+alias grep='grep --exclude="*.svn-base" --devices=skip'
+alias cp='cp -i --preserve=timestamps'
+fi
 
 alias tig='tig --all'
 alias xxd='xxd -c $(( (($COLUMNS - 10)/7)*2 ))'
 alias wget='wget -c --timeout=15 --wait=0 --tries=0'
 alias xpdf='xpdf -z width'
 #alias tar='tar --exclude=.svn --exclude=CVS'
-
-if [ "$OSTYPE" == "linux-gnu" ]; then
-
-alias grep='grep --exclude="*.svn-base" --devices=skip'
-alias cp='cp -i --preserve=timestamps'
-
-function rm()
-{ #{{{
-
-	local file_count=0
-	local ok=true
-	for i in "$@"; do
-		if ! expr match "$i" "\-*" > /dev/null; then
-			if test -e "$i"; then
-				let file_count++
-			else
-				/bin/rm "$i"
-				ok=false
-			fi
-		fi
-	done; unset i
-	if ! $ok; then
-		if test $file_count -gt 0; then
-			echo "and $file_count more item(s) not rm'ed"
-		fi
-		return
-	fi
-
-	if test $file_count -eq 0; then
-		echo "no files" > /dev/stderr
-		return
-	elif test $file_count -gt 1; then
-		ls -d "$@"
-		read -p "remove $file_count items (y/n) [y]? " answer
-		test "$answer" == "y" -o "$answer" == "" || return
-	fi
-
-	/bin/rm "$@"
-
-} #}}}
-
-fi
 
 function head()
 { #{{{
