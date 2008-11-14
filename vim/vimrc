@@ -92,6 +92,7 @@ set scrolloff=2
 set foldmethod=syntax
 set foldnestmax=1
 set foldminlines=2
+set nowrap
 set nonumber
 set showcmd
 
@@ -169,8 +170,8 @@ nmap <+> <C-W>+
 nmap <-> <C-W>-
 
 " make
-"nmap <C-n> :wall<CR>:make<CR>
-nmap <C-n> :update<CR>:make %:r.o<CR>
+nmap <C-n> :wall<CR>:make<CR>
+"nmap <C-n> :update<CR>:make %:r.o<CR>
 "TODO: se terminar sem arquivo carregado, :q<CR>
 imap <C-n> <ESC><C-n>
 
