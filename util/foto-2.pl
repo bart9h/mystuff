@@ -42,7 +42,10 @@ my %args = (
 		mv => 0,
 		gui_mode => 0,
 
-		#file_managers => [ 'nautilus', 'Thunar', 'pcmanfm', 'ROX-Filer' ],
+		self => $0,
+		fifo_name => 'download-fifo',
+
+		#file_managers => 'nautilus,Thunar,pcmanfm,ROX-Filer',
 		#file_manager => undef,
 );
 
@@ -101,7 +104,10 @@ sub do_mkdir($)
 #}#
 
 sub default_args()
-{#
+{#  calculated default values for %args
+
+	#{# res = root window size
+
 	sub cached_resolution {
 		#TODO:  "cache in ~/etc/var/screen-pixels
 		'1024x768'
@@ -113,28 +119,42 @@ sub default_args()
 		? "$1x$2"
 		: cached_resolution();
 
+	#}#
+
+	#{# max_tasks = number of CPUs
 
 	my $cpu_count = 0;
 	foreach (file_read ('/proc/cpuinfo')) {
 		++$cpu_count  if /^processor\s*:\s*\d+$/;
 	}
 	$args{max_tasks} = $cpu_count ? $cpu_count : 1;
+
+	#}#
+
+	# make sure $args{self} is not a relative path,
+	# for we'll chdir later (gphoto2 don't have option for that)
+	my $pwd = `pwd`;  chomp $pwd;
+	$args{self} =~ s{^(\.\.?/)}{$pwd/$1};
+
+	# default file_manager is the first in list
+	#$args{file_manager} = (split /,/,$args{file_managers})[0];
+}#
+
+sub usage()
+{#
+	#TODO: better %args, to contain description
+	#      (borrow from other script I wrote..)
+	print 'arguments and their defaults:';
+	foreach (sort keys %args) {
+		my $val = $args{$_};
+		s/_/-/;
+		print '--'.$_.(defined $val ? "=$val" : '');
+	}
+	exit 0;
 }#
 
 sub read_args (@)
-{#
-	sub usage()
-	{#
-		#TODO: better %args, to contain description
-		#      (borrow from other script I wrote..)
-		print 'arguments and their defaults:';
-		foreach (sort keys %args) {
-			my $val = $args{$_};
-			s/_/-/;
-			print '--'.$_.(defined $val ? "=$val" : '');
-		}
-		exit 0;
-	}#
+{# read cmdline parameters into %args
 
 	my $process_args = 1;
 	foreach (@_) {
@@ -209,74 +229,20 @@ sub move_file ($)
 	}
 	else {
 		rename $_[0], $path  or die "mv $_[0] $path: $!";
+		chmod 0444, $path;
 	}
 
 	return $path;
 }#
 
-sub download()
+sub process_file ($)
 {#
-	{# check if disk has enough free space
-
-		my $total_kb = 0;
-		foreach (split /\n/, `$args{sudo} gphoto2 -L | grep '^\#'`) {
-			chomp;
-			my ($num, $name, $size_kb) =
-				/\A\#(\d+)\s+([^\s]+)\s+(\d+).*/
-				or next;
-			$total_kb += $size_kb;
-		}
-
-		if ($total_kb == 0) {
-			print "nothing found from the camera";
-			return ();
-		}
-
-		my @df = split /\s+/, `df -k $args{basedir} | tail -1`;
-		my $free_space_kb = $df[3];
-		if ($total_kb > 2*$free_space_kb) {
-			print "NOT ENOUGH DISK SPACE!";
-			return ();
-		}
-	}#
-
-	# make and change to temporary dir to download files into
-	use File::Temp;
-	my $download_dir = File::Temp::tempdir ('download-XXXXX', DIR => $args{basedir})  or die $!;
-	chdir $download_dir  or die "chdir $download_dir: $!";
-
-	x "$args{sudo} gphoto2 -P";
-	my @files = glob '*.*';
-	x "$args{sudo} chown $ENV{USER} ".join(' ', @files);
-
-	@files = map { "$download_dir/$_" } @files;
-	return ($download_dir, \@files);
-}#
-
-my $task_count = 0;
-sub post_process ($)
-{#
-
-	my @files = ();
-	foreach (@{$_[0]})
-	{#  move photos to dir based on exif data
-
-		my $path = $_;
-
-		if (-e $path  or  $args{nop}) {
-			my $shot = move_file ($path);
-			if ($shot) {
-				chmod 0444, $shot;
-				push @files, $shot;
-			}
-		}
-		else {
-			print STDERR "$path not found";
-		}
-	}#
+	#  move photo to dir based on exif data
+	if (-e $_[0]  or  $args{nop}) {
+		my $shot = move_file ($_[0]);
+	}
 	return if $args{mv};
 
-	sub mkview($)
 	{#  convert original photo to jpeg of screen size
 
 		my $shot = $_[0];
@@ -319,32 +285,49 @@ sub post_process ($)
 		}
 	}#
 
-	#{#  manage $args{max_tasks} parallel mkview() tasks
+}#
 
-	sub signal_handler($) { --$task_count  if $_[0] eq 'CHLD' }
-	$SIG{CHLD} = \&signal_handler;
+sub download_and_post_process()
+{#
+	{# `gphoto2 -L` to check if disk has enough free space
 
-	my ($count, $total) = (0, scalar @files);
-	while (@files) {
-		while (@files and $task_count < $args{max_tasks}) {
-			++$count;
-			print "\n$count/$total";
-
-			# launch new task
-			++$task_count;
-			my $file = shift @files;
-			my $pid = fork;
-			if ($pid eq 0) {
-				mkview ($file);
-				exit 0;
-			}
+		my $total_kb = 0;
+		foreach (split /\n/, `$args{sudo} gphoto2 -L | grep '^\#'`) {
+			chomp;
+			my ($num, $name, $size_kb) =
+				/\A\#(\d+)\s+([^\s]+)\s+(\d+).*/
+				or next;
+			$total_kb += $size_kb;
 		}
-		my $child = wait;
-	}
 
-	wait while ($task_count);
+		if ($total_kb == 0) {
+			print "nothing found from the camera";
+			return ();
+		}
 
-	#}#
+		my @df = split /\s+/, `df -k $args{basedir} | tail -1`;
+		my $free_space_kb = $df[3];
+		if ($total_kb > 2*$free_space_kb) {
+			print "NOT ENOUGH DISK SPACE!";
+			return ();
+		}
+	}#
+
+	# make and change to temporary dir to download files into
+	use File::Temp;
+	my $download_dir = File::Temp::tempdir ('download-XXXXX', DIR => $args{basedir})  or die $!;
+	chdir $download_dir  or die "chdir $download_dir: $!";
+
+	# create FIFO to comunicate with gphoto2 hook
+	x "mkfifo $args{fifo_name}";
+	-p $args{fifo_name}  or die "$args{fifo_name}: no such FIFO";
+
+	# call gphoto2 in background
+	x "$args{sudo} gphoto2 --hook-script $args{self} -P &";
+
+
+	chdir $args{_pwd}    or die "chdir $args{_pwd}: $!";
+	rmdir $download_dir  or die "rmdir $download_dir: $!";
 }#
 
 sub browse_results (@)
@@ -387,26 +370,94 @@ sub main_gui()
 	Gtk2->main();
 }#
 
-sub main (@)
-{#
-	$ENV{DISPLAY} = ':0'  unless defined $ENV{DISPLAY};
-	default_args();
-	read_args (@ARGV);
-	if ($args{gui_mode}) {
-		main_gui();
+sub gphoto2_hook()
+{# handle gphoto2 hook actions
+
+	if ($ENV{ACTION} eq 'download') {
+
+		my $file = $ENV{ARGUMENT};
+		x "chown $ENV{USER} \"$file\"; chmod ugo-r \"$file\"";
+		my $pipe = $args{fifo_name};
+		-p $pipe  or die "$pipe: not a fifo"; #TODO: uncomment
+
+		open PIPE, ">$pipe"  or die "open $pipe: $!";
+		print PIPE "`pwd`/$file\n"  or die "write $pipe: $!";
+		close PIPE;
+	}
+}#
+
+my $task_count = 0;
+sub process_pipe()
+{#  manage $args{max_tasks} parallel mkview() tasks
+
+	sub signal_handler($) { --$task_count  if $_[0] eq 'CHLD' }
+	$SIG{CHLD} = \&signal_handler;
+
+	my ($count, $total) = (0, scalar @files);
+
+	open PIPE, $args{fifo_name}  or die "open $args{fifo_filename}: $!";
+	while (!eof PIPE) {
+		while ($task_count < $args{max_tasks}) {
+			local $_ = <>;
+			chomp;
+			my $file = "$download_dir/$_";
+
+			++$count;
+			print "\n$count/$total: $_";
+
+			# launch new task
+			++$task_count;
+			if (fork == 0) {
+				mkview ($file);
+				exit 0;
+			}
+		}
+		wait;
+	}
+	close PIPE;
+
+	wait while ($task_count);
+
+}#
+
+sub import_files()
+{#  import files from camera or cmdline
+
+	if (fork == 0) {
+		process_pipe();
+		exit 0;
+	}
+
+	if (exists $args{files}) {
+		my $count = scalar @{$args{files}};
+		foreach (@{$args{files}}) {
+			if (-e $_) {
+				post_process ($_);
+			}
+			else {
+				print STDERR "$_ not found";
+			}
+		}
 	}
 	else {
-		-d $args{basedir}  or die "$args{basedir}: $!";
+	}
+}#
 
-		if (exists $args{files}) {
-			post_process ($args{files});
+sub main (@)
+{#
+	if (scalar @ARGV == 0 and $ENV{ACTION}) {
+		gphoto2_hook();
+	}
+	else {
+		#$ENV{DISPLAY} = ':0'  unless defined $ENV{DISPLAY};
+		default_args();
+		read_args (@ARGV);
+		if ($args{gui_mode}) {
+			main_gui();
 		}
 		else {
-			my ($dir, $files) = download();
-			if ($dir) {
-				post_process ($files);
-				rmdir $dir  or die "rmdir $dir: $!";
-			}
+			-d $args{basedir}  or die "$args{basedir}: $!";
+			import_files();
 		}
 	}
 }#
