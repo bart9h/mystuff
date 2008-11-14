@@ -238,6 +238,7 @@ alias mpq='mplayer -nosound -osdlevel 0'
 alias mpr='ls -Q | rl | xargs mplayer -fs'
 alias mprq='ls -Q | rl | xargs mplayer -fs -ao null'
 alias ponte='mplayer mms://200.246.9.2/pontelive'
+alias mistureba='tsocks mplayer http://74.86.142.195:8690'
 
 function v() {
 	if test "$1"; then
@@ -572,7 +573,6 @@ export LS_COLORS='no=00:fi=00:di=01;31:ln=01;36:pi=40;33:so=01;35:bd=40;33;01:cd
 
 alias tetrinet='tetrinet -noslide -fancy bart9h games03.click21.com.br'
 
-alias k='sudo kbdrate -r 30 -d 200'
 alias black='xsetroot -solid black'
 
 
@@ -629,7 +629,7 @@ case "$OSTYPE" in
 		ulimit -m $(( $MemTotal / 2 ))
 
 		# virtual memory          (kbytes, -v) unlimited
-		ulimit -v $(( $SwapTotal + $MemTotal / 2 ))
+		ulimit -v $(( 3 * $MemTotal / 4 ))
 	;;
 esac
 
