@@ -1,0 +1,10 @@
+dev-util/tig
+games-strategy/ufo-ai
+media-fonts/inconsolata
+x11-misc/pcmanfm
+x11-plugins/wmhdplop
+
+www-client/mozilla-firefox
+dev-libs/nspr
+dev-libs/nss
+net-libs/xulrunner

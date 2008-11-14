@@ -5,6 +5,7 @@
 set nocompatible
 set noswapfile
 set noignorecase
+set modeline
 
 
 " {{{1 behaviour

@@ -5,6 +5,7 @@ function eset()
 		rm "$tmp" || return
 	fi
 
+	local i
 	for i in "$@"; do
 		echo "export $i=${!i}" >> "$tmp"
 	done

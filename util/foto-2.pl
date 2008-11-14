@@ -6,7 +6,7 @@
 # retrieve photos and videos from camera
 # uses gphoto2 as backend
 
-=todo
+=TODO
 
 - Check existence of required external tools
   (gphoto2, exiv2, ufraw-batch, convert (or gm), xwininfo).
@@ -40,6 +40,7 @@ my %args = (
 		sudo => 'sudo',
 		max_tasks => 1,
 		mv => 0,
+		force => 0,
 		gui_mode => 0,
 
 		self => $0,
