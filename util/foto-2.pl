@@ -183,7 +183,7 @@ sub exif2path ($)
 	my $name = lc $_[0];  $name =~ s{^.*/([^/]+)$}{$1};
 	return "$dir/"
 		#.sprintf ('%04d%02d%02d-', $year, $mon, $mday)
-		.sprintf ('%02d:%02d:%02d-', $hour, $min, $sec)
+		.sprintf ('%02d%02d%02d-', $hour, $min, $sec)
 		.$name;
 }#
 
