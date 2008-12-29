@@ -452,7 +452,7 @@ alias mame='xmame.x11 -rompath .'
 
 function mkcd() { mkdir "$1" && cd "$1"; }
 function cd..() {
-	dir="$PWD"
+	local dir="$PWD"
 	cd .. || return
 	read -p "rm -rf \"$dir\" (y/[n])? " || return
 	test "$REPLY" == "y" -o "$REPLY" == "r" || return
@@ -479,8 +479,10 @@ function cdp() {
 }
 
 function bk() {
-	bkdir="$HOME/BACKUP"
+	local bkdir="$HOME/BACKUP"
+	local n
 	let n=$( echo $1 | wc -c ) - 1
+	local dir
 	if test / == $( echo $1 | cut -b $n ); then
 		dir="$( echo $1 | cut -b 1-$(($n - 1)) )"
 	else
@@ -488,8 +490,8 @@ function bk() {
 	fi
 	
 	if test -d "$dir"; then
-		basename="$bkdir/$dir.`date +%Y-%m-%d`"
-		name="$basename.tgz"
+		local basename="$bkdir/$dir.`date +%Y-%m-%d`"
+		local name="$basename.tgz"
 		if test -e "$name"; then
 			for i in a b c d e f g h i j; do
 				name="$basename$i".tgz
