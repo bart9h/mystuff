@@ -35,7 +35,7 @@ my %args = (
 		jpeg_quality => 80,
 
 		basedir => $ENV{HOME}.'/fotos',
-		dir_fmt => '%04d/%02d-%02d',
+		dir_fmt => '%04d-%02d-%02d',
 		nop => 0,
 		sudo => 'sudo',
 		max_tasks => 1,
@@ -165,22 +165,25 @@ sub read_args (@)
 
 sub exif2path ($)
 {#
+	my ($source_file) = @_;
+
+	my $ext = $source_file =~ /\.([^.]+)$/ ? $1
+		: die "no extension in \"$source_file\"";
+
 	# get timestamp from EXIF data
 	my ($year, $mon, $mday, $hour, $min, $sec) =
-		`exiv2 $_[0]`
+		`exiv2 $source_file`
 		=~ /^Image timestamp : (\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})$/m
-		or die "no exif info for file $_[0]";
+		or die "no exif info for file \"$source_file\"";
 
-	# basedir/shot/YYYY/MM/DD/
-	my $dir = $args{basedir}.'/shot/'
-		.sprintf $args{dir_fmt}, $year, $mon, $mday;
+	my $dir = $args{basedir}.'/'.sprintf $args{dir_fmt}, $year, $mon, $mday;
 	do_mkdir $dir;
 
-	my $name = lc $_[0];  $name =~ s{^.*/([^/]+)$}{$1};
-	return "$dir/"
-		#.sprintf ('%04d%02d%02d-', $year, $mon, $mday)
-		.sprintf ('%02d%02d%02d-', $hour, $min, $sec)
-		.$name;
+	foreach ('a' .. 'z') {
+		my $path = sprintf '%s/%02d%02d%02d%s.%s', $dir, $hour, $min, $sec, $_, lc $ext;
+		return $path unless -e $path;
+	}
+	die;
 }#
 
 sub move_file ($)
@@ -258,8 +261,43 @@ sub download()
 	return ($download_dir, \@files);
 }#
 
+sub post_process_file ($)
+{#
+	sub mkview($)
+	{#  convert original photo to jpeg of screen size
+
+		my $shot = $_[0];
+		if ($shot =~ /^(.*)\.([^\.]+)$/) {
+			my ($pathbase, $ext) = ($1, $2);
+
+			my $view = "$pathbase-$args{res}.jpg";
+
+			sub exif ($)
+			{#
+				local $_ = `exiv2 "$_[0]"`;
+				s/$_[0]//m;
+				$_;
+			}#
+			next if -e $view and (exif $shot eq exif $view);
+
+			if ($ext eq 'cr2') {
+				x "nice ufraw-batch --wb=camera --exposure=auto --size=$args{res} --out-type=jpeg --compression=$args{jpeg_quality} \"$shot\"";
+			}
+			elsif ($ext eq 'jpg') {
+				x "nice gm convert -quality $args{jpeg_quality} -resize $args{res} \"$shot\" \"$view\""
+					." && exiv2 insert -l\"`dirname \"$shot\"`\" -S.jpg \"$view\"";
+			}
+			else {
+				print "warning: $shot: unknown file type";
+			}
+		}
+	}#
+
+	mkview ($_[0]);
+}#
+
 my $task_count = 0;
-sub post_process ($)
+sub move_and_post_process_files ($)
 {#
 
 	my @files = ();
@@ -281,49 +319,6 @@ sub post_process ($)
 	}#
 	return if $args{mv};
 
-	sub mkview($)
-	{#  convert original photo to jpeg of screen size
-
-		my $shot = $_[0];
-		if ($shot =~ /^(.*)\.([^\.]+)$/) {
-			my ($base, $ext) = ($1, $2);
-			my $view = "$base.jpg";
-			$view =~ s{/shot/}{/$args{res}/};
-
-			sub exif ($)
-			{#
-				local $_ = `exiv2 "$_[0]"`;
-				s/$_[0]//m;
-				$_;
-			}#
-
-			next if -e $view and ($ext eq 'mpg' or exif $shot eq exif $view);
-
-			my $dir = `dirname "$view"`;
-			chomp $dir;
-			do_mkdir $dir;
-
-			if ($ext eq 'cr2') {
-				x "nice ufraw-batch --wb=camera --exposure=auto --size=$args{res} --out-type=jpeg --compression=$args{jpeg_quality} --out-path=\"$dir\" \"$shot\"";
-			}
-			elsif ($ext eq 'jpg') {
-				x "nice gm convert -quality $args{jpeg_quality} -resize $args{res} \"$shot\" \"$view\""
-					." && exiv2 insert -l\"`dirname \"$shot\"`\" -S.jpg \"$view\"";
-			}
-			elsif ($ext eq 'mpg') {
-				if (!$args{nop}) {
-					symlink $shot, $view;
-				}
-				else {
-					print "ln -s $shot $view";
-				}
-			}
-			else {
-				print "warning: $shot: unknown file type";
-			}
-		}
-	}#
-
 	#{#  manage $args{max_tasks} parallel mkview() tasks
 
 	sub signal_handler($) { --$task_count  if $_[0] eq 'CHLD' }
@@ -340,7 +335,7 @@ sub post_process ($)
 			my $file = shift @files;
 			my $pid = fork;
 			if ($pid eq 0) {
-				mkview ($file);
+				post_process_file ($file);
 				exit 0;
 			}
 		}
@@ -381,7 +376,7 @@ sub browse_results (@)
 
 sub main_gui()
 {#
-	use Gtk2 '-init';
+	import Gtk2 '-init';
 
 	my $window = Gtk2::Window->new;
 	$window->signal_connect (delete_event => sub {Gtk2->main_quit; 1});
@@ -404,12 +399,12 @@ sub main (@)
 		-d $args{basedir}  or die "$args{basedir}: $!";
 
 		if (exists $args{files}) {
-			post_process ($args{files});
+			move_and_post_process_files ($args{files});
 		}
 		else {
 			my ($dir, $files) = download();
 			if ($dir) {
-				post_process ($files);
+				move_and_post_process_files ($files);
 				rmdir $dir  or die "rmdir $dir: $!";
 			}
 		}
