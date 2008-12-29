@@ -203,12 +203,12 @@ sub move_file ($)
 	}
 
 	# move the file to it's new place/name
-	my $msg = "mv $_[0] $path";
+	my $cmd = join ' ', ($args{mv} ? 'mv' : 'cp'), $_[0], $path;
 	if ($args{nop}) {
-		print $msg;
+		print $cmd;
 	}
 	else {
-		rename $_[0], $path  or die "mv $_[0] $path: $!";
+		x $cmd;
 	}
 
 	return $path;
