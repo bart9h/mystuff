@@ -3,7 +3,7 @@
 
 
 # use Ctrl-Alt-backslash to reload this file
-Control Mod1 backslash :MacroCmd {Reconfigure} {ExecCommand fbsetbg -l; invalidate}
+Control Mod4 Delete :MacroCmd {Reconfigure} {ExecCommand fbsetbg -l; invalidate}
 
 
 OnWindow Mod4 Mouse1 :StartMoving
@@ -38,6 +38,8 @@ Mod4 s :StickWindow
 Mod4 BackSpace :Close
 #Mod4 Escape :Close
 
+Mod4 u :Raise
+Mod4 p :Lower
 Mod1 F2  :StickWindow
 Mod1 F3  :MinimizeWindow
 Mod1 F12 :MinimizeWindow
@@ -114,25 +116,35 @@ Control Mod1 Shift slash :SendToWorkspace 4
 #Mod4 KP_Prior :MoveTo -0  0
 #Mod4 KP_Next  :MoveTo -0 -0
 
-Shift KP_Right :MoveRight  10
-Shift KP_Left  :MoveLeft   10
-Shift KP_Up    :MoveUp     10
-Shift KP_Down  :MoveDown   10
+Mod4 Control Right :MoveRight  1
+Mod4 Control Left  :MoveLeft   1
+Mod4 Control Up    :MoveUp     1
+Mod4 Control Down  :MoveDown   1
 
-Mod1 KP_Right :Resize  1  0
-Mod1 KP_Left  :Resize -1  0
-Mod1 KP_Up    :Resize  0 -1
-Mod1 KP_Down  :Resize  0  1
+Mod4 Right :MoveRight  10
+Mod4 Left  :MoveLeft   10
+Mod4 Up    :MoveUp     10
+Mod4 Down  :MoveDown   10
 
-Mod1 Shift KP_Right :Resize  10   0
-Mod1 Shift KP_Left  :Resize -10   0
-Mod1 Shift KP_Up    :Resize   0 -10
-Mod1 Shift KP_Down  :Resize   0  10
+Mod4 Shift Right :MoveRight  50
+Mod4 Shift Left  :MoveLeft   50
+Mod4 Shift Up    :MoveUp     50
+Mod4 Shift Down  :MoveDown   50
 
-Mod1 Shift Control KP_Right :Resize  50   0
-Mod1 Shift Control KP_Left  :Resize -50   0
-Mod1 Shift Control KP_Up    :Resize   0 -50
-Mod1 Shift Control KP_Down  :Resize   0  50
+Mod4 Mod1 Control Right :Resize  1  0
+Mod4 Mod1 Control Left  :Resize -1  0
+Mod4 Mod1 Control Up    :Resize  0 -1
+Mod4 Mod1 Control Down  :Resize  0  1
+
+Mod4 Mod1 Right :Resize  10   0
+Mod4 Mod1 Left  :Resize -10   0
+Mod4 Mod1 Up    :Resize   0 -10
+Mod4 Mod1 Down  :Resize   0  10
+
+Mod4 Mod1 Shift Right :Resize  50   0
+Mod4 Mod1 Shift Left  :Resize -50   0
+Mod4 Mod1 Shift Up    :Resize   0 -50
+Mod4 Mod1 Shift Down  :Resize   0  50
 
 # xwit as workaround for pointer changing focus w/o moving (the window moves), in mousefocus mode
 #Shift KP_Right :MacroCmd {ExecCommand xwit -rwarp  10   0} {Move  10   0}
@@ -140,32 +152,32 @@ Mod1 Shift Control KP_Down  :Resize   0  50
 #Shift KP_Up    :MacroCmd {ExecCommand xwit -rwarp   0 -10} {Move   0 -10}
 #Shift KP_Down  :MacroCmd {ExecCommand xwit -rwarp   0  10} {Move   0  10}
 
-Control Shift KP_Right :Move 1 0
-Control Shift KP_Left :Move -1 0
-Control Shift KP_Up :Move 0 -1
-Control Shift KP_Down :Move 0 1
+#Control Shift KP_Right :Move 1 0
+#Control Shift KP_Left :Move -1 0
+#Control Shift KP_Up :Move 0 -1
+#Control Shift KP_Down :Move 0 1
 
 
 # {{{1          move pointer
 
 # move pointer to top-left corner (0, 0)
-Mod4 KP_7 :ExecCommand xwit -rwarp -9999 -9999
-Mod4 KP_5: ExecCommand xwit -rwarp -9999 -9999; xwit -rwarp 1300 800
+#Mod4 KP_7 :ExecCommand xwit -rwarp -9999 -9999
+#Mod4 KP_5: ExecCommand xwit -rwarp -9999 -9999; xwit -rwarp 1300 800
 
 # move pointer around
-Mod4 Right :ExecCommand xwit -rwarp  40   0
-Mod4 Left  :ExecCommand xwit -rwarp -40   0
-Mod4 Up    :ExecCommand xwit -rwarp   0 -40
-Mod4 Down  :ExecCommand xwit -rwarp   0  40
-Control Mod4 Right :ExecCommand xwit -rwarp  4  0
-Control Mod4 Left  :ExecCommand xwit -rwarp -4  0
-Control Mod4 Up    :ExecCommand xwit -rwarp  0 -4
-Control Mod4 Down  :ExecCommand xwit -rwarp  0  4
+#Mod4 Right :ExecCommand xwit -rwarp  40   0
+#Mod4 Left  :ExecCommand xwit -rwarp -40   0
+#Mod4 Up    :ExecCommand xwit -rwarp   0 -40
+#Mod4 Down  :ExecCommand xwit -rwarp   0  40
+#Control Mod4 Right :ExecCommand xwit -rwarp  4  0
+#Control Mod4 Left  :ExecCommand xwit -rwarp -4  0
+#Control Mod4 Up    :ExecCommand xwit -rwarp  0 -4
+#Control Mod4 Down  :ExecCommand xwit -rwarp  0  4
 
-Control Shift Mod4 Right :ExecCommand xwit -rwarp  1  0
-Control Shift Mod4 Left  :ExecCommand xwit -rwarp -1  0
-Control Shift Mod4 Up    :ExecCommand xwit -rwarp  0 -1
-Control Shift Mod4 Down  :ExecCommand xwit -rwarp  0  1
+#Control Shift Mod4 Right :ExecCommand xwit -rwarp  1  0
+#Control Shift Mod4 Left  :ExecCommand xwit -rwarp -1  0
+#Control Shift Mod4 Up    :ExecCommand xwit -rwarp  0 -1
+#Control Shift Mod4 Down  :ExecCommand xwit -rwarp  0  1
 
 
 # {{{1          programs
