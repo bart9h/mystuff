@@ -103,16 +103,12 @@ sub do_mkdir($)
 
 sub default_args()
 {#
-	sub cached_resolution {
+	sub get_resolution {
 		#TODO:  "cache in ~/etc/var/screen-pixels
-		'1024x768'
+		`xdpyinfo` =~ /\b(\d{2,}x\d{2,})\b/s ? $1 : '1024x768';
 	}
 
-	#TODO: use xdpyinfo instead
-	$args{res} =
-		`xwininfo -root` =~ /\bWidth:\s+(\d+)\b.*\bHeight:\s+(\d+)\b/s
-		? "$1x$2"
-		: cached_resolution();
+	$args{res} = get_resolution();
 
 
 	my $cpu_count = 0;
