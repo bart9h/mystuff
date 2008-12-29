@@ -104,10 +104,7 @@ let perl_extended_vars=1
 
 if has("gui_running")
 	set guioptions -=T
-"	set guioptions -=m
-"	set guifont=Monospace\ 12
-	set guifont=Bitstream\ Vera\ Sans\ Mono\ 11
-"	set guifont=Lucida\ Sans\ Typewriter:style=Bold
+	set guifont=Inconsolata\ 11
 "	hi Normal guifg=gray guibg=#202030
 	set bg=light
 	colo blue
