@@ -182,6 +182,8 @@ nmap M :Man <C-R><C-W><CR>
 
 " {{{1 commands
 
+command! Conflict /^\(=======$\|<<<<<<< \|>>>>>>> \)/
+
 command! -bar -nargs=1 DoMan %!/usr/bin/man -a -S 3:2:1:5:8:4:7:6:9 -P cat <args>
 command! -bar -nargs=1 Man
 \   new
