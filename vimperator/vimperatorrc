@@ -10,6 +10,8 @@ set nextpattern+=^\s*siguiente\s*$
 set nextpattern+=^\s*pr.xim[oa]\s*$
 set previouspattern+=^\s*anterior\s*$
 
+source etc/vimperator/plugin/direct_delb.js
+
 "autocmd LocationChange .* :js modes.passAllKeys = /mail\.google\.com/.test(buffer.URL) || /google\.com\/reader\//.test(buffer.URL)
 
 "autocmd PageLoad .* :js modes.passAllKeys = /mail\.google\.com/.test(buffer.URL)
