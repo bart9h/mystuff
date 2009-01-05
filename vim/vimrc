@@ -4,16 +4,20 @@
 
 set nocompatible
 set noswapfile
-set noignorecase
 set modeline
 
 
 " {{{1 behaviour
 
-set backspace="indent,start"
+set title
+set ignorecase
+set smartcase
+set backspace="indent,eol,start"
 set bs=2
 set wildmenu
+set wildmode=list:longest
 "set tildeop
+set hidden
 
 " {{{1 tab
 
@@ -36,14 +40,17 @@ set cinoptions=>s,e0,n0,f0,{0,}0,^0,:0,=s,l0,b0,g0,hs,ps,ts,is,+s,c3,C0,/0,(2s,u
 
 " {{{1 options
 
-set wildmenu
+set history=1000
 set visualbell t_vb=
 if version >= 700
 	let loaded_matchparen=1
+	"let load_doxygen_syntax=1
 	set diffopt+=vertical
 endif
 
 set grepprg=grep\ -nH\ $*
+filetype on
+filetype plugin on
 filetype indent on
 let g:netrw_sort_sequence="[\/]$,*,.bak$,.o$,.swp$,.obj$"
 let g:netrw_list_hide= '^\.[^.].*'
@@ -97,6 +104,9 @@ set nowrap
 set nonumber
 set showcmd
 
+autocmd InsertLeave * se nocursorline
+autocmd InsertEnter * se cursorline
+
 " nao pisca sobre ([{pares}])
 let loaded_matchparen=1
 
@@ -128,6 +138,9 @@ endif
 
 
 " {{{1 key mappings
+
+noremap ' `
+noremap ` '
 
 nmap <S-tab> :tabnext<CR>
 
