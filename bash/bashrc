@@ -178,7 +178,7 @@ alias gc='git commit'
 alias gca='git commit -a'
 alias gci='git commit --interactive'
 alias gco='git checkout'
-alias gs='git status -a'
+alias gs='git status'
 alias gd='git diff'
 alias gsac='git stash apply && git stash clear'
 alias gsd='git_stash_do "svn dcommit"'
@@ -353,31 +353,6 @@ alias jpg2raw='test -d shot && cd shot; for i in *; do test -f ../`echo $i|sed "
 
 alias kb='~/etc/desktop/switch-kbmap.sh'
 
-job()  # manage background jobs
-{ #{{{
-	spool_dir="/tmp/jobs"
-
-	if test -z "$*"; then
-		ls "$spool_dir"
-		return
-	fi
-
-	let max_jobs=`show cpus`+1
-
-	test -d "$spool_dir" || mkdir "$spool_dir" || exit
-
-	while test $( ls "$spool_dir" | wc -l ) -ge $max_jobs; do
-		sleep 1s
-	done
-
-	(
-		job=$( mktemp "$spool_dir"/job.XXXXXX )
-		test -f "$job" || exit
-		"$@"
-		rm "$job"
-	)&
-} #}}}
-
 function lddr()  # ldd "recursivo": faz ldd das bibliotecas nao-padrao mostradas pelo ldd
 { #{{{
 	for i in "$@"; do
@@ -470,7 +445,7 @@ alias ntop='sudo jnettop'
 alias g9='gkrellm -w -s 9h &'
 alias irc='irssi -n barrett9h -c irc.freenode.net'
 #alias lm='nice lame -m s -v -h -V 2 -b 32 -B 320'
-alias lm='for i in *.wav; do nice lame -v "$i" "`echo $i | sed s/wav$/mp3/`"; done; unset i'
+alias lm='for i in *.wav; do job nice lame -v "$i" "`echo $i | sed s/wav$/mp3/`"; done; unset i'
 alias treo='nice lame -m j -v -f'
 #alias v='gvim -geom 80x50 +"set guioptions-=T" +"set guioptions-=m" -font "-misc-fixed-medium-r-semicondensed-*-*-120-*-*-c-*-iso8859-1"'
 
@@ -478,7 +453,7 @@ alias mame='xmame.x11 -rompath .'
 
 function mkcd() { mkdir "$1" && cd "$1"; }
 function cd..() {
-	dir="$PWD"
+	local dir="$PWD"
 	cd .. || return
 	read -p "rm -rf \"$dir\" (y/[n])? " || return
 	test "$REPLY" == "y" -o "$REPLY" == "r" || return
@@ -505,8 +480,10 @@ function cdp() {
 }
 
 function bk() {
-	bkdir="$HOME/BACKUP"
+	local bkdir="$HOME/BACKUP"
+	local n
 	let n=$( echo $1 | wc -c ) - 1
+	local dir
 	if test / == $( echo $1 | cut -b $n ); then
 		dir="$( echo $1 | cut -b 1-$(($n - 1)) )"
 	else
@@ -514,8 +491,8 @@ function bk() {
 	fi
 	
 	if test -d "$dir"; then
-		basename="$bkdir/$dir.`date +%Y-%m-%d`"
-		name="$basename.tgz"
+		local basename="$bkdir/$dir.`date +%Y-%m-%d`"
+		local name="$basename.tgz"
 		if test -e "$name"; then
 			for i in a b c d e f g h i j; do
 				name="$basename$i".tgz
@@ -576,32 +553,32 @@ set -o noclobber
 SwapTotal=$( cat /proc/meminfo | sed '/^SwapTotal/!d;s/^[^0-9]*\([0-9]\+\).*/\1/' )
 
 # core file size          (blocks, -c) 0
-ulimit -c $(( 32 * 1024 ))
+ulimit -S -c $(( 32 * 1024 ))
 
 # max locked memory       (kbytes, -l) unlimited
-ulimit -l $(( 512 * 1024 )) 2>/dev/null  #FIXME: check if I can
+ulimit -S -l $(( 512 * 1024 )) 2>/dev/null  #FIXME: check if I can
 
 case "$OSTYPE" in
 	*linux*)
 		# file size               (blocks, -f) unlimited
-		ulimit -f $(( 20 * 1024*1024 ))
+		ulimit -S -f $(( 20 * 1024*1024 ))
 
 		# max user processes              (-u) unlimited
-		ulimit -u 1024
+		ulimit -S -u 1024
 
 		# file locks                      (-x) unlimited
 		if [ $BASH_VERSINFO -ge 3 ]; then
-			ulimit -x 128
+			ulimit -S -x 128
 		fi
 
 		# data seg size           (kbytes, -d) unlimited
-		ulimit -d $(( $MemTotal / 2 ))
+		ulimit -S -d $(( $MemTotal / 2 ))
 
 		# max memory size         (kbytes, -m) unlimited
-		ulimit -m $(( $MemTotal / 2 ))
+		ulimit -S -m $(( $MemTotal / 2 ))
 
 		# virtual memory          (kbytes, -v) unlimited
-		ulimit -v $(( 3 * $MemTotal / 4 ))
+		ulimit -S -v $(( ( 3 * $MemTotal ) / 4 ))
 	;;
 esac
 

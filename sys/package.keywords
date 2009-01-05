@@ -1,10 +1,42 @@
+app-editors/leafpad
+>=app-vim/alternate-2.18
 dev-util/tig
+games-arcade/kuklomenos **
+games-fps/nprquake-sdl **
+games-fps/tenebrae **
+games-misc/sdljoytest
 games-strategy/ufo-ai
 media-fonts/inconsolata
+media-gfx/gliv
+media-libs/gavl
+media-video/came
+sys-apps/preload
+x11-misc/bbweather **
 x11-misc/pcmanfm
+x11-misc/xwit
 x11-plugins/wmhdplop
+
+www-client/midori **
+net-libs/webkit-gtk
+
+>=media-gfx/hugin-0.7.0
+media-libs/libpano13
+>=media-gfx/enblend-3.0_p20080807
+media-gfx/autopano-sift-C
+
+=x11-wm/awesome-3.0
+dev-libs/libev
+>=x11-libs/libxcb-1.1
+>=x11-proto/xcb-proto-1.2
+>=dev-util/cmake-2.6
+>=x11-libs/xcb-util-0.3
 
 www-client/mozilla-firefox
 dev-libs/nspr
 dev-libs/nss
 net-libs/xulrunner
+
+# top10
+media-libs/lib3ds
+#media-libs/cal3d
+#media-libs/plib

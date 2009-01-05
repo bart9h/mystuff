@@ -1,1 +1,21 @@
-dev-util/git doc tk subversion
+app-cdr/graveman dvdr flac mp3 vorbis
+app-editors/vim vim-pager cscope -python
+app-editors/gvim gtk cscope
+app-office/lyx latex
+app-text/poppler-bindings cairo
+dev-util/git doc tk subversion curl
+media-gfx/hugin enblend
+=media-gfx/hugin-0.7.0 enblend
+media-gfx/pstoedit plotutils
+media-libs/flac ogg
+media-libs/libquicktime aac dv ffmpeg lame
+media-libs/libsamplerate sndfile
+media-libs/libsndfile flac
+media-libs/libao alsa
+media-sound/sox alsa ao encode ffmpeg flac id3tag libsamplerate mad ogg sndfile ladspa amrnb amrwb
+media-video/avidemux aac alsa amrnb encode gtk lame libsamplerate truetype vorbis x264 xv xvid
+media-video/ffmpeg X ieee1394 imlib ogg aac a52 amr
+net-im/pidgin gtk gnutls dbus sasl
+x11-libs/cairo xcb
+x11-libs/openmotif jpeg
+x11-libs/wxGTK X opengl sdl

@@ -94,11 +94,17 @@ xinitrc_bia()
 xinitrc_doti()
 {
 	#xcompmgr -c -f -C -I .1 -O .1 &
+	(
 	gkrellm -w &
+	sleep 1
 	wmweather+ --station "SBRJ" --location "22'54'00S 43'10'00W" --metric  &
+	sleep 1
 	wmweather+ --station "SBSP" --location "23'37'40S 46'15'00W" --metric  &
+	sleep 1
 	wmweather+ --station "SAEZ" --location "34'48'00S 58'32'00W" --metric  &
+	sleep 1
 	wmweather+ --station "SAAR" --location "32'55'00S 60'47'00W" --metric  &
+	) &
 	#wmtop -c "xterm -geometry 90x24 -e htop" &
 	#pidgin --nologin &
 }
@@ -195,6 +201,8 @@ esac
 if ! pidof xmms2d; then
 	( sleep 6s && exec xmms2d ) &
 fi
+
+ivman-launch --exit-with-session xinit &
 
 { # window manager
 

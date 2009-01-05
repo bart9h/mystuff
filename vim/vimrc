@@ -4,7 +4,14 @@
 
 set nocompatible
 set noswapfile
+
+" {{{1  overwriteable by modeline
+
+set foldmethod=syntax
+set noignorecase
+
 set modeline
+set modelines=3
 
 
 " {{{1 behaviour
@@ -74,7 +81,7 @@ command! FileTypePerl setlocal makeprg=perl\ -c\ %
 
 "autocmd! BufEnter * resize
 autocmd! BufWritePost ~/.vimrc,$HOME/etc/vim/vimrc source ~/.vimrc
-"autocmd! BufWritePost ~/.vim/colors/my-elflord.vim,$HOME/etc/vim/colors/my-elflord.vim colo my-elflord
+autocmd! BufWritePost ~/.vim/colors/my-elflord.vim,~/etc/vim/colors/my-elflord.vim colo my-elflord
 "autocmd! BufWritePost /etc/apache2/httpd.conf !sudo sh /etc/rc.d/rc.httpd restart
 
 "{{{2 vim -b : edit binary using xxd-format!
@@ -98,7 +105,6 @@ set ruler
 set winminheight=0
 set hlsearch
 set scrolloff=2
-set foldmethod=syntax
 set foldnestmax=1
 set foldminlines=2
 set nowrap
@@ -116,16 +122,15 @@ let perl_extended_vars=1
 
 if has("gui_running")
 	set guioptions -=T
-"	set guioptions -=m
-"	set guifont=Monospace\ 12
-	set guifont=Bitstream\ Vera\ Sans\ Mono\ 11
-"	set guifont=Lucida\ Sans\ Typewriter:style=Bold
+	set guifont=Inconsolata\ 11
 "	hi Normal guifg=gray guibg=#202030
 	set bg=light
 	colo blue
 else
 	set background=dark
 	hi Cursor ctermbg=yellow ctermfg=black
+	"colo dark-256
+	colo my-elflord
 endif
 
 " hi link cComment Comment
@@ -142,6 +147,8 @@ endif
 
 noremap ' `
 noremap ` '
+
+nnoremap <c-d> <c-d><c-d>
 
 nmap <S-tab> :tabnext<CR>
 
@@ -198,6 +205,8 @@ nmap M :Man <C-R><C-W><CR>
 
 
 " {{{1 commands
+
+command! Conflict /^\(=======$\|<<<<<<< \|>>>>>>> \)/
 
 command! -bar -nargs=1 DoMan %!/usr/bin/man -a -S 3:2:1:5:8:4:7:6:9 -P cat <args>
 command! -bar -nargs=1 Man

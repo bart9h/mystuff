@@ -11,27 +11,6 @@ if exists("syntax_on")
 endif
 
 
-" {{{1  my
-
-let g:colors_name = "my-elflord"
-
-hi TabLineSel    ctermfg=Gray      ctermbg=DarkBlue
-hi TabLine       ctermfg=DarkBlue  ctermbg=Gray
-hi TabLineFill   ctermfg=Gray      ctermbg=None
-
-hi StatusLine    ctermbg=Gray      ctermfg=DarkBlue
-hi StatusLineNC  ctermbg=DarkBlue  ctermfg=Gray
-
-hi Cursor    ctermfg=Red ctermbg=Blue
-hi CursorLine    ctermfg=Red ctermbg=Blue
-hi CursorColumn	ctermfg=Red ctermbg=Blue
-
-hi LineNr ctermfg=DarkRed
-hi Folded ctermfg=DarkRed
-
-hi Search ctermbg=magenta guibg=#b000b0
-
-
 " {{{1 original
 
 hi Normal		guifg=cyan			guibg=black
@@ -72,6 +51,28 @@ hi link SpecialChar Special
 hi link Delimiter Special
 hi link SpecialComment Special
 hi link Debug Special
+
+
+" {{{1  my
+
+let g:colors_name = "my-elflord"
+
+hi TabLineSel    ctermfg=DarkGray  ctermbg=DarkCyan
+hi TabLine       ctermfg=Cyan      ctermbg=DarkGray
+hi TabLineFill   ctermfg=Black  ctermbg=none
+
+hi StatusLineNC  ctermfg=DarkGray  ctermbg=Cyan
+hi StatusLine    ctermfg=Cyan      ctermbg=DarkGray
+
+hi Cursor    ctermfg=Red ctermbg=Blue
+hi CursorLine    ctermfg=Red ctermbg=Blue
+hi CursorColumn	ctermfg=Red ctermbg=Blue
+
+hi LineNr ctermfg=DarkRed
+hi Folded ctermfg=blue cterm=bold
+hi Comment  ctermfg=darkgray  guifg=#80a0ff
+
+hi Search ctermbg=magenta guibg=#b000b0
 
 
 " {{{1 reference

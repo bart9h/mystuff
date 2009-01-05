@@ -11,7 +11,7 @@ use Data::Dumper;
 #{# global data
 
 my %reqs =
-(	#{# required external tools
+(	#{# required packages
 
 	# X11
 	xosd => { bin => 'osd_cat', deb => 'xosd-bin' },
