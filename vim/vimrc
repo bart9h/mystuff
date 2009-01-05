@@ -4,8 +4,14 @@
 
 set nocompatible
 set noswapfile
+
+" {{{1  overwriteable by modeline
+
+set foldmethod=syntax
 set noignorecase
+
 set modeline
+set modelines=3
 
 
 " {{{1 behaviour
@@ -66,7 +72,7 @@ command! FileTypePerl setlocal makeprg=perl\ -c\ %
 
 "autocmd! BufEnter * resize
 autocmd! BufWritePost ~/.vimrc,$HOME/etc/vim/vimrc source ~/.vimrc
-"autocmd! BufWritePost ~/.vim/colors/my-elflord.vim,$HOME/etc/vim/colors/my-elflord.vim colo my-elflord
+autocmd! BufWritePost ~/.vim/colors/my-elflord.vim,~/etc/vim/colors/my-elflord.vim colo my-elflord
 "autocmd! BufWritePost /etc/apache2/httpd.conf !sudo sh /etc/rc.d/rc.httpd restart
 
 "{{{2 vim -b : edit binary using xxd-format!
@@ -90,7 +96,6 @@ set ruler
 set winminheight=0
 set hlsearch
 set scrolloff=2
-set foldmethod=syntax
 set foldnestmax=1
 set foldminlines=2
 set nowrap
@@ -112,6 +117,8 @@ if has("gui_running")
 else
 	set background=dark
 	hi Cursor ctermbg=yellow ctermfg=black
+	"colo dark-256
+	colo my-elflord
 endif
 
 " hi link cComment Comment
@@ -125,6 +132,8 @@ endif
 
 
 " {{{1 key mappings
+
+nnoremap <c-d> <c-d><c-d>
 
 nmap <S-tab> :tabnext<CR>
 
