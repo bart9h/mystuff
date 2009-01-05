@@ -40,6 +40,10 @@
 
 " Section: Plugin header {{{1
 
+if exists('VCSCommandDisableAll')
+	finish
+endif
+
 if v:version < 700
 	echohl WarningMsg|echomsg 'VCSCommand requires at least VIM 7.0'|echohl None
 	finish
@@ -221,15 +225,23 @@ function! s:gitFunctions.Review(argList)
 		let revision = a:argList[0]
 	endif
 
-	let oldCwd = VCSCommandChangeToCurrentFileDir(resolve(bufname(VCSCommandGetOriginalBuffer('%'))))
+	let oldCwd = VCSCommandChangeToCurrentFileDir(bufname(VCSCommandGetOriginalBuffer('%')))
 	try
 		let prefix = system(VCSCommandGetOption('VCSCommandGitExec', 'git') . ' rev-parse --show-prefix')
 	finally
 		call VCSCommandChdir(oldCwd)
 	endtry
-
 	let prefix = substitute(prefix, '\n$', '', '')
-	let blob = '"' . revision . ':' . prefix . '<VCSCOMMANDFILE>"'
+
+	let m=matchlist(revision, '\([^ ]*\) \(.*\)')
+	if len(m) == 0
+		let file= prefix . "<VCSCOMMANDFILE>"
+	else
+		let revision=m[1]
+		let file=m[2]
+	endif
+
+	let blob = '"' . revision . ':' . file . '"'
 	let resultBuffer = s:DoCommand('show ' . blob, 'review', revision, {})
 	if resultBuffer > 0
 		let &filetype=getbufvar(b:VCSCommandOriginalBuffer, '&filetype')

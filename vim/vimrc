@@ -9,6 +9,7 @@ set modeline
 
 " {{{1 behaviour
 
+let g:git_diff_spawn_mode=1
 set title
 set ignorecase
 set smartcase
