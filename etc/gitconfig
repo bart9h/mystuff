@@ -31,3 +31,5 @@
 	pager = true
 	status = auto
 
+[merge]
+	tool = meld
