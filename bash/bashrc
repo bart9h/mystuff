@@ -173,14 +173,13 @@ alias pgw='ping gw'
 alias pgo='ping google.com'
 alias links='which links >/dev/null && links || elinks'
 
-alias gk='gitk --all &'
+alias gk='(while test ! -d .git -a "$PWD" != /; do cd .. || exit; done; test -d .git && ( exec gitk --all & ) || echo .git not found)'
 alias gc='git commit'
 alias gca='git commit -a'
 alias gci='git commit --interactive'
 alias gco='git checkout'
 alias gs='git status'
 alias gd='git diff'
-alias gsac='git stash apply && git stash clear'
 alias gsd='git_stash_do "svn dcommit"'
 alias gsr='git_stash_do "svn rebase"'
 function git_stash_do()
@@ -316,27 +315,12 @@ function update() {
 	fi
 }
 
-#export CVS_RSH=ssh
-#export CVSROOT=:ext:9h:/home/9hells/cvsroot
 
 #}}} version control
 #{{{ #TODO: organizar o resto abaixo..
 # aliases
 alias pgr='pgrep -l'
 alias cdrec='sudo cdrecord -v dev=/dev/cdrom'
-function q4() {
-	if true; then
-		# metodo menos drastico, impede somente DNS, mantendo conexoes atuais abertas
-		a='/etc/resolv.conf'
-		b='/etc/__disabled__resolv.conf'
-		sudo mv $a $b || return
-		(sleep 90s; sudo mv $b $a) &
-	else
-		sudo ifconfig eth0 down || return
-		(sleep 90s; sudo ~/etc/etc/neton) &
-	fi
-	/home/games/quake4/quake4
-}
 
 
 #{{{1          util
