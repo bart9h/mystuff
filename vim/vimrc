@@ -23,7 +23,7 @@ set smartcase
 set backspace="indent,eol,start"
 set bs=2
 set wildmenu
-set wildmode=list:longest
+set wildmode=list:longest,full
 "set tildeop
 set hidden
 
