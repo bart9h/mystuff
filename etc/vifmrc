@@ -9,7 +9,7 @@
 # If you would like to use another vi clone such as Vim, Elvis, or Vile
 # you will need to change this setting.
 
-VI_COMMAND=vi
+VI_COMMAND=vim
 # VI_COMMAND=vim
 # VI_COMMAND=elvis -G termcap
 # VI_COMMAND=vile
@@ -32,7 +32,7 @@ USE_ONE_WINDOW=0
 # Screen configuration.  If you would like to use vifm with
 # the screen program set this to 1.
 
-USE_SCREEN=0
+USE_SCREEN=1
 
 # 1 means use color if the terminal supports it.
 # 0 means don't use color even if supported.
@@ -129,6 +129,7 @@ COMMAND=grep=vim \"+grep %a\"
 COMMAND=make=!!make
 COMMAND=mv=mv %f %D &
 COMMAND=run=!! ./%f
+COMMAND=t=cd ~/.vifm/Trash
 
 # The file type is for the default programs to be used with
 # a file extension. 
