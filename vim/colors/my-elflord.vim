@@ -53,6 +53,7 @@ hi link SpecialComment Special
 hi link Debug Special
 
 
+
 " {{{1  my
 
 let g:colors_name = "my-elflord"
@@ -64,9 +65,9 @@ hi TabLineFill   ctermfg=Black  ctermbg=none
 hi StatusLineNC  ctermfg=DarkGray  ctermbg=Cyan
 hi StatusLine    ctermfg=Cyan      ctermbg=DarkGray
 
-hi Cursor    ctermfg=Red ctermbg=Blue
-hi CursorLine    ctermfg=Red ctermbg=Blue
-hi CursorColumn	ctermfg=Red ctermbg=Blue
+hi Cursor    term=underline
+hi CursorLine term=underline
+hi CursorColumn	 term=underline
 
 hi LineNr ctermfg=DarkRed
 hi Folded ctermfg=blue cterm=bold

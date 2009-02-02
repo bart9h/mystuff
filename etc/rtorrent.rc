@@ -9,14 +9,14 @@ min_peers = 3
 max_peers_seed = 4
 max_peers = 20
 
-download_rate = 24
-upload_rate = 6
+download_rate = 80
+upload_rate = 16
 
-schedule = 1,02:00:00,0,download_rate=50
-schedule = 1,02:00:00,0,upload_rate=9
+schedule = 1,02:00:00,0,download_rate=100
+schedule = 1,02:00:00,0,upload_rate=24
 
-schedule = 1,07:00:00,0,download_rate=24
-schedule = 1,07:00:00,0,upload_rate=6
+schedule = 1,07:00:00,0,download_rate=80
+schedule = 1,07:00:00,0,upload_rate=16
 
 directory = /home/media/torrent
 session   = /home/media/torrent/session
