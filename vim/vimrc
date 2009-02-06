@@ -107,7 +107,6 @@ set hlsearch
 set scrolloff=2
 set foldnestmax=1
 set foldminlines=2
-set nowrap
 set nonumber
 set showcmd
 
@@ -125,12 +124,12 @@ if has("gui_running")
 	set guifont=Inconsolata\ 11
 "	hi Normal guifg=gray guibg=#202030
 	set bg=light
-	colo blue
+	colorscheme blue
 else
 	set background=dark
 	hi Cursor ctermbg=yellow ctermfg=black
-	"colo dark-256
-	colo my-elflord
+	"colorscheme dark-256
+	colorscheme my-elflord
 endif
 
 " hi link cComment Comment
