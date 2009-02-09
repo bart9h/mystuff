@@ -143,4 +143,5 @@ COMMAND=t=cd ~/.vifm/Trash
 FILETYPE=Web=html,htm=links,mozilla
 FILETYPE=Object=o=nm %f | less
 FILETYPE=Image=jpg,jpeg,png,gif=eog,xv,gimp
+FILETYPE=Video=mpg,mpeg,avi,mkv=mplayer,vlc,xine,totem
 FILETYPE=Archive=tar.gz,tgz=tar -tzf %f | less,tar -zxvf %f
