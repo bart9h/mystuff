@@ -1,6 +1,7 @@
 # vim:ft=conkyrc:
 
 short_units yes
+text_buffer_size 1024
 
 # set to yes if you want Conky to be forked in the background
 background no
@@ -90,4 +91,8 @@ ${color #aa9944} ${top name 2} ${top pid 2} ${top cpu 2} ${top mem 2}
 ${color #998866} ${top name 3} ${top pid 3} ${top cpu 3} ${top mem 3}
 ${color #888888} ${top name 4} ${top pid 4} ${top cpu 4} ${top mem 4}
 ${color #888888} ${top name 5} ${top pid 5} ${top cpu 5} ${top mem 5}
+
+Conditions: ${execi 3600 conkyForecast --location=BRXX0201 --datatype=CC}
+${font ConkyWeather:size=36}${execi 3600 conkyForecast --location=BRXX0201 --datatype=WF --startday=0 --endday=3}${font}
+Temp: ${execi 3600 conkyForecast --location=BRXX0201 --datatype=HT}
 
