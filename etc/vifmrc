@@ -27,7 +27,7 @@ USE_TRASH=1
 # Show only one Window
 # If you would like to start vifm with only one window set this to 1
 
-USE_ONE_WINDOW=0
+USE_ONE_WINDOW=1
 
 # Screen configuration.  If you would like to use vifm with
 # the screen program set this to 1.
@@ -108,9 +108,11 @@ RUN_EXECUTABLE=0
 
 # BOOKMARKS=mark=/full/directory/path=filename
 
+BOOKMARKS=H=/home/doti=
 BOOKMARKS=L=/usr/local=../
 BOOKMARKS=R=/=
 BOOKMARKS=S=/usr/local/share=../
+BOOKMARKS=T=/home/doti/.vifm/Trash=
 BOOKMARKS=U=/usr=../
 
 # COMMAND=command_name=action
@@ -129,7 +131,6 @@ COMMAND=grep=vim \"+grep %a\"
 COMMAND=make=!!make
 COMMAND=mv=mv %f %D &
 COMMAND=run=!! ./%f
-COMMAND=t=cd ~/.vifm/Trash
 
 # The file type is for the default programs to be used with
 # a file extension. 
