@@ -13,23 +13,17 @@ out_to_console no
 
 use_xft yes
 xftfont Inconsolata-10
+xftalpha 0.8
 
 own_window yes
 own_window_type override
 own_window_transparent yes
 own_window_colour white
 
-# Text alpha when using Xft
-xftalpha 0.8
-
-# mail spool
 #mail_spool $MAIL
 
-# Update interval in seconds
-update_interval 1
+update_interval 2.5
 
-
-# Use double buffering (reduces flicker, may not work for everyone)
 double_buffer yes
 
 draw_shades no
@@ -43,56 +37,42 @@ alignment bottom_left
 
 # gap between borders of screen and text
 gap_x 8
-gap_y 28
+gap_y 30
 
 # Subtract file system buffers from used memory?
 no_buffers yes
 
-color1 CCCCCC
-color2 888888
+color1 gray90
+color2 gray50
+color3 gray10
+color4 gold
+color5 tan4
 
 TEXT
-
-
-${color white}${time %k:%M:%S}               ${color2}${time %b/%a/%d}
-$sysname $kernel on $machine
-Uptime: $uptime
+${color tan}${texeci 60 conkyPidgin --onlineonly --sortbylogactivity --availabletext=O --awaytext=a --unavailabletext=u --chattingtext=C --includelist=geeks,amigos --template=/home/doti/etc/conky/conkyPidgin.template}
 ${color3}${hr 1}
-${color2}${cpugraph 25 ff0000 ff00ff}
-${color2}CPU: ${color1}${cpu}%    $color2(${cpu cpu1}+${cpu cpu2}%)   ${freq_dyn 1},${freq_dyn 2}MHz
-
-${color2}load : ${color1}$loadavg ${color2}
-${color2}procs: ${color1}$processes	${color2}running: ${color1}$running_processes
+ ${color green}${time %k:%Mh}${color2}  ${time %a,} ${color1}${time %d}${color2} ${time %b}  up $uptime
+ $sysname $kernel on $machine
 ${color3}${hr 1}
-${color2}ram  : ${color1}$mem${color2}/${color1}$memmax ${color2}- ${color1}$memperc%
-${color2}       buffers $buffers,  cached $cached
-${color2}swap : ${color1}$swap${color2}/${color1}$swapmax ${color2}   - ${color1}$swapperc%
-
-${color2}eth0: ${addrs eth0}
-${color2}DOWN: ${color1}${downspeedf eth0} k/s	       ${color2}UP: ${color1}${upspeedf eth0} k/s
-${color2}${downspeedgraph eth0 25,100 002200 00aa00}	  ${color2}${upspeedgraph eth0 25,100 000022 0000aa}
-${color2}total: ${color1}${totaldown eth0}	   ${color2}total: ${color1}${totalup eth0}
-
-${color2}root: ${color1}${fs_free /} ${color2}free, ${color1}${fs_size /} total
-      ${fs_bar /}
-${color2}home: ${color1}${fs_free /home} ${color2}free, ${color1}${fs_size /home} total
-      ${fs_bar /home}
-
-/dev/sda:
-temp : ${hddtemp sda},  scheduler: ${ioscheduler sda}
-read : ${diskio_read sda}
-       ${diskiograph_read normal sda}
-write: ${diskio_write sda}
-       ${diskiograph_write normal sda}
-
-${color #CCCCCC} proccess          PID   CPU%   MEM%
-${color #ddaa00} ${top name 1} ${top pid 1} ${top cpu 1} ${top mem 1}
-${color #aa9944} ${top name 2} ${top pid 2} ${top cpu 2} ${top mem 2}
-${color #998866} ${top name 3} ${top pid 3} ${top cpu 3} ${top mem 3}
-${color #888888} ${top name 4} ${top pid 4} ${top cpu 4} ${top mem 4}
-${color #888888} ${top name 5} ${top pid 5} ${top cpu 5} ${top mem 5}
-
-Conditions: ${execi 3600 conkyForecast --location=BRXX0201 --datatype=CC}
-${font ConkyWeather:size=36}${execi 3600 conkyForecast --location=BRXX0201 --datatype=WF --startday=0 --endday=3}${font}
-Temp: ${execi 3600 conkyForecast --location=BRXX0201 --datatype=HT}
-
+${color4}CPU${color2}s: ${color green}$cpu%$color2    (${cpu cpu1}+${cpu cpu2}%, ${freq_dyn 1}+${freq_dyn 2}MHz)
+${color2}load: ${color1}$loadavg
+${color2}ram : ${color1}$mem${color2}/$memmax
+${color2}buf : $buffers, cache: $cached
+${color2}${cpugraph normal 0 25,200 160000 ff0000}
+${color1}$processes${color2} proccess       PID   CPU%   MEM%
+${color #aa8844} ${top name 1} ${top pid 1} ${top cpu 1} ${top mem 1}
+${color #998866} ${top name 2} ${top pid 2} ${top cpu 2} ${top mem 2}
+${color #888888} ${top name 3} ${top pid 3} ${top cpu 3} ${top mem 3}
+${color3}${hr 1}
+${color4}/dev/sda${color2}: ${color1}${hddtemp sda}${color2},  scheduler ${color1}${ioscheduler sda}${color2}
+read: ${color1}${diskio_read sda}${color2}  write: ${color1}${diskio_write sda}${color2}
+${diskiograph_read log sda 20,100 040816 224488 50000}  ${diskiograph_write log sda 20,100 160804 884422 50000}
+root: ${color1}${fs_free /}${color2} free, ${fs_size /} total
+home: ${color green}${fs_free /home}${color2} free, ${fs_size /home} total
+${color3}${hr 1}
+${color4}eth0${color2}: ${addrs eth0}
+DOWN: ${color1}${downspeedf eth0}${color2} KiB/s   UP: ${color1}${upspeedf eth0}${color2} KiB/s
+${downspeedgraph eth0 25,100 040816 224488}  ${upspeedgraph eth0 25,100 160804 884422}
+${color3}${hr 1}
+${color2}Conditions: ${color1}${execi 600 conkyForecast --location=BRXX0201 --datatype=HT}${color2}, ${execi 600 conkyForecast --location=BRXX0201 --datatype=CC}
+${font ConkyWeather:size=36}${execi 600 conkyForecast --location=BRXX0201 --datatype=WF --startday=1 --endday=4}${font}
