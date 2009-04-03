@@ -107,6 +107,7 @@ foreach my $path (`find "$collection_dir" -type f`) {
 			album  => 'ALBUM',
 			track  => 'TRACKNUMBER',
 			song   => 'TITLE',
+			genre  => 'GENRE',
 		);
 
 		my %f = (  # how to set vorbis metadata for each format
