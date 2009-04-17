@@ -54,7 +54,8 @@ ${color3}${hr 1}
  ${color green}${time %k:%Mh}${color2}  ${time %a,} ${color1}${time %d}${color2} ${time %b}  up $uptime
  $sysname $kernel on $machine
 ${color3}${hr 1}
-${color4}CPU${color2}s: ${color green}$cpu%$color2    (${cpu cpu1}+${cpu cpu2}%, ${freq_dyn 1}+${freq_dyn 2}MHz)
+${color4}GPU${color2} : ${color white}${execi 10 nvidia-settings -q gpucoretemp | grep '):' | awk '{print $4}' | cut -c -2}${color2} °C
+${color4}CPU${color2}s: ${color green}$cpu%$color2    (${cpu cpu1}+${cpu cpu2}%)
 ${color2}load: ${color1}$loadavg
 ${color2}ram : ${color1}$mem${color2}/$memmax
 ${color2}buf : $buffers, cache: $cached
