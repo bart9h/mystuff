@@ -14,8 +14,6 @@ function _load() {
 	fi
 }
 _load "$HOME/etc/bash/functions"
-prompt_color="1;37"
-_load "$HOME/.bashrc_local"
 
 
 #{{{1 lazy-loading of functions
@@ -48,6 +46,12 @@ function call()
 
 	"$f" "$@"
 }
+
+
+#{{{1  load local stuff from .bashrc_local
+
+prompt_color="1;37"
+_load "$HOME/.bashrc_local"
 
 
 #{{{1 software setup
@@ -597,6 +601,10 @@ if echo "$BASH_VERSION" |  grep -q '^3\.1\..*'; then
 fi
 
 #}}}
+#{{{1  local stuff from .bashrc_local_post may override
 
 _load "$HOME/.bashrc_local_post"
+
+
+#}}}
 # vim600:foldmethod=marker:
