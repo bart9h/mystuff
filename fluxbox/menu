@@ -2,12 +2,9 @@
 
 [begin]
 
-	[exec] (firefox) {firefox -P beta} </usr/lib/firefox-3.0b5/icons/mozicon16.xpm>
-
-	[exec] (pidgin) {pidgin} <share/icons/pidgin-icon.png>
-
+	[exec] (firefox) {firefox} </usr/lib/firefox-3.0/icons/mozicon16.xpm>
+	[exec] (pidgin) {pidgin} </usr/share/icons/hicolor/16x16/apps/pidgin.png>
 	[exec] (pcmanfm) {pcmanfm} <share/icons/folder.png>
-
 	[exec] (xterm) {xterm} <share/icons/terminal.png>
 
 	[include] (.fluxbox/menu_local)
@@ -15,22 +12,6 @@
 
 	[submenu] (programas)
 		[exec] (baixar fotos) {xterm -e /home/doti/etc/scripts/foto.pl}
-		[submenu] (terminals)
-			[exec] (utc) {xterm -bg BlackBlue -geometry +360+0 -e ssh -v -X -C -t barrett@utc}
-			#[exec] (utc) {xterm -bg BlackBlue -geometry +360+0 -e ssh -v -X -C -t utc screen -x a}
-			[exec] (Xnest) {/home/doti/etc/desktop/xnest.sh}
-			[exec] (xterm tiny) {xterm -fs 8}
-			[exec] (utc/windows) {rdesktop  -x m -P -a 8 -z  -u rodolfobo utc}
-			#[exec] (9hells) {xterm -bg BlackGreen -geometry 117x24+0+378 -e ssh -v -X -C -t 9h bin/open_screen a}
-			#[exec] (utc/r) {xterm -bg BlackBlue -geometry +360+0 -e ssh -v -X -C -t utc su - -c \"screen -x a\"}
-			[exec] (utc/maua) {xterm -bg BlackBlue -geometry +360+0 -e ssh -v -X -C -t barrett@utc ssh utcrj}
-			#[exec] (unisys) {xterm -bg BlackBlue -e ssh -v -X ssh rodolfo@200.220.31.195}
-			#[exec] (zed) {xterm -bg BlackBlue -e ssh -v -X -C zed}
-			[exec] (xterm) {xterm}
-			[exec] (root) {xterm -bg BlackRed -e sudo su -}
-			[exec] (big) {xterm -fs 16}
-			[exec] (huge) {xterm -fs 19}
-		[end]
 
 		[submenu] (games)
 			[exec] (qonk) {qonk}
@@ -103,12 +84,11 @@
 	[separator]
 
 	[submenu] (Fluxbox)
-		#[config] (Configure)
-		#[submenu] (Styles) {Choose a style...}
-		#	[stylesdir] (/usr/share/fluxbox/styles)
-		#	[stylesdir] (~/.fluxbox/styles)
-		#[end]
-		[include] (/etc/X11/fluxbox/system.fluxbox-menu)
+		[config] (Configure)
+		[submenu] (Styles) {Choose a style...}
+			[stylesdir] (/usr/share/fluxbox/styles)
+			[stylesdir] (~/.fluxbox/styles)
+		[end]
 	[end]
 
 	#[exec] (rodar) {/home/doti/etc/desktop/x-rotate.sh}
