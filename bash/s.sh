@@ -6,7 +6,7 @@ function s()
 
 	# if no arg, list existing screens
 	if test "$1" == ""; then
-		screen -wipe | grep '([AD][te]tached)'
+		screen -wipe | \grep '([AD][te]tached)'
 		return
 	fi
 
@@ -28,7 +28,7 @@ function s()
 	fi
 
 	# if arg is existing screen, attach
-	if test -z "$1" && screen -ls | grep "\<[0-9]*\.$name\>"; then
+	if test -z "$1" && screen -ls | \grep "\<[0-9]*\.$name\>"; then
 		test -n "$WINDOW" && screen -X title "$name"
 		screen -x "$name"
 

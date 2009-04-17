@@ -69,6 +69,7 @@ export MANPAGER="$PAGER"
 export EDITOR="vim"
 export SVN_EDITOR="$EDITOR"
 export GREP_OPTIONS='--exclude="*.svn-base"'
+export GREP_COLOR="1;33"
 
 # paths
 export DERELICT_DIR='/home/sft/d/derelict'
@@ -107,7 +108,7 @@ alias web="$HOME/etc/scripts/web.pl"
 
 alias mv='mv -i'
 if [ "$OSTYPE" == "linux-gnu" ]; then
-alias grep='grep --exclude="*.svn-base" --devices=skip'
+alias grep='grep --exclude="*.svn-base" --devices=skip --color=auto'
 alias cp='cp -i --preserve=timestamps'
 fi
 
@@ -182,7 +183,7 @@ alias gc='git commit'
 alias gca='git commit -a'
 alias gci='git commit --interactive'
 alias gco='git checkout'
-alias gs='git status'
+alias gs="git status |\grep -v '\.\.\/'"
 alias gd='git diff'
 alias gsd='git_stash_do "svn dcommit"'
 alias gsr='git_stash_do "svn rebase"'
