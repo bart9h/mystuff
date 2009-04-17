@@ -81,7 +81,7 @@ export ACLOCAL_FLAGS='-I /usr/local/share/aclocal'
 
 # shell
 export INPUTRC="$HOME/.inputrc"
-if false && [ -f /etc/bash_completion ]; then
+if true && [ -f /etc/bash_completion ]; then
 	. /etc/bash_completion
 fi
 
@@ -116,6 +116,7 @@ alias tig='tig --all'
 alias xxd='xxd -c $(( (($COLUMNS - 10)/7)*2 ))'
 alias wget='wget -c --timeout=15 --wait=0 --tries=0'
 alias xpdf='xpdf -z width'
+alias rdesktop='rdesktop  -x m -P -a 8 -z'
 #alias tar='tar --exclude=.svn --exclude=CVS'
 
 function head()
@@ -167,6 +168,7 @@ alias z='f -rt'
 
 #{{{1 abbreviations
 
+alias pac='sudo yaourt'
 alias p='ps -AH --format "%U %p %a"'
 alias l='less'
 alias cn='cat > /dev/null' # quick volatile writepad
@@ -279,7 +281,7 @@ function ci() {
 		svnci "$@"
 	elif test -d CVS; then
 		echo 'nao sei fazer CVS ainda'
-	else # supoe git
+	else # assumes git
 		tmp=`mktemp /tmp/gitdif.XXXXXX` || return
 		git-diff "$@" >| "$tmp" || return
 		if test -s "$tmp"; then
