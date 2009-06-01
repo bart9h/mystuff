@@ -112,6 +112,10 @@ set showcmd
 autocmd InsertLeave * se nocursorline
 autocmd InsertEnter * se cursorline
 
+"status line
+set laststatus=2
+set statusline=%<%f\ %h%m%r(%{GitBranchInfoTokens()[0]})%=%-14.(%l,%c%V%)\ %P
+
 " nao pisca sobre ([{pares}])
 let loaded_matchparen=1
 
