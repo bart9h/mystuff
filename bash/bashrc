@@ -187,6 +187,7 @@ alias gci='git commit --interactive'
 alias gco='git checkout'
 alias gs="git status |\grep -v '\.\.\/'"
 alias gd='git diff'
+alias gl='git log --pretty=format:"%h %Cblue%cr%Creset %cn %Cgreen%s%Creset" --graph'
 alias gsd='git_stash_do "svn dcommit"'
 alias gsr='git_stash_do "svn rebase"'
 function git_stash_do()
