@@ -125,13 +125,11 @@ let perl_extended_vars=1
 if has("gui_running")
 	set guioptions -=T
 	set guifont=Inconsolata\ 11
-"	hi Normal guifg=gray guibg=#202030
-	set bg=light
-	colorscheme blue
+	colorscheme darkblue
+	hi CursorLine guibg=#0000b0 guifg=white
 else
 	set background=dark
 	hi Cursor ctermbg=yellow ctermfg=black
-	"colorscheme dark-256
 	colorscheme my-elflord
 endif
 
