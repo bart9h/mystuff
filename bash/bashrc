@@ -73,7 +73,6 @@ export GREP_COLOR="1;33"
 
 # paths
 export DERELICT_DIR='/home/sft/d/derelict'
-export PKG_CONFIG_PATH="/usr/local/lib/pkgconfig:/usr/lib/pkgconfig:$PKG_CONFIG_PATH"
 export CHOICESPATH="${HOME}/.Choices:/usr/local/share/Choices:/usr/share/Choices"
 
 # dev
@@ -217,7 +216,7 @@ alias mpdvd='mplayer -identify dvd://1 -dvd-device "$PWD"'
 alias mpq='mplayer -nosound -osdlevel 0'
 alias mpr='ls -Q | rl | xargs mplayer -fs'
 alias mprq='ls -Q | rl | xargs mplayer -fs -ao null'
-alias ponte='mplayer mms://200.246.9.2/pontelive'
+alias ponte='mplayer mms://201.18.53.75/pontelive'
 alias mistureba='tsocks mplayer http://74.86.142.195:8690'
 
 function v() {
