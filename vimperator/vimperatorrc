@@ -1,28 +1,18 @@
-" vim:ft=vimperator:
-
-set guioptions=m
-set visualbell
-
-map \ :set invum<CR>
+"2.0 (created: 2009/03/28 23:48:07)
+map \\ :set invum<CR>
 map r :echo "reload?"<CR>
+set guioptions=mrb
 
 set nextpattern+=^\s*siguiente\s*$
 set nextpattern+=^\s*pr.xim[oa]\s*$
 set previouspattern+=^\s*anterior\s*$
 
-source etc/vimperator/plugin/direct_delb.js
+set runtimepath=/u/nttx/.vimperator
+set visualbell
 
-"autocmd LocationChange .* :js modes.passAllKeys = /mail\.google\.com/.test(buffer.URL) || /google\.com\/reader\//.test(buffer.URL)
+"source etc/vimperator/plugin/direct_delb.js
 
-"autocmd PageLoad .* :js modes.passAllKeys = /mail\.google\.com/.test(buffer.URL)
-
-" try to find more Gmail hints
-"set hinttags=//*[@onclick or @onmouseover or @onmousedown or @onmouseup or @oncommand or @class='lk' or @class='s' or @class='lk cs' or @class='msc' or @class='ll'] | //input[not(@type='hidden')] | //a | //area | //iframe | //textarea | //button | //select | //xhtml:*[@onclick or @onmouseover or @onmousedown or @onmouseup or @oncommand or @class='lk' or @class='s'] | //xhtml:input[not(@type='hidden')] | //xhtml:a | //xhtml:area | //xhtml:iframe | //xhtml:textarea | //xhtml:button | //xhtml:select | //tr[@class='rr' or @class='ur']/td[position()=5]
-
-"""  Use this as a bookmarlet to post to delicious with  :o del tag1 ... tagN
-" javascript: e=%22%22+( window.getSelection ?  window.getSelection() : document.getSelection ?  document.getSelection() : document.selection.createRange().text); void( delicious = open( 'https://api.del.icio.us/v1/posts/add?description='+ encodeURIComponent(document.title)+'&extended='+ encodeURIComponent(e).replace(/ /g, %22+%22)+ '&tags=%s'+'&url='+ encodeURIComponent(window.location.href), 'delicious','toolbar=no,width=500,height=150'), setTimeout('delicious.close()',5000))
-
-
+" change color of cmdline when in focus
 javascript <<EOM
 (function(){
 	var inputElm = document.getElementById('liberator-commandline-command');
@@ -36,6 +26,7 @@ javascript <<EOM
 })();
 EOM
 
+" RSS icon in statusbar
 javascript <<EOF
 (function(){
 	var feedPanel = document.createElement("statusbarpanel");
@@ -47,3 +38,12 @@ javascript <<EOF
 })();
 EOF
 
+" try to find more Gmail hints
+"set hinttags=//*[@onclick or @onmouseover or @onmousedown or @onmouseup or @oncommand or @class='lk' or @class='s' or @class='lk cs' or @class='msc' or @class='ll'] | //input[not(@type='hidden')] | //a | //area | //iframe | //textarea | //button | //select | //xhtml:*[@onclick or @onmouseover or @onmousedown or @onmouseup or @oncommand or @class='lk' or @class='s'] | //xhtml:input[not(@type='hidden')] | //xhtml:a | //xhtml:area | //xhtml:iframe | //xhtml:textarea | //xhtml:button | //xhtml:select | //tr[@class='rr' or @class='ur']/td[position()=5]
+
+"""  Use this as a bookmarlet to post to delicious with  :o del tag1 ... tagN
+" javascript: e=%22%22+( window.getSelection ?  window.getSelection() : document.getSelection ?  document.getSelection() : document.selection.createRange().text); void( delicious = open( 'https://api.del.icio.us/v1/posts/add?description='+ encodeURIComponent(document.title)+'&extended='+ encodeURIComponent(e).replace(/ /g, %22+%22)+ '&tags=%s'+'&url='+ encodeURIComponent(window.location.href), 'delicious','toolbar=no,width=500,height=150'), setTimeout('delicious.close()',5000))
+
+source! ~/.vimperatorrc.local
+
+" vim: set ft=vimperator:
