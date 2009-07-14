@@ -1,12 +1,12 @@
 #!/bin/bash
-# vim600:ft=sh:foldmethod=marker:foldmarker={,}:
+# vim600:ft=sh:foldmethod=marker:foldmarker=)#,;;#:
 
 function show()
 {
 	local what="$1"; shift
 	case "$what" in
 
-	ansi|colors)
+	ansi|colors)#
 		for b in 0 1; do
 			for j in 3 4; do
 				i=0
@@ -17,9 +17,9 @@ function show()
 				echo -e "\e[0;0m"
 			done
 		done
-	;;
+	;;#
 
-	256)
+	256)#
 		local i red green blue fmt="%02x" reset="\x1b[0m\x1b[38;5;16m"
 		test "$1" && fmt="%03d"
 		printf "$reset"
@@ -53,17 +53,17 @@ function show()
 		done
 
 		printf "\x1b[0m\n"
-	;;
+	;;#
 
-	processors|cpus)
+	processors|cpus)#
 		cat /proc/cpuinfo | grep '^processor\>' | wc -l
-	;;
+	;;#
 
-	resolution|res|rez)
+	resolution|res|rez)#
 		echo $(xwininfo -root|grep Width:|cut -d : -f 2)x$(xwininfo -root|grep Height:|cut -d : -f 2|sed s/\ //g)
-	;;
+	;;#
 
-	sizeof)
+	sizeof)#
 		shift
 		test -z "$1" && echo "sizeof what?" && return
 		local arg
@@ -79,11 +79,12 @@ function show()
 			esac
 		done
 		echo -e "#include <stdio.h>\n#include <time.h>\nint main() { printf(\"%d\\\n\", sizeof($*)); return 0; }" | crun $arg
-	;;
+	;;#
 
-	*)
+	*)# help
 		echo "things to show: colors, cpus, resolution, sizeof"
-	;;
+	;;#
+
 	esac
 }
 
