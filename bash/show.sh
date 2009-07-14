@@ -6,7 +6,7 @@ function show()
 	local what="$1"; shift
 	case "$what" in
 
-	ansi|colors)#
+	colors)#
 		for b in 0 1; do
 			for j in 3 4; do
 				i=0
@@ -55,15 +55,19 @@ function show()
 		printf "\x1b[0m\n"
 	;;#
 
-	processors|cpus)#
+	cpus)#
 		cat /proc/cpuinfo | grep '^processor\>' | wc -l
 	;;#
 
-	resolution|res|rez)#
+	resolution|res)#
 		echo $(xwininfo -root|grep Width:|cut -d : -f 2)x$(xwininfo -root|grep Height:|cut -d : -f 2|sed s/\ //g)
 	;;#
 
-	sizeof)#
+	termsize|rez)#
+		echo ${COLUMNS}x${LINES}
+	;;#
+
+	sizeof)# #<C-type>
 		shift
 		test -z "$1" && echo "sizeof what?" && return
 		local arg
