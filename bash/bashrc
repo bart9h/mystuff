@@ -60,7 +60,7 @@ export LANG="en_US.UTF-8"
 export LANGUAGE="$LANG"
 export LC_COLLATE="C"
 
-export LESS='-X -F -M -R -f -a -j4'
+export LESS='-X -F -M -R -f -J -W -j4'
 export PAGER="less $LESS"
 export MANPAGER="$PAGER"
 #export MANPAGER="col -b | view -c 'set ft=man nomod nolist' -"
@@ -118,15 +118,6 @@ alias xpdf='xpdf -z width'
 alias rdesktop='rdesktop  -x m -P -a 8 -z'
 #alias tar='tar --exclude=.svn --exclude=CVS'
 
-function head()
-{ #{{{
-	if test "$1" == ""; then
-		`which head` -$(( 2 * $LINES / 3 )) "$@"
-	else
-		`which head` "$@"
-	fi
-} #}}}
-
 #{{{1 ls
 
 if [ "$OSTYPE" == "linux-gnu"  -a  "$TERM" != "dumb" ]; then
@@ -172,10 +163,20 @@ alias p='ps -AH --format "%U %p %a"'
 alias l='less'
 alias cn='cat > /dev/null' # quick volatile writepad
 alias data='date +%Y-%m-%d'
+function h()
+{ #{{{
+	if test "$1" == ""; then
+		head -$(( 2 * $LINES / 3 )) "$@"
+	else
+		head "$@"
+	fi
+} #}}}
+
 
 alias u='if test $( ls *.rar 2>/dev/null | wc -l ) == 1; then rar x *.rar && rm *.rar; elif test $( ls *.zip 2>/dev/null | wc -l ) == 1; then unzip *.zip && rm *.zip; else echo \?; fi'
 
 alias pgw='ping gw'
+alias pwl='ping wl'
 alias pgo='ping google.com'
 alias links='which links >/dev/null && links || elinks'
 
@@ -186,7 +187,11 @@ alias gci='git commit --interactive'
 alias gco='git checkout'
 alias gs="git status |\grep -v '\.\.\/'"
 alias gd='git diff'
-alias gl='git log --pretty=format:"%h %Cblue%cr%Creset %cn %Cred%d %Cgreen%s%Creset" --graph'
+function gl() {
+	git log --pretty=format:"%h %Cblue%cr%Creset %cn %Cred%d %Cgreen%s%Creset" --graph \
+	| sed 's/\((\|,\ \)refs\/\w\+\//\1/g;s/(origin\//(o\//g' \
+	| less
+}
 alias gsd='git_stash_do "svn dcommit"'
 alias gsr='git_stash_do "svn rebase"'
 function git_stash_do()

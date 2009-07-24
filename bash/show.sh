@@ -1,5 +1,5 @@
-#!/bin/bash
-# vim600:ft=sh:foldmethod=marker:foldmarker=)#,;;#:
+# /bin/bash
+# vim600:foldmethod=marker:foldmarker=)#,;;#:
 
 function show()
 {
@@ -86,7 +86,8 @@ function show()
 	;;#
 
 	*)# help
-		echo "things to show: colors, cpus, resolution, sizeof"
+		echo "options:"
+		grep ')#' "$ETC/bash/show.sh" |head -n -2 |tail -n +2 |sed 's/)\?#//g;s/|/\ or\ /g'
 	;;#
 
 	esac

@@ -15,7 +15,7 @@ function s()
 
 	# if arg is _, create "meta" screen
 	if test "$name" == "_"; then
-		escape="-e ^Bb"
+		escape="-e ^Ss"
 		if test -n "$1"; then
 			name="$1"; shift
 		fi
