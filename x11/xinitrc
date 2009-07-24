@@ -11,8 +11,8 @@ echo '# ~/.xinitrc'
 	export GTK_IM_MODULE='cedilla'
 }
 
-source "$HOME/etc/bash/osd.sh"
-source "$HOME/etc/bash/Xdefaults.sh"
+source "$ETC/bash/osd.sh"
+source "$ETC/bash/Xdefaults.sh"
 Xdefaults
 
 #xhost localhost

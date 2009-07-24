@@ -6,19 +6,19 @@
 test -z "$PS1" && return
 
 unalias -a
-
+export ETC="$HOME/etc"
 
 function _load() {
 	if test -r "$1"; then
 		source "$1"
 	fi
 }
-_load "$HOME/etc/bash/functions"
+_load "$ETC/bash/functions"
 
 
 #{{{1 lazy-loading of functions
 
-for i in "$HOME/etc/bash/"*.sh; do
+for i in "$ETC/bash/"*.sh; do
 	f="$( basename "$i" | sed 's/\.sh$//' )"
 	alias $f="call $f"
 	unset f
@@ -38,7 +38,7 @@ function call()
 	fi
 
 	if test "$t" != "function"; then
-		local s="$HOME/etc/bash/$f.sh"
+		local s="$ETC/bash/$f.sh"
 		if test -r "$s"; then
 			source "$s" ""
 		fi
@@ -96,11 +96,11 @@ add_to_path \
 		-t "/sbin" \
 #		-h "/usr/local/lib/cw" \
 
-alias dif="$HOME/etc/scripts/dif.sh"
-alias undeaf="$HOME/etc/util/undeaf.sh"
-alias path2tag="$HOME/etc/scripts/path2tag.pl"
-alias vimv="$HOME/etc/scripts/vimv.sh"
-alias web="$HOME/etc/scripts/web.pl"
+alias dif="$ETC/scripts/dif.sh"
+alias undeaf="$ETC/util/undeaf.sh"
+alias path2tag="$ETC/scripts/path2tag.pl"
+alias vimv="$ETC/scripts/vimv.sh"
+alias web="$ETC/scripts/web.pl"
 
 
 #{{{1          aliases and functions that mask existing programs
@@ -343,7 +343,7 @@ alias raw2jpg='rawbatch --size=`show res` --out-path=.. *'
 #TODO: move this to foto.pl
 alias jpg2raw='test -d shot && cd shot; for i in *; do test -f ../`echo $i|sed "s/.cr2$/.jpg/"` || mv -v $i ../.qiv-trash/; done; unset i'
 
-alias kb='~/etc/desktop/switch-kbmap.sh'
+alias kb='$ETC/desktop/switch-kbmap.sh'
 
 function lddr()  # ldd "recursivo": faz ldd das bibliotecas nao-padrao mostradas pelo ldd
 { #{{{
@@ -393,7 +393,7 @@ unset uncommited
 
 alias ph='vi ~/src/txt/phonebook.txt'
 
-alias t='source ~/etc/scripts/untar.sh'
+alias t='source $ETC/scripts/untar.sh'
 alias grepsmallnear='find . -type f -maxdepth 2 -size -10k -not -name "* *" | xargs grep'
 #alias r='xset r'
 #alias k='sudo kbdrate -r 30 -d 250'
@@ -401,7 +401,7 @@ alias grepsmallnear='find . -type f -maxdepth 2 -size -10k -not -name "* *" | xa
 alias caps='xmodmap -e "remove Lock = Caps_Lock" -e "keysym Caps_Lock = Escape"'
 alias geom="xwininfo -root | sed -rn '/-geometry/s/[^0-9]*([0-9]+x[0-9]+).*/\1/p'"
 alias 2view='convert -quality 80 -resize `geom`'
-alias dt='~/etc/scripts/dtool.pl'
+alias dt='$ETC/scripts/dtool.pl'
 alias vd='dt vd'
 
 function waitload() {

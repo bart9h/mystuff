@@ -31,9 +31,9 @@ fi
 setxkbmap $kbmap || exit
 
 if test "$HOSTNAME" == "lambda"; then
-	xmodmap "$HOME"/etc/etc/Xmodmap.sun
+	xmodmap "$ETC/etc/Xmodmap.sun"
 elif test "$HOME" == "/u/nttx"; then
-	xmodmap "$HOME"/etc/etc/Xmodmap.br
+	xmodmap "$ETC/etc/Xmodmap.br"
 else
 	xmodmap -e "remove Lock = Caps_Lock" -e "keysym Caps_Lock = Escape"
 fi
@@ -48,7 +48,7 @@ if test "$trayicon_file"; then
 fi
 
 if which osd_cat &>/dev/null; then
-	source "$HOME/etc/bash/osd.sh"
+	source "$ETC/bash/osd.sh"
 	printf "setxkbmap %s\n" "$kbmap" | osd &
 else
 	echo "setxkbmap $kbmap"
