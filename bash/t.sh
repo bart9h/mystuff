@@ -11,25 +11,35 @@ function t()
 		arg=""
 	else
 		echo unknown archive type
-		arg="?"
+		return
 	fi
 
-	if [ "$arg" != "?" ]; then
-		# get the first filename from the archive
-		first=`tar tf$arg "$1" | head -1`
+	local d="$1_contents"
+	mkdir "$d" ||return
 
-		# if there's a path, extract right here
-		if echo $first | grep -q "/" && echo $first | grep -qv "^./[^/]*"; then
-			dir=`echo $first | cut -d \/ -f 1`
-			tar xvf$arg "$1" && cd "$dir" && ls
-		# if not, create a dir with the first part of the name of the archive
-		else
-			dir="`echo $1 | cut -d . -f 1`"
-			mkdir "$dir" && \
-			cd "$dir" && \
-			tar xfv$arg "../$1" && \
-			ls
-		fi
+	if tar -C "$d" -xv$arg -f "$1"; then
+		local count=$(ls -A "$d" 2>/dev/null| wc -l)
+		case $count in
+		1)
+			local d2=$(basename "$d"/*)
+			mv "$d"/* . ||return
+			rmdir "$d" ||return
+			cd "$d2"
+			;;
+
+		0)
+			echo "empty"
+			rmdir "$d"
+			return
+			;;
+
+		*)
+			cd "$d"
+			;;
+		esac
+		ls
+	else
+		rmdir "$d"
 	fi
 }
 
