@@ -398,7 +398,6 @@ unset uncommited
 
 alias ph='vi ~/src/txt/phonebook.txt'
 
-alias t='source $ETC/scripts/untar.sh'
 alias grepsmallnear='find . -type f -maxdepth 2 -size -10k -not -name "* *" | xargs grep'
 #alias r='xset r'
 #alias k='sudo kbdrate -r 30 -d 250'
