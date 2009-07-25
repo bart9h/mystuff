@@ -158,7 +158,8 @@ alias z='f -rt'
 
 #{{{1 abbreviations
 
-alias pac='sudo yaourt'
+alias pac='sudo pacman --needed'
+alias ya='sudo yaourt'
 alias p='ps -AH --format "%U %p %a"'
 alias l='less'
 alias cn='cat > /dev/null' # quick volatile writepad
