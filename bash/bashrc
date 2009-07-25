@@ -186,7 +186,8 @@ alias gc='git commit'
 alias gca='git commit -a'
 alias gci='git commit --interactive'
 alias gco='git checkout'
-alias gs="git status |\grep -v '\.\.\/'"
+alias gs.="git status |\grep -v '\.\.\/'"
+alias gs="git status"
 alias gd='git diff'
 function gl() {
 	git log --pretty=format:"%h %Cblue%cr%Creset %cn %Cred%d %Cgreen%s%Creset" --graph \
