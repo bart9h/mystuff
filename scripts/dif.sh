@@ -43,6 +43,7 @@ while test "$1"; do
 
 	if test -n "$tar_type"; then
 		target="/tmp/`basename "$1"`"
+		test -d "$target" && target="${target}-2"
 		mkdir $verbose "$target" || exit
 		dir="$target"
 		test -n "$verbose" && echo "untaring \"$1\" to \"$target\""
@@ -55,9 +56,9 @@ while test "$1"; do
 		fi
 	fi
 
-	test "$first" && a="$x" || b="$x"
-	test "$first" && adir="$dir" || bdir="$dir"
-	first=
+	$first && a="$x" || b="$x"
+	$first && adir="$dir" || bdir="$dir"
+	first=false
 	shift
 done
 
