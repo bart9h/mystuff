@@ -1,3 +1,5 @@
+#!/bin/bash
+
 function eset()
 {
 	tmp="/tmp/eset.$USER.sh"

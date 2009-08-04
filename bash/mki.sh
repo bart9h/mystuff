@@ -45,7 +45,7 @@ function mki()
 	elif test -e /etc/debian_version; then
 		t=debian
 	else
-		echo 'rpm sucks'; false; return
+		echo 'nope'; false; return
 	fi
 
 	cmd="sudo checkinstall --fstrans=no --type=$t --nodoc --pkgname=\"$name\" $args $CHECKINSTALL_ARGS $cmd"

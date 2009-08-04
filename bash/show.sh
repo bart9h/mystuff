@@ -68,7 +68,6 @@ function show()
 	;;#
 
 	sizeof)# #<C-type>
-		shift
 		test -z "$1" && echo "sizeof what?" && return
 		local arg
 		while true; do
@@ -87,7 +86,7 @@ function show()
 
 	*)# help
 		echo "options:"
-		grep ')#' "$ETC/bash/show.sh" |head -n -2 |tail -n +2 |sed 's/)\?#//g;s/|/\ or\ /g'
+		grep ')#' "$ETC/bash/show.sh" |sed 's/)\?#//g;s/|/\ or\ /g' |grep -v 'help\|foldmarker' #;;#
 	;;#
 
 	esac
