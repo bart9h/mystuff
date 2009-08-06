@@ -188,10 +188,11 @@ alias gs.="git status |\grep -v '\.\.\/'"
 alias gs='git status'
 alias gd='git diff'
 function gl() {
-	git log --pretty=format:"%h %Cblue%cr%Creset %cn %Cred%d %Cgreen%s%Creset" --graph \
+	git log --pretty=format:"%h %Cblue%cr%Creset %cn %Cred%d %Cgreen%s%Creset" --graph "$@" \
 	| sed 's/\((\|,\ \)refs\/\w\+\//\1/g;s/(origin\//(o\//g' \
 	| less
 }
+alias gr='(git log --color --stat -1; git diff --color HEAD~ HEAD)|less'
 alias gsd='git_stash_do "svn dcommit"'
 alias gsr='git_stash_do "svn rebase"'
 function git_stash_do()
