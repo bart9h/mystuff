@@ -203,6 +203,9 @@ imap <C-x> <ESC>:q<CR>
 
 nmap M :Man <C-R><C-W><CR>
 
+vmap <f1> "ay
+vmap <f2> "by:tabnew<CR>"bP:diffthis<CR>:set buftype=nofile<CR>:vnew<CR>"aP:set buftype=nofile<CR>:diffthis<CR>
+
 
 " {{{1 commands
 
