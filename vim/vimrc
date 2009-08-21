@@ -151,6 +151,8 @@ noremap ` '
 
 nnoremap <c-d> <c-d><c-d>
 
+nnoremap <C-L> :nohls<CR><C-L>
+
 nmap <S-tab> :tabnext<CR>
 
 " toggle spell cheching
