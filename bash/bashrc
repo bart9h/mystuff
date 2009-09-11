@@ -238,6 +238,7 @@ alias mprq='ls -Q | rl | xargs mplayer -fs -ao null'
 alias ponte='mplayer mms://201.18.53.75/pontelive'
 alias mistureba='tsocks mplayer http://74.86.142.195:8690'
 alias ytdl='youtube-dl -t -b'
+alias ion='ionice -c2 -n7'
 
 function v() {
 	if test "$1"; then
@@ -255,6 +256,7 @@ if test -e /etc/debian_version; then
 elif test -e /etc/arch-release; then
 
 	alias pac='sudo pacman --needed'
+	alias pacs='yaourt -Ss'
 	alias ya='sudo yaourt'
 
 elif test -e /etc/slackware-version; then
