@@ -86,6 +86,9 @@ fi
 
 export DMD_DIR='/opt/dmd'
 
+export XDG_DATA_HOME="$ETC"
+export XDG_CONFIG_HOME="$ETC"
+
 
 #{{{1 path
 
