@@ -1,3 +1,16 @@
 set editing-mode vi
+
+# Completed names which are symbolic links to
+# directories have a slash appended.
+set mark-symlinked-directories on
+
+set bell-style none
+
+set input-meta on
+set convert-meta off
+set output-meta on
+
+# 4DOS-like up-down history search
 "\e[A":history-search-backward
 "\e[B":history-search-forward
+
