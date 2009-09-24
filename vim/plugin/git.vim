@@ -1,3 +1,7 @@
+if version < 700
+	finish
+endif
+
 if !exists('g:git_command_edit')
     let g:git_command_edit = 'new'
 endif

@@ -64,6 +64,11 @@
 " This will show you the current branch only. No prefix text, no characters
 " around it. You can also make another functions to use the returned array.
 "
+
+if version < 700
+	finish
+endif
+
 let s:menu_on		= 0
 let s:checking		= ""
 let s:rebase_msg	= 'Rebasing,merging,bisecting?'

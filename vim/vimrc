@@ -110,12 +110,14 @@ set foldminlines=2
 set nonumber
 set showcmd
 
-autocmd InsertLeave * se nocursorline
-autocmd InsertEnter * se cursorline
+if version >= 700
+	autocmd InsertLeave * se nocursorline
+	autocmd InsertEnter * se cursorline
 
-"status line
-set laststatus=2
-set statusline=%<%f\ %h%m%r(%{GitBranchInfoTokens()[0]})%=%-14.(%l,%c%V%)\ %P
+	"status line
+	set laststatus=2
+	set statusline=%<%f\ %h%m%r(%{GitBranchInfoTokens()[0]})%=%-14.(%l,%c%V%)\ %P
+endif
 
 " nao pisca sobre ([{pares}])
 let loaded_matchparen=1

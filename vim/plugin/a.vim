@@ -15,6 +15,10 @@
 " Patch for spaces in files/directories from Nathan Stien (also reported by
 " Soeren Sonnenburg)
 
+if version < 700
+	finish
+endif
+
 " Do not load a.vim if is has already been loaded.
 if exists("loaded_alternateFile")
     finish
