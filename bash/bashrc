@@ -234,6 +234,7 @@ function v() {
 		vim .
 	fi
 }
+alias Con="vim -o \$(grep -rl '^=======\$' .) +'set nofoldenable' +Con"
 
 if test -e /etc/debian_version; then
 
