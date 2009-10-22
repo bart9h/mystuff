@@ -183,6 +183,7 @@ alias gk='(while test ! -d .git -a "$PWD" != /; do cd .. || exit; done; test -d 
 alias gc='git commit'
 alias gca='git commit -a'
 alias gci='git commit --interactive'
+alias gri='git rebase -i'
 alias gco='git checkout'
 alias gs.="git status |\grep -v '\.\.\/'"
 alias gs='git status'
