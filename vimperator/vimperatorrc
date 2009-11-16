@@ -1,6 +1,7 @@
 "2.0 (created: 2009/03/28 23:48:07)
 map \\ :set invum<CR>
 map r :echo "reload?"<CR>
+map E :o javascript:document.body.contentEditable='true'; document.designMode='on'; void 0<CR>
 set guioptions=mrb
 
 set nextpattern+=^\s*siguiente\s*$
