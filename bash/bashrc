@@ -259,8 +259,9 @@ if test -e /etc/debian_version; then
 elif test -e /etc/arch-release; then
 
 	alias pac='sudo pacman --needed'
-	alias pacs='yaourt -Ss'
-	alias ya='sudo yaourt'
+	alias pacs='pacman -Ss'
+	alias ya='sudo yaourt --needed'
+	alias yas='yaourt -Ss'
 
 elif test -e /etc/slackware-version; then
 
