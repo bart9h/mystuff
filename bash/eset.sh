@@ -9,7 +9,7 @@ function eset()
 
 	local i
 	for i in "$@"; do
-		echo "export $i=${!i}" >> "$tmp"
+		echo "export $i='${!i}'" >> "$tmp"
 	done
 	$EDITOR "$tmp" && source "$tmp"
 }
