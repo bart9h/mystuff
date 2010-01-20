@@ -204,7 +204,7 @@ imap <C-n> <ESC><C-n>
 nmap , :cn<CR>
 
 " quit
-nmap <C-x> :q<CR>:resize<CR>
+nmap <C-x> :q<CR>
 imap <C-x> <ESC>:q<CR>
 
 nmap M :Man <C-R><C-W><CR>
