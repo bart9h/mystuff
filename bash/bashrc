@@ -205,7 +205,7 @@ alias gs='git status'
 alias gd='git diff'
 function gl() {
 	git log --pretty=format:"%h %Cblue%cr%Creset %cn %Cred%d %Cgreen%s%Creset" --graph "$@" \
-	| sed 's/\((\|,\ \)refs\/\w\+\//\1/g;s/(origin\//(o\//g' \
+	| sed 's/\((\|,\ \)refs\/\w\+\//\1/g;s/origin\//o\//g' \
 	| less
 }
 alias gr='(git log --color --stat -1; git diff --color HEAD~ HEAD)|less'
