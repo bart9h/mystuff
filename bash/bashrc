@@ -374,6 +374,7 @@ alias raw2jpg='rawbatch --size=`show res` --out-path=.. *'
 
 #TODO: move this to foto.pl
 alias jpg2raw='test -d shot && cd shot; for i in *; do test -f ../`sed "s/.cr2$/.jpg/" <<< "$i"` || mv -v $i ../.qiv-trash/; done; unset i'
+alias mvufraw='for z in *.ufraw; do mv -v $z $HOME/fotos/$(echo $z|sed "s/^\([0-9]\{4\}\)\([0-9]\{2\}\)\([0-9]\{2\}\).*$/\1\/\2-\3/")/; done'
 
 alias kb='$ETC/desktop/switch-kbmap.sh'
 
