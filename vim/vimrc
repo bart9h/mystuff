@@ -215,6 +215,8 @@ vmap <f2> "by:tabnew<CR>"bP:diffthis<CR>:set buftype=nofile<CR>:vnew<CR>"aP:set 
 
 " {{{1 commands
 
+command! SudoW w !sudo tee % >/dev/null
+
 command! Conflict /^\(=======$\|<<<<<<< \|>>>>>>> \)/
 command! Todo /\<\(TODO\|FIXME\|XXX\|HACK\)\>/
 
