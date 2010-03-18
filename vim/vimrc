@@ -201,6 +201,7 @@ nmap <C-n> :wall<CR>:make<CR>
 "nmap <C-n> :update<CR>:make %:r.o<CR>
 "TODO: se terminar sem arquivo carregado, :q<CR>
 imap <C-n> <ESC><C-n>
+nmap , :cn<CR>
 
 " quit
 nmap <C-x> :q<CR>:resize<CR>
