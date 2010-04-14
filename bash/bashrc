@@ -355,7 +355,7 @@ alias rawbatch='ufraw-batch --wb=camera --exposure=auto --out-type=jpeg --compre
 alias raw2jpg='rawbatch --size=`show res` --out-path=.. *'
 
 #TODO: move this to foto.pl
-alias jpg2raw='test -d shot && cd shot; for i in *; do test -f ../`echo $i|sed "s/.cr2$/.jpg/"` || mv -v $i ../.qiv-trash/; done; unset i'
+alias jpg2raw='test -d shot && cd shot; for i in *; do test -f ../`sed "s/.cr2$/.jpg/" <<< "$i"` || mv -v $i ../.qiv-trash/; done; unset i'
 
 alias kb='$ETC/desktop/switch-kbmap.sh'
 
@@ -450,7 +450,7 @@ alias ntop='sudo jnettop'
 alias g9='gkrellm -w -s 9h &'
 alias irc='irssi -n barrett9h -c irc.freenode.net'
 #alias lm='nice lame -m s -v -h -V 2 -b 32 -B 320'
-alias lm='for i in *.wav; do job nice lame -v "$i" "`echo $i | sed s/wav$/mp3/`"; done; unset i'
+alias lm='for i in *.wav; do job nice lame -v "$i" "$(sed "s/wav$/mp3/" <<< "$i")"; done; unset i'
 alias treo='nice lame -m j -v -f'
 #alias v='gvim -geom 80x50 +"set guioptions-=T" +"set guioptions-=m" -font "-misc-fixed-medium-r-semicondensed-*-*-120-*-*-c-*-iso8859-1"'
 
@@ -487,10 +487,10 @@ function cdp() {
 function bk() {
 	local bkdir="$HOME/BACKUP"
 	local n
-	let n=$( echo $1 | wc -c ) - 1
+	let n=$(wc -c <<< "$1") - 1
 	local dir
-	if test / == $( echo $1 | cut -b $n ); then
-		dir="$( echo $1 | cut -b 1-$(($n - 1)) )"
+	if test / == $( cut -b $n <<< "$1" ); then
+		dir="$( cut -b 1-$(($n - 1)) <<< "$1" )"
 	else
 		dir="$1"
 	fi
@@ -595,7 +595,7 @@ esac
 #{{{ the command prompt
 
 export HISTCONTROL="ignoreboth"
-PS1='\[\e[0;'$prompt_color'm\]\t [$(echo $STY|cut -d . -f 2).$WINDOW] \u@\h \w $(git branch 2>/dev/null | grep -e "^\* ")$(git status 2>/dev/null | grep -q "^# Change" && echo "[+]")\[\e[0m\]\n\$ '
+PS1='\[\e[0;'$prompt_color'm\]\t [$(cut -d . -f 2 <<< $STY).$WINDOW] \u@\h \w $(git branch 2>/dev/null | grep -e "^\* ")$(git status 2>/dev/null | grep -q "^# Change" && echo "[+]")\[\e[0m\]\n\$ '
 export PS1
 export THE_PS1=$PS1
 
@@ -608,11 +608,11 @@ function titlebar()
 	test -n "$WINDOW" || return
 	local s="$*"
 	case "$s" in cd|cd\ *|ls|ls\ *|screen|screen\ *) return ;; esac
-	s="`echo $s | cut -d \  -f 1`"
+	s="$(cut -d \  -f 1 <<< "$s")"
 	screen -X title "$s"
 }
 
-if echo "$BASH_VERSION" |  grep -q '^3\.1\..*'; then
+if grep -q '^3\.1\..*' <<< "$BASH_VERSION"; then
 	#set -o functrace
 	trap 'titlebar $BASH_COMMAND' DEBUG
 fi

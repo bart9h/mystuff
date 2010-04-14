@@ -10,7 +10,7 @@ function s()
 		return
 	fi
 
-	local name="$(echo "$1" | sed 's/\/$//')"; shift
+	local name="$(sed 's/\/$//' <<< "$1")"; shift
 	local escape=""
 
 	# if arg is _, create "meta" screen

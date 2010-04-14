@@ -3,11 +3,11 @@
 function t()
 {
 	# check archive type (by filename's extension)
-	if echo "$1" | grep -q ".tar.gz$\|.tgz$"; then
+	if grep -q ".tar.gz$\|.tgz$" <<< "$1"; then
 		arg="z"
-	elif echo "$1" | grep -q ".tar.bz2$\|.tbz$\|.tbz2"; then
+	elif grep -q ".tar.bz2$\|.tbz$\|.tbz2 <<< "$1""; then
 		arg="j"
-	elif echo "$1" | grep -q ".tar$"; then
+	elif grep -q ".tar$" <<< "$1"; then
 		arg=""
 	else
 		echo unknown archive type
