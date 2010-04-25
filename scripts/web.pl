@@ -105,12 +105,12 @@ my %engines = (
 	wiki => {
 		description => 'Wikipedia (english)',
 		args => [ '-w',  '--wikipedia' ],
-		url => 'http://en.wikipedia.org/wiki/',  # felling lucky
+		url => 'http://en.wikipedia.org/wiki/Special:Search/',
 	},
 	wpt => {
 		description => 'Wikipedia (portuguese)',
 		args => [ '-wpt', '--wikipedia-pt' ],
-		url => 'http://pt.wikipedia.org/wiki/',  # felling lucky
+		url => 'http://pt.wikipedia.org/wiki/Especial:Busca/',
 	},
 );
 
