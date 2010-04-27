@@ -117,7 +117,7 @@ function mv() {
 		dir="$(dirname "$target")"
 	fi
 	test -d "$dir" || mkdir -vp "$dir"
-	$(which mv) "$@"
+	command mv "$@"
 }
 
 alias mv='mv -i'
