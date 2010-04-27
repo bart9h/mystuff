@@ -61,7 +61,7 @@ export LANGUAGE="$LANG"
 export LC_COLLATE="C"
 
 export LESS='-X -F -M -R -f -J -W -j4'
-export PAGER="less $LESS"
+export PAGER='less'
 export MANPAGER="$PAGER"
 #export MANPAGER="col -b | view -c 'set ft=man nomod nolist' -"
 [ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
