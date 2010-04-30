@@ -249,6 +249,7 @@ function v() {
 	fi
 }
 alias Con="vim -o \$(grep -rl '^=======\$' .) +'set nofoldenable' +Con"
+alias TODO="vim -o \$(grep -rl '\<\(TODO\|FIXME\|XXX\|HACK\)\>' *.{c,d,h,sh,pl,pm,java,cpp,cxx,C} 2>/dev/null) +'set nofoldenable' +Todo"
 
 if test -e /etc/debian_version; then
 
