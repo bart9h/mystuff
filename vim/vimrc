@@ -72,6 +72,7 @@ autocmd! FileType perl FileTypePerl
 command! FileTypePerl setlocal makeprg=perl\ -c\ %
 \	| setlocal keywordprg=perldoc\ -f
 \	| setlocal cindent
+\	| setlocal number
 \	| setlocal errorformat=
 \%-G%.%#had\ compilation\ errors.,
 \%-G%.%#syntax\ OK,
