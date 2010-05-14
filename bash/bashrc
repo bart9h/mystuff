@@ -258,7 +258,7 @@ elif test -e /etc/arch-release; then
 
 	alias pac='sudo pacman --needed'
 	alias pacs='pacman -Ss'
-	alias ya='sudo yaourt --needed'
+	alias ya='yaourt --needed'
 	alias yas='yaourt -Ss'
 
 elif test -e /etc/slackware-version; then
