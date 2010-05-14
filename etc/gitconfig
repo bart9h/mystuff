@@ -32,4 +32,4 @@
 	status = auto
 
 [merge]
-	tool = meld
+	tool = vimdiff
