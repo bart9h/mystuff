@@ -19,6 +19,7 @@ function add_to_path()
 				end='head'
 			;;
 			*)
+			if test -d "$1"; then
 				if
 					! expr match "$PATH"    "$1:"  >/dev/null &&
 					! expr match "$PATH" ".*:$1:"  >/dev/null &&
@@ -30,6 +31,7 @@ function add_to_path()
 						export PATH="$1:$PATH"
 					fi
 				fi
+			fi
 			;;
 		esac
 		shift
