@@ -42,6 +42,11 @@ function s()
 		test -z "$session_name" -o "$session_name" == "." \
 		&& session_name="`basename "$PWD"`"
 
+		if test "$session_name" == "src"; then
+			local p="$(cd .. && basename "$PWD")"
+			test "$p" != "/" && session_name="$p"
+		fi
+
 		test -n "$WINDOW" && screen -X title "$session_name"
 		TERM=xterm screen $escape -S "$session_name"
 
