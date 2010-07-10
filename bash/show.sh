@@ -6,6 +6,11 @@ function show()
 	local what="$1"; shift
 	case "$what" in
 
+	ip)#
+		wget -O - checkip.dyndns.org 2>/dev/null |
+		sed 's/^.*IP Address: \([^<]*\).*$/\1/'
+	;;#
+
 	colors)#
 		for b in 0 1; do
 			for j in 3 4; do
