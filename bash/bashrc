@@ -187,7 +187,7 @@ function h()
 } #}}}
 
 
-alias u='if test $( ls *.rar 2>/dev/null | wc -l ) == 1; then rar x *.rar && rm *.rar; elif test $( ls *.zip 2>/dev/null | wc -l ) == 1; then unzip *.zip && rm *.zip; else echo \?; fi'
+alias u='if test $( ls *.rar 2>/dev/null | wc -l ) == 1; then unrar x *.rar && rm *.rar; elif test $( ls *.zip 2>/dev/null | wc -l ) == 1; then unzip *.zip && rm *.zip; else echo \?; fi'
 
 alias pgw='ping gw'
 alias pwl='ping wl'
