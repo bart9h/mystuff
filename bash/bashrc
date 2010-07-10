@@ -233,6 +233,7 @@ alias cmi='conf && mk && mki'
 alias qpro='rm Makefile *.pro; qmake -project && qmake && make clean'
 
 alias mp='mplayer'
+alias mpw='while pgrep mplayer; do sleep 1s; done'
 alias mpf='mplayer -fs -osdlevel 0'
 alias mpdvd='mplayer -identify dvd://1 -dvd-device "$PWD"'
 alias mpq='mplayer -nosound -osdlevel 0'
