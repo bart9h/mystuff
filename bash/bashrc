@@ -92,9 +92,6 @@ fi
 
 export DMD_DIR='/opt/dmd'
 
-export XDG_DATA_HOME="$ETC"
-export XDG_CONFIG_HOME="$ETC"
-
 
 #{{{1 path
 
@@ -199,7 +196,6 @@ alias u='if test $( ls *.rar 2>/dev/null | wc -l ) == 1; then unrar x *.rar && r
 alias pgw='ping gw'
 alias pwl='ping wl'
 alias pgo='ping google.com'
-alias links='which links >/dev/null && links || elinks'
 
 alias gk='(while test ! -d .git -a "$PWD" != /; do cd .. || exit; done; test -d .git && ( exec gitk --all & ) || echo .git not found)'
 alias gc='git commit'
