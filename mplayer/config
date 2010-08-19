@@ -1,6 +1,11 @@
-# vim:ft=mplayerconf:
-
+[default]
+ao=alsa
 subfont-text-scale=3
 subpos=96
 mixer-channel=Master
 stop-xscreensaver=1
+
+[gnome-mplayer]
+msglevel=all=5
+
+# vim:ft=mplayerconf:
