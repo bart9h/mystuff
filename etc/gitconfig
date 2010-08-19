@@ -30,12 +30,12 @@
 	color = auto
 
 [color]
-	ui = always
+	ui          = always
 	interactive = always
-	branch = auto
-	diff = auto
-	pager = true
-	status = auto
+	branch      = auto
+	diff        = auto
+	pager       = true
+	status      = auto
 
 [merge]
 	tool = vimdiff
