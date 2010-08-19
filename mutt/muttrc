@@ -1,15 +1,15 @@
 # A basic .muttrc for use with Gmail
 
 # Change the following six lines to match your Gmail account details
-set imap_user = "YOUR.EMAIL@gmail.com"
-set imap_pass = "PASSWORD"
-set smtp_url = "smtp://YOUR.EMAIL@smtp.gmail.com:587/"
-set smtp_pass = "PASSWORD"
-set from = "YOUR.EMAIL@gmail.com"
-set realname = "YOUR NAME"
+set imap_user = "rodolfo.borges@gmail.com"
+#set imap_pass = "PASSWORD"
+set smtp_url = "smtp://rodolfo.borges@smtp.gmail.com:587/"
+#set smtp_pass = "PASSWORD"
+set from = "rodolfo.borges@gmail.com"
+set realname = "Rodolfo Borges"
 
 # Change the following line to a different editor you prefer.
-set editor = "nano"
+set editor = "vim"
 
 # Basic config, you can leave this as is
 set folder = "imaps://imap.gmail.com:993"
