@@ -1,7 +1,7 @@
 
 port_range = 59222-59222
-#encryption = allow_incoming,try_outgoing,enable_retry
-encryption = require_RC4
+encryption = allow_incoming,try_outgoing,enable_retry
+#encryption = require_RC4
 
 max_open_sockets = 80
 
