@@ -201,7 +201,7 @@ alias gci='git commit --interactive'
 alias gri='git rebase -i'
 alias gco='git checkout'
 alias gs.="git status |\grep -v '\.\.\/'"
-alias gs='git status'
+alias gs='git status -sb'
 alias gd='git diff'
 function gl() {
 	git log --pretty=format:"%h %Cblue%cr%Creset %cn %Cred%d %Cgreen%s%Creset" --graph --all "$@" \
