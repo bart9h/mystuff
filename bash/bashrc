@@ -209,6 +209,7 @@ function gl() {
 	| less
 }
 alias gr='(git log --color --stat -1; git diff --color HEAD~ HEAD)|less'
+alias gsp='git_stash_do "pull"'
 alias gsd='git_stash_do "svn dcommit"'
 alias gsr='git_stash_do "svn rebase"'
 function git_stash_do()
