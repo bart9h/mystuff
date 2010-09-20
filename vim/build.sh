@@ -9,6 +9,7 @@ case "$1" in
 			--disable-nls \
 			--enable-multibyte \
 			--enable-perlinterp \
+			--enable-pythoninterp \
 			--enable-gui=no \
 			--without-x \
 			|| exit
@@ -19,6 +20,7 @@ case "$1" in
 			--disable-nls \
 			--enable-multibyte \
 			--enable-perlinterp \
+			--enable-pythoninterp \
 			--enable-gui=gtk2 \
 			|| exit
 	;;
