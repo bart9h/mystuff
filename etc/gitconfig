@@ -3,25 +3,25 @@
 	email = rodolfo.borges@gmail.com
 
 [alias]
-    c  = commit
-    ca = commit -a
-    ci = commit --interactive
-    co = checkout
+	c  = commit
+	ca = commit -a
+	ci = commit --interactive
+	co = checkout
 	d  = diff
-    st = status -a
+	st = status -a
 
 [apply]
-    whitespace = strip
+	whitespace = strip
 
 [diff]
-    color = auto
-    rename = copy 
+	color = auto
+	rename = copy
 
 [pager]
-    color = true 
+	color = true
 
 [status]
-    color = auto
+	color = auto
 
 [color]
 	ui = always
