@@ -9,6 +9,7 @@
 	co = checkout
 	d  = diff
 	st = status -a
+	fixup = commit --amend -C HEAD
 
 [apply]
 	whitespace = strip
