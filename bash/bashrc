@@ -74,7 +74,7 @@ export MANPAGER="$PAGER"
 
 export EDITOR="vim"
 export SVN_EDITOR="$EDITOR"
-export GREP_OPTIONS='--exclude="*.svn-base"'
+export GREP_OPTIONS='--exclude="*.svn-base" --exclude="\.git"'
 export GREP_COLOR="1;33"
 
 # paths
