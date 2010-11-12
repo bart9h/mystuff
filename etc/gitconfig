@@ -9,6 +9,7 @@
 	co = checkout
 	d  = diff
 	st = status -a
+	ri = rebase -i
 	fixup = commit --amend -C HEAD
 
 [apply]
