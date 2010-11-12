@@ -235,6 +235,7 @@ function git_stash_do()
 alias configure='nice ./configure --disable-nls'
 alias mk="nice make -j $(( `show cpus` + 1 ))"
 alias rmk='make clean && mk'
+alias rcmk='test $(basename "$PWD") == build && test -e ../CMakeLists.txt && /bin/rm -rf * && cmake ..'
 alias cm='configure && mk'
 alias conf='./configure --help && read a && configure $a'
 alias confh='./configure --help | less'
