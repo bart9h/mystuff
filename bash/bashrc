@@ -16,6 +16,12 @@ function _load() {
 _load "$ETC/bash/functions"
 
 
+#{{{1 global variables
+
+SOURCE_EXTENSIONS='d pl pm sh js java py rb c h cpp cxx C hxx hpp'
+SOURCE_EXTGLOB='*.{d,pl,pm,sh,js,java,py,rb,c,h,cpp,cxx,C,hxx,hpp}'
+
+
 #{{{1 lazy-loading of functions
 
 for i in "$ETC/bash/"*.sh; do
@@ -156,7 +162,7 @@ function a() {
 		fi  
 	fi
 }
-alias c='a *.{c,d,h,sh,pl,pm,java,cpp,cxx,C} 2>/dev/null'
+alias c='a $SOURCE_EXTGLOB 2>/dev/null'
 alias d='ls -lF'
 function f() {
 	\ls -FGhln --color=always --time-style=long-iso "$@" |
@@ -251,7 +257,7 @@ function v() {
 	fi
 }
 alias Con="vim -o \$(grep -rl '^=======\$' .) +'set nofoldenable' +Conflict"
-alias TODO="vim -o \$(grep -rl '\<\(TODO\|FIXME\|XXX\|HACK\)\>' *.{c,d,h,sh,pl,pm,java,cpp,cxx,C} 2>/dev/null) +'set nofoldenable' +Todo"
+alias TODO="vim -o \$(grep -rl '\<\(TODO\|FIXME\|XXX\|HACK\)\>' $SOURCE_EXTGLOB 2>/dev/null) +'set nofoldenable' +Todo"
 
 if test -e /etc/debian_version; then
 
