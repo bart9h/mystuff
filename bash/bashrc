@@ -233,7 +233,7 @@ function git_stash_do()
 }
 
 alias configure='nice ./configure --disable-nls'
-alias mk="nice make -j `show cpus`"
+alias mk="nice make -j $(( `show cpus` + 1 ))"
 alias rmk='make clean && mk'
 alias cm='configure && mk'
 alias conf='./configure --help && read a && configure $a'
