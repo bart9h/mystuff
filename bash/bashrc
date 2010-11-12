@@ -129,6 +129,7 @@ function mv() {
 alias mv='mv -i'
 if [ "$OSTYPE" == "linux-gnu" ]; then
 alias grep='grep --exclude="*.svn-base" --devices=skip --color=auto'
+alias greps='grep $(for i in $SOURCE_EXTENSIONS; do echo --include="*."$i; done)'
 alias cp='cp -i --preserve=timestamps'
 fi
 
