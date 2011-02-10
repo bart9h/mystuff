@@ -2,6 +2,9 @@
 	name = Rodolfo Borges
 	email = rodolfo.borges@gmail.com
 
+[core]
+	excludefiles = ~/.gitignore
+
 [alias]
 	c  = commit
 	ca = commit -a
@@ -11,6 +14,7 @@
 	st = status -a
 	ri = rebase -i
 	fixup = commit --amend -C HEAD
+	l = log --pretty=format:'%h %Cblue%cr%Creset %cn %Cred%d %Cgreen%s%Creset' --graph --all
 
 [apply]
 	whitespace = strip
@@ -35,3 +39,10 @@
 
 [merge]
 	tool = vimdiff
+	options = --no-ff
+
+[sendemail]
+	smtpencryption = tls
+	smtpserver = smtp.gmail.com
+	smtpuser = rodolfo.borges@gmail.com
+	smtpserverport = 587
