@@ -261,7 +261,7 @@ alias TODO="vim -o \$(grep -rl '\<\(TODO\|FIXME\|XXX\|HACK\)\>' $SOURCE_EXTGLOB 
 
 if test -e /etc/debian_version; then
 
-	alias apt='sudo aptitude'
+	alias apt='sudo ionice -c2 -n7 aptitude'
 
 elif test -e /etc/arch-release; then
 
