@@ -130,6 +130,7 @@ alias greps='grep $(for i in $SOURCE_EXTENSIONS; do echo --include="*."$i; done)
 alias cp='cp -i --preserve=timestamps'
 fi
 
+alias qiv='qiv -e'
 alias tig='tig --all'
 alias xxd='xxd -c $(( (($COLUMNS - 10)/7)*2 ))'
 alias wget='wget -c --timeout=15 --wait=0 --tries=0'
