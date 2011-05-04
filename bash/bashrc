@@ -376,6 +376,7 @@ alias cdrec='sudo cdrecord -v dev=/dev/cdrom'
 # quick edit&reload this file
 alias ea='vim ~/.bashrc && source ~/.bashrc'
 
+alias taillog='sudo tail -f $(file $(sudo find /var/log -type f -not -name "*.[0-9]*") | grep text | cut -d : -f 1)'
 alias rawbatch='ufraw-batch --wb=camera --exposure=auto --out-type=jpeg --compression=80'
 
 alias raw2jpg='rawbatch --size=`show res` --out-path=.. *'
