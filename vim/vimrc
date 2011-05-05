@@ -159,7 +159,7 @@ nnoremap <c-d> <c-d><c-d>
 
 nnoremap <C-L> :nohls<CR><C-L>
 
-nmap <S-tab> :tabnext<CR>
+nmap <tab> :tabnext<CR>
 
 " toggle spell cheching
 nmap <F8> :set spelllang=en spell!<CR>
@@ -219,10 +219,20 @@ vmap <f2> "by:tabnew<CR>"bP:diffthis<CR>:set buftype=nofile<CR>:vnew<CR>"aP:set 
 
 " {{{1 commands
 
-command! SudoW w !sudo tee % >/dev/null
-
 command! Conflict /^\(=======$\|<<<<<<< \|>>>>>>> \)/
 command! Todo /\<\(TODO\|FIXME\|XXX\|HACK\)\>/
+
+command! GD
+\  GitDiff
+\| set filetype=diff
+\| set buftype=nofile
+
+command! GDS
+\  GitDiff --staged
+\| set filetype=diff
+\| set buftype=nofile
+
+command! SudoW w !sudo tee % >/dev/null
 
 command! ToAscii
 \ 	%s///

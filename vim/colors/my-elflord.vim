@@ -32,7 +32,7 @@ hi LineNr ctermfg=DarkRed
 hi Folded ctermfg=blue cterm=bold
 hi Comment  ctermfg=darkgray  guifg=#80a0ff
 
-hi Search ctermbg=green ctermfg=yellow guibg=#b000b0
+hi Search ctermbg=green ctermfg=white
 
 
 " {{{1 reference
