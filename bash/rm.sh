@@ -48,7 +48,7 @@ function rm()
 
 	# finally, call /bin/rm with original arguments
 	# ie:  grep -v 'shift' rm.sh  || die
-	$(which rm) "$@"
+	$(which rm) -v "$@"
 
 }
 
