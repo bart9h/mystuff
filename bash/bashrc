@@ -202,7 +202,6 @@ alias gk='(while test ! -d .git -a "$PWD" != /; do cd .. || exit; done; test -d 
 alias gc='git commit'
 alias gca='git commit -a'
 alias gci='git commit --interactive'
-alias gri='git rebase -i'
 alias gco='git checkout'
 alias gsa='git status -sb'
 alias gs='gsa --untracked-files=no'
@@ -211,6 +210,13 @@ alias gd='git diff'
 alias gds='git diff --staged'
 alias gsl='git stash list'
 alias gspop='git stash pop'
+function gri() {
+	if test -n "$1"; then
+		git rebase -i "$@"
+	else
+		git rebase -i "origin"
+	fi
+}
 function gl() {
 	git log --pretty=format:"%h %Cblue%cr%Creset %cn %Cred%d %Cgreen%s%Creset" --graph --all "$@" \
 	| sed 's/\((\|,\ \)refs\/\w\+\//\1/g;s/origin\//o\//g' \
