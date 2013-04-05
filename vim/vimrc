@@ -74,6 +74,7 @@ highlight RedundantSpaces ctermbg=red guibg=red
 match RedundantSpaces /\s\+$\| \+\ze\t/
 
 if has("gui_running")
+	set novisualbell
 	set guioptions -=T
 	set guifont=Inconsolata\ 12
 	colorscheme darkblue
