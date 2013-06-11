@@ -166,7 +166,6 @@ sub main()
 	{# interpret parameters
 		my $arg = shift @ARGV;
 
-		my $term;
 		if($check_args and $arg =~ /^-/) {
 			if($arg =~ /^--$/) {
 				$check_args = 0;

@@ -410,10 +410,8 @@ alias reconnect='sudo kill `pidof dhclient`; sudo ifconfig eth0 down; sudo dhcli
 function do_crun() {
 	local cc="$1"; shift
 	local aout=`mktemp /tmp/crun.XXXXXX`
-	if $cc "$@" -o "$aout" -; then
-		"$aout"
-		rm "$aout"
-	fi
+	$cc "$@" -o "$aout" - && "$aout"
+	`which rm` -f "$aout"
 }
 
 function crun() {
@@ -500,7 +498,7 @@ alias treo='nice lame -m j -v -f'
 
 alias mame='xmame.x11 -rompath .'
 
-function mkcd() { mkdir "$1" && cd "$1"; }
+function mkcd() { mkdir -p "$1" && cd "$1"; }
 function cd..() {
 	local dir="$PWD"
 	cd .. || return

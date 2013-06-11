@@ -31,6 +31,8 @@ function add_to_path()
 						export PATH="$1:$PATH"
 					fi
 				fi
+			else
+				echo "\"$1\": not a directory"
 			fi
 			;;
 		esac

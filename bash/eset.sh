@@ -4,7 +4,7 @@ function eset()
 {
 	tmp="/tmp/eset.$USER.sh"
 	if test -s "$tmp"; then
-		rm "$tmp" || return
+		\rm "$tmp" || return
 	fi
 
 	local i
