@@ -76,6 +76,7 @@ export EDITOR="vim"
 export SVN_EDITOR="$EDITOR"
 export GREP_OPTIONS='--exclude="*.svn-base" --exclude="\.git"'
 export GREP_COLOR="1;33"
+export TIG_DIFF_OPTS='-b'
 
 # paths
 export DERELICT_DIR='/home/sft/d/derelict'
@@ -125,7 +126,7 @@ function mv() {
 
 alias mv='mv -i'
 if [ "$OSTYPE" == "linux-gnu" ]; then
-alias grep='grep --exclude="*.svn-base" --devices=skip --color=auto'
+alias grep='grep --exclude="*.svn-base" --exclude=".git" --devices=skip --color=auto'
 alias greps='grep $(for i in $SOURCE_EXTENSIONS; do echo --include="*."$i; done)'
 alias cp='cp -i --preserve=timestamps'
 fi
@@ -206,8 +207,8 @@ alias gco='git checkout'
 alias gsa='git status -sb'
 alias gs='gsa --untracked-files=no'
 alias gs.="gs |\grep -v '\.\.\/'"
-alias gd='git diff'
-alias gds='git diff --staged'
+alias gd='git diff -p --stat -b --patience'
+alias gds='gd --staged'
 alias gsl='git stash list'
 alias gspop='git stash pop'
 function gri() {
@@ -222,7 +223,8 @@ function gl() {
 	| sed 's/\((\|,\ \)refs\/\w\+\//\1/g;s/origin\//o\//g' \
 	| less
 }
-alias gr='(git log --color --stat -1; git diff --color HEAD~ HEAD)|less'
+alias gr='(git log --color --stat -1; git diff -b --word-diff --color HEAD~ HEAD)|less'
+alias gspop='git stash pop'
 alias gsp='git_stash_do "pull"'
 alias gsd='git_stash_do "svn dcommit"'
 alias gsr='git_stash_do "svn rebase"'
