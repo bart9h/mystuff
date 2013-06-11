@@ -652,23 +652,21 @@ PS1='\[\e[0;'$prompt_color'm\]\t [$PS1_sty.$WINDOW] \u@\h \w$(__git_ps1)\[\e[0m\
 export PS1
 export THE_PS1=$PS1
 
-if test -n "$WINDOW"; then
-	PROMPT_COMMAND='test -n "$WINDOW" && screen -X title "${PWD/$HOME/~}"'
-fi
-
 function titlebar()
 {
-	test -n "$WINDOW" || return
-	local s="$*"
-	case "$s" in cd|cd\ *|ls|ls\ *|screen|screen\ *) return ;; esac
-	s="$(cut -d \  -f 1 <<< "$s")"
-	screen -X title "$s"
+	case "$*" in trap|trap\ *|cd|cd\ *|ls|ls\ *|screen|screen\ *) return ;; esac
+	local t="$(cut -d \  -f 1 <<< "$*")"
+	if test -n "$WINDOW" -a "$t" != "trap"; then
+		screen -X title "$t"
+		my_title="$t"
+	fi
 }
 
-if grep -q '^3\.1\..*' <<< "$BASH_VERSION"; then
-	#set -o functrace
-	trap 'titlebar $BASH_COMMAND' DEBUG
+if test -n "$WINDOW"; then
+	PROMPT_COMMAND='trap DEBUG; if test -n "$WINDOW"; then my_t="${PWD/$HOME/~}"; if test "$my_t" != "$my_title"; then screen -X title "$my_t"; my_title="$my_t"; unset my_t; fi; fi; trap "titlebar \$BASH_COMMAND" debug'
 fi
+
+trap 'titlebar $BASH_COMMAND' DEBUG
 
 #}}}
 #{{{1  local stuff from .bashrc_local_post may override
