@@ -636,8 +636,19 @@ esac
 #}}}
 #{{{ the command prompt
 
+GIT_PS1_SHOWDIRTYSTATE=1
+GIT_PS1_SHOWSTASHSTATE=1
+GIT_PS1_SHOWUNTRACKEDFILES=1
+# Explicitly unset color (default anyhow). Use 1 to set it.
+GIT_PS1_SHOWCOLORHINTS=
+GIT_PS1_DESCRIBE_STYLE="branch"
+GIT_PS1_SHOWUPSTREAM="auto git"
+source "$ETC/sys/git-prompt.sh"
+
 export HISTCONTROL="ignoreboth"
-PS1='\[\e[0;'$prompt_color'm\]\t [$(cut -d . -f 2 <<< $STY).$WINDOW] \u@\h \w $(git branch 2>/dev/null | grep -e "^\* ")$(git status 2>/dev/null | grep -q "^# Change" && echo "[+]")\[\e[0m\]\n\$ '
+PS1_sty="$(cut -d . -f 2 <<< $STY)"
+PS1='\[\e[0;'$prompt_color'm\]\t [$PS1_sty.$WINDOW] \u@\h \w$(__git_ps1)\[\e[0m\]\n\$ '
+#PS1='\[\e[0;'$prompt_color'm\]\t [$PS1_sty.$WINDOW] \u@\h \w\[\e[0m\]\n\$ '
 export PS1
 export THE_PS1=$PS1
 
