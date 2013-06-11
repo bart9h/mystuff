@@ -17,12 +17,13 @@ runtime colors/elflord.vim
 
 let g:colors_name = "my-elflord"
 
-hi TabLineSel    ctermfg=DarkGray  ctermbg=DarkCyan
-hi TabLine       ctermfg=Cyan      ctermbg=DarkGray
-hi TabLineFill   ctermfg=Black  ctermbg=none
+hi TabLineSel    ctermfg=none  ctermbg=darkgreen
+hi TabLine       ctermfg=black      ctermbg=white
+hi TabLineFill   ctermfg=none     ctermbg=none
 
-hi StatusLineNC  ctermfg=DarkGray  ctermbg=Cyan
-hi StatusLine    ctermfg=Cyan      ctermbg=DarkGray
+hi StatusLine    ctermfg=2     ctermbg=White
+hi StatusLineNC  ctermfg=none     ctermbg=none
+hi VertSplit     ctermfg=none     ctermbg=none
 
 hi Cursor        term=underline
 hi CursorLine    term=underline
@@ -30,8 +31,7 @@ hi CursorColumn	 term=underline
 
 hi LineNr ctermfg=DarkRed
 hi Folded ctermfg=blue cterm=bold
-hi Comment  ctermfg=darkgray  guifg=#80a0ff
-
+hi Comment  ctermfg=darkblue  ctermbg=none guifg=#80a0ff
 hi Search ctermbg=green ctermfg=white
 
 
