@@ -3,7 +3,7 @@
 	email = rodolfo.borges@gmail.com
 
 [core]
-	excludefiles = ~/.gitignore
+	excludesfile = ~/.gitignore
 
 [alias]
 	c  = commit
