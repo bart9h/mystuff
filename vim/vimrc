@@ -25,6 +25,7 @@ set wildmenu
 set wildmode=list:longest,full
 "set tildeop
 set hidden
+set switchbuf=usetab
 
 " {{{1 tab
 
@@ -81,6 +82,7 @@ command! FileTypePerl setlocal makeprg=perl\ -c\ %
 \%+C%.%#
 
 "autocmd! BufEnter * resize
+"autocmd! BufEnter * if expand("%:h") != "" && getbufvar("%", "buftype") == "file" | chdir %:h | endif
 autocmd! BufWritePost ~/.vimrc,$ETC/vim/vimrc source ~/.vimrc
 autocmd! BufWritePost ~/.vim/colors/my-elflord.vim,$ETC/vim/colors/my-elflord.vim colo my-elflord
 "autocmd! BufWritePost /etc/apache2/httpd.conf !sudo sh /etc/rc.d/rc.httpd restart
@@ -111,9 +113,12 @@ set foldminlines=2
 set nonumber
 set showcmd
 
+autocmd FocusLost * set number
+autocmd FocusGained * set relativenumber
+
 if version >= 700
-	autocmd InsertLeave * se nocursorline
-	autocmd InsertEnter * se cursorline
+	autocmd InsertLeave * set nocursorline
+	autocmd InsertEnter * set cursorline
 
 	"status line
 	set laststatus=2
@@ -128,7 +133,7 @@ let perl_extended_vars=1
 
 if has("gui_running")
 	set guioptions -=T
-	set guifont=Inconsolata\ 11
+	set guifont=Inconsolata\ 12
 	colorscheme darkblue
 	hi CursorLine guibg=#0000b0 guifg=white
 else
@@ -155,6 +160,9 @@ match RedundantSpaces /\s\+$\| \+\ze\t/
 noremap ' `
 noremap ` '
 
+"disable ex mode
+nnoremap Q <nop>
+
 nnoremap <c-d> <c-d><c-d>
 
 nnoremap <C-L> :nohls<CR><C-L>
@@ -171,7 +179,7 @@ nmap <space> za
 nmap <F9> @q
 
 " search for current word on all source files
-nmap <C-c> :!cd "`dirname "%:p"`"; grep -n "\<<cword>\>" *.[cChd] *.cpp *.cxx *.pl *.pm *.pc *.f 2> /dev/null; true<CR>
+nmap <C-c> :!cd "`dirname "%:p"`"; grep -n "\<<cword>\>" *.[cChd] *.cpp *.cxx *.pl *.pm *.java *.pc *.f 2> /dev/null; true<CR>
 
 " makes * highlight the word, but don't jump to next occurrence
 "map <silent> * yiw:let @/="\\<".@0."\\>"<CR>:set hls<CR>
@@ -244,8 +252,9 @@ command! -bar -nargs=1 Man
 \   new
 \|  DoMan <args>
 \|  set filetype=man
-\|  goto 1
 \|  set buftype=nofile
+\|  set foldmethod=indent
+\|  goto 1
 \|  %s/.//g
 
 command! ToHtml
@@ -261,9 +270,9 @@ command! AcentoToHtml
 \| %s/\~o/\&otilde;/ge  |  %s/\~O/\&Otilde;/ge
 \| %s/\~n/\&ntilde;/ge  |  %s/\~N/\&Ntilde;/ge
 \| %s/\`a/\&agrave;/ge  |  %s/\`A/\&Agrave;/ge
-\| %s/\^a/\&acirc;/ge   |  %s/\^A/\&Acirc;/ge 
-\| %s/\^e/\&ecirc;/ge   |  %s/\^E/\&Ecirc;/ge 
-\| %s/\^o/\&ocirc;/ge   |  %s/\^O/\&Ocirc;/ge 
+\| %s/\^a/\&acirc;/ge   |  %s/\^A/\&Acirc;/ge
+\| %s/\^e/\&ecirc;/ge   |  %s/\^E/\&Ecirc;/ge
+\| %s/\^o/\&ocirc;/ge   |  %s/\^O/\&Ocirc;/ge
 \| %s/\'a/\&aacute;/ge  |  %s/\'A/\&Aacute;/ge
 \| %s/\'e/\&eacute;/ge  |  %s/\'E/\&Eacute;/ge
 \| %s/\'i/\&iacute;/ge  |  %s/\'I/\&Iacute;/ge
@@ -276,15 +285,45 @@ command! HtmlToAcento
 \| %s/&otilde;/\~o/ge  |  %s/&Otilde;/\~O/ge
 \| %s/&ntilde;/\~n/ge  |  %s/&Ntilde;/\~N/ge
 \| %s/&agrave;/\`a/ge  |  %s/&Agrave;/\`A/ge
-\| %s/&acirc;/\^a/ge   |  %s/&Acirc;/\^A/ge 
-\| %s/&ecirc;/\^e/ge   |  %s/&Ecirc;/\^E/ge 
-\| %s/&ocirc;/\^o/ge   |  %s/&Ocirc;/\^O/ge 
+\| %s/&acirc;/\^a/ge   |  %s/&Acirc;/\^A/ge
+\| %s/&ecirc;/\^e/ge   |  %s/&Ecirc;/\^E/ge
+\| %s/&ocirc;/\^o/ge   |  %s/&Ocirc;/\^O/ge
 \| %s/&aacute;/\'a/ge  |  %s/&Aacute;/\'A/ge
 \| %s/&eacute;/\'e/ge  |  %s/&Eacute;/\'E/ge
 \| %s/&iacute;/\'i/ge  |  %s/&Iacute;/\'I/ge
 \| %s/&oacute;/\'o/ge  |  %s/&Oacute;/\'O/ge
 \| %s/&uacute;/\'u/ge  |  %s/&Uacute;/\'U/ge
 \| %s/&ccedil;/\'c/ge  |  %s/&Ccedil;/\'C/ge
+
+command! AcentoToUtf
+\  %s/\~a/ã/ge  |  %s/\~A/Ã/ge
+\| %s/\~o/õ/ge  |  %s/\~O/Õ/ge
+\| %s/\~n/ñ/ge  |  %s/\~N/Ñ/ge
+\| %s/\`a/à/ge  |  %s/\`A/À/ge
+\| %s/\^a/â/ge  |  %s/\^A/Â/ge
+\| %s/\^e/ê/ge  |  %s/\^E/Ê/ge
+\| %s/\^o/ô/ge  |  %s/\^O/Ô/ge
+\| %s/\'a/á/ge  |  %s/\'A/Á/ge
+\| %s/\'e/é/ge  |  %s/\'E/É/ge
+\| %s/\'i/í/ge  |  %s/\'I/Í/ge
+\| %s/\'o/ó/ge  |  %s/\'O/Ó/ge
+\| %s/\'u/ú/ge  |  %s/\'U/Ú/ge
+\| %s/\'c/ç/ge  |  %s/\'C/Ç/ge
+
+command! AcentoToUtfT
+\  't,'Ts/\~a/ã/ge  |  't,'Ts/\~A/Ã/ge
+\| 't,'Ts/\~o/õ/ge  |  't,'Ts/\~O/Õ/ge
+\| 't,'Ts/\~n/ñ/ge  |  't,'Ts/\~N/Ñ/ge
+\| 't,'Ts/\`a/à/ge  |  't,'Ts/\`A/À/ge
+\| 't,'Ts/\^a/â/ge  |  't,'Ts/\^A/Â/ge
+\| 't,'Ts/\^e/ê/ge  |  't,'Ts/\^E/Ê/ge
+\| 't,'Ts/\^o/ô/ge  |  't,'Ts/\^O/Ô/ge
+\| 't,'Ts/\'a/á/ge  |  't,'Ts/\'A/Á/ge
+\| 't,'Ts/\'e/é/ge  |  't,'Ts/\'E/É/ge
+\| 't,'Ts/\'i/í/ge  |  't,'Ts/\'I/Í/ge
+\| 't,'Ts/\'o/ó/ge  |  't,'Ts/\'O/Ó/ge
+\| 't,'Ts/\'u/ú/ge  |  't,'Ts/\'U/Ú/ge
+\| 't,'Ts/\'c/ç/ge  |  't,'Ts/\'C/Ç/ge
 
 "command! Tex
 
