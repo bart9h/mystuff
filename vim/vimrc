@@ -50,7 +50,7 @@ set cinoptions=>s,e0,n0,f0,{0,}0,^0,:0,=s,l0,b0,g0,hs,ps,ts,is,+s,c3,C0,/0,(2s,u
 
 set history=1000
 set visualbell t_vb=
-set diffopt+=iwhite
+"set diffopt+=iwhite
 if version >= 700
 	let loaded_matchparen=1
 	"let load_doxygen_syntax=1
@@ -109,7 +109,7 @@ syntax enable
 set ruler
 set winminheight=0
 set hlsearch
-set scrolloff=2
+set scrolloff=8
 set foldnestmax=1
 set foldminlines=2
 set nonumber
@@ -124,7 +124,7 @@ if version >= 700
 
 	"status line
 	set laststatus=2
-	set statusline=%<%f\ %h%m%r(%{GitBranchInfoTokens()[0]})%=%-14.(%l,%c%V%)\ %P
+	"set statusline=%<%f\ %h%m%r(%{GitBranchInfoTokens()[0]})%=%-14.(%l,%c%V%)\ %P
 endif
 
 " nao pisca sobre ([{pares}])
@@ -176,6 +176,7 @@ nnoremap Q <nop>
 
 nnoremap <c-d> <c-d><c-d>
 
+"nnoremap <C-L> :nohls<CR>:match Search //<CR><C-L>
 nnoremap <C-L> :nohls<CR><C-L>
 
 nmap <tab> :tabnext<CR>
@@ -193,7 +194,8 @@ nmap <F9> @q
 nmap <C-c> :!cd "`dirname "%:p"`"; grep -n "\<<cword>\>" *.[cChd] *.cpp *.cxx *.pl *.pm *.java *.pc *.f 2> /dev/null; true<CR>
 
 " makes * highlight the word, but don't jump to next occurrence
-"map <silent> * yiw:let @/="\\<".@0."\\>"<CR>:set hls<CR>
+"map <silent> * :let @/="\\<<c-r><c-w>\\>"<CR>:set hls<CR>
+
 map <silent> * *N
 
 " save

@@ -1,0 +1,1 @@
+../src/tabman.vim/plugin/tabman.vim
