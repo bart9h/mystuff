@@ -87,6 +87,8 @@ autocmd! BufWritePost ~/.vimrc,$ETC/vim/vimrc source ~/.vimrc
 autocmd! BufWritePost ~/.vim/colors/my-elflord.vim,$ETC/vim/colors/my-elflord.vim colo my-elflord
 "autocmd! BufWritePost /etc/apache2/httpd.conf !sudo sh /etc/rc.d/rc.httpd restart
 
+"autocmd! BufRead,BufNewFile,BufEnter *.{c,cpp,h,javascript} call CSyntaxAfter()
+
 "{{{2 vim -b : edit binary using xxd-format!
 augroup Binary
 au!
@@ -153,6 +155,15 @@ endif
 
 highlight RedundantSpaces ctermbg=red guibg=red
 match RedundantSpaces /\s\+$\| \+\ze\t/
+
+
+" Add highlighting for function definition in C++
+function! EnhanceCppSyntax()
+	syn match cppFuncDef "::\~\?\zs\h\w*\ze\s*([^)]*\()\s*\(const\|:\)\?\)\?$"
+	hi def link cppFuncDef Special
+endfunction
+
+autocmd Syntax cpp call EnhanceCppSyntax()
 
 
 " {{{1 key mappings
