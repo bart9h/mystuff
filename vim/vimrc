@@ -80,6 +80,95 @@ else
 endif
 
 
+" {{{1  key mappings
+
+" swap ' and ` (makes ' go to exact position)
+noremap ' `
+noremap ` '
+
+"disable ex mode
+nnoremap Q <nop>
+
+" <c-l> also clear search highlight
+nnoremap <C-L> :nohlsearch<CR><C-L>
+
+" cycle through tabs
+nmap <tab> :tabnext<CR>
+
+" toggle spell cheching
+nmap <F8> :set spelllang=en spell!<CR>
+
+" quick macro
+nmap <F9> @q
+
+" makes * stay on current word
+map <silent> * *N
+
+" rotate windows
+nmap <C-k> <C-W>r<C-W>k<C-w>_
+nmap <C-j> <C-W>j<C-W>R<C-w>_
+imap <C-k> <ESC><C-k>
+imap <C-j> <ESC><C-j>
+
+" resize window
+nmap <C-kPlus> <C-W>+
+nmap <C-kMinus> <C-W>-
+nmap <+> <C-W>+
+nmap <-> <C-W>-
+
+" diff selections
+vmap <f1> "ay
+vmap <f2> "by:tabnew<CR>"bP:diffthis<CR>:set buftype=nofile<CR>:vnew<CR>"aP:set buftype=nofile<CR>:diffthis<CR>
+
+" close/open folders
+nmap <space> za
+
+" quit
+nmap <c-x> :q<CR>
+
+" search for current word on all source files
+nmap <c-c> :!cd "`dirname "%:p"`"; grep -n "\<<cword>\>" *.[cChd] *.cpp *.cxx *.pl *.pm *.java *.pc *.f 2> /dev/null; true<CR>
+
+" make
+nmap <c-n> :wall<CR>:make<CR>
+
+" man
+nmap <K> :Man <C-R><C-W><CR>
+
+" navitage through compiler errors
+nmap <,> :cnext<CR>
+
+
+"{{{1 filetype
+
+autocmd! FileType perl FileTypePerl
+command! FileTypePerl setlocal makeprg=perl\ -c\ %
+\	| setlocal keywordprg=perldoc\ -f
+\	| setlocal cindent
+\	| setlocal number
+\	| setlocal errorformat=
+\%-G%.%#had\ compilation\ errors.,
+\%-G%.%#syntax\ OK,
+\%m\ at\ %f\ line\ %l.,
+\%+A%.%#\ at\ %f\ line\ %l\\,%.%#,
+\%+C%.%#
+
+
+"{{{1 commands
+
+command! Conflict /^\(=======$\|<<<<<<< \|>>>>>>> \)/
+
+command! -bar -nargs=1 DoMan %!/usr/bin/man -a -S 3:2:1:5:8:4:7:6:9 -P cat <args>
+command! -bar -nargs=1 Man
+\   new
+\|  DoMan <args>
+\|  set filetype=man
+\|  set buftype=nofile
+\|  set foldmethod=indent
+\|  goto 1
+\|  %s/.//g
+
+
 " {{{1 load local settings
 
 if filereadable($HOME . "/.vimrc_local")
