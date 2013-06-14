@@ -1,34 +1,80 @@
- set nocompatible               " be iMproved
- filetype off                   " required!
+"{{{1 Vundle
 
- set rtp+=~/.vim/bundle/vundle/
- call vundle#rc()
+set nocompatible               " be iMproved
+filetype off                   " required!
 
- " let Vundle manage Vundle
- " required! 
- Bundle 'gmarik/vundle'
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
 
- " My Bundles here:
- "
- " original repos on github
- Bundle 'tpope/vim-fugitive'
- Bundle 'Lokaltog/vim-easymotion'
- Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
- Bundle 'tpope/vim-rails.git'
- " vim-scripts repos
- Bundle 'L9'
- Bundle 'FuzzyFinder'
- " non github repos
- Bundle 'git://git.wincent.com/command-t.git'
- " ...
+" let Vundle manage Vundle
+" required!
+Bundle 'gmarik/vundle'
 
- filetype plugin indent on     " required!
- "
- " Brief help
- " :BundleList          - list configured bundles
- " :BundleInstall(!)    - install(update) bundles
- " :BundleSearch(!) foo - search(or refresh cache first) for foo
- " :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
- "
- " see :h vundle for more details or wiki for FAQ
- " NOTE: comments after Bundle command are not allowed..
+" My Bundles here:
+"
+" original repos on github
+Bundle 'tpope/vim-fugitive'
+" Bundle 'Lokaltog/vim-easymotion'
+" Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
+" Bundle 'tpope/vim-rails.git'
+" vim-scripts repos
+" Bundle 'L9'
+" Bundle 'FuzzyFinder'
+" non github repos
+" Bundle 'git://git.wincent.com/command-t.git'
+" ...
+
+filetype plugin indent on     " required!
+"
+" Brief help
+" :BundleList          - list configured bundles
+" :BundleInstall(!)    - install(update) bundles
+" :BundleSearch(!) foo - search(or refresh cache first) for foo
+" :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
+"
+" see :h vundle for more details or wiki for FAQ
+" NOTE: comments after Bundle command are not allowed..
+
+
+"{{{1  behaviour
+
+set nobackup
+set noswapfile
+
+set hidden
+set switchbuf=usetab
+
+set wildmenu
+set wildmode=list:longest,full
+
+
+" {{{1 tab
+
+set tabstop=4
+set shiftwidth=4
+set nosmarttab
+set softtabstop=0
+
+
+" {{{1 visual
+
+set winminheight=0
+set scrolloff=4
+set laststatus=2
+
+let loaded_matchparen=1   " don't highlight matching ()[]{}s
+let perl_extended_vars=1  " highlight perl $extended->{variables}
+
+highlight RedundantSpaces ctermbg=red guibg=red
+match RedundantSpaces /\s\+$\| \+\ze\t/
+
+
+" {{{1 load local settings
+
+if filereadable($HOME . "/.vimrc_local")
+	source ~/.vimrc_local
+endif
+
+
+"}}}
+" vim600:fdm=marker:fmr={{{,}}}:
