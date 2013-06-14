@@ -68,6 +68,17 @@ let perl_extended_vars=1  " highlight perl $extended->{variables}
 highlight RedundantSpaces ctermbg=red guibg=red
 match RedundantSpaces /\s\+$\| \+\ze\t/
 
+if has("gui_running")
+	set guioptions -=T
+	set guifont=Inconsolata\ 12
+	colorscheme darkblue
+	hi CursorLine guibg=#0000b0 guifg=white
+else
+	set background=dark
+	hi Cursor ctermbg=yellow ctermfg=black
+	colorscheme my-elflord
+endif
+
 
 " {{{1 load local settings
 
