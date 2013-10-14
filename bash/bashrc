@@ -1,6 +1,6 @@
 #!/bin/bash
 # ~/.bashrc: executed by bash(1) for non-login shells.
-#{{{1  prepare the environment, and load local stuff
+#{{{1  prepare the environment
 
 # escape if environment already loaded
 test -z "$PS1" && return
@@ -91,14 +91,10 @@ if true && [ -f /etc/bash_completion ]; then
 	. /etc/bash_completion
 fi
 
-export DMD_DIR='/opt/dmd'
-
 
 #{{{1 path
 
 add_to_path \
-		-h "$HOME/bin" \
-		-h "$DMD_DIR/bin" \
 		-t "/usr/sbin" \
 		-t "/sbin" \
 #		-h "/usr/local/lib/cw" \
@@ -376,11 +372,6 @@ function update() {
 
 #}}} version control
 #{{{ #TODO: organizar o resto abaixo..
-# aliases
-alias pgr='pgrep -l'
-alias cdrec='sudo cdrecord -v dev=/dev/cdrom'
-
-
 #{{{1          util
 
 # quick edit&reload this file
@@ -669,7 +660,7 @@ fi
 trap 'titlebar $BASH_COMMAND' DEBUG
 
 #}}}
-#{{{1  local stuff from .bashrc_local_post may override
+#{{{1  local stuff from .bashrc_local_post
 
 _load "$HOME/.bashrc_local_post"
 
