@@ -413,6 +413,42 @@ function Crun() {
 	do_crun "g++ -x c++" "$@"
 }
 
+function cmain() {
+	(
+	cat <<EOF
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdint.h>
+#include <stdbool.h>
+int main (int argc, char* argv[])
+{
+EOF
+	cat
+	cat << EOF
+	return 0;
+}
+EOF
+	) | crun
+}
+
+function Cmain() {
+	(
+	cat <<EOF
+#include <iostream>
+#include <string>
+#include <vector>
+#include <map>
+int main (int argc, char* argv[])
+{
+EOF
+	cat
+	cat << EOF
+	return 0;
+}
+EOF
+	) | Crun
+}
 
 #{{{1          misc
 
