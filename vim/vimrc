@@ -46,9 +46,10 @@ set switchbuf=usetab
 
 set wildmenu
 set wildmode=list:longest,full
+set nostartofline
 
 
-" {{{1 tab
+"{{{1 tab
 
 set tabstop=4
 set shiftwidth=4
@@ -56,8 +57,12 @@ set nosmarttab
 set softtabstop=0
 
 
-" {{{1 visual
+"{{{1 visual
 
+syntax on
+set ruler
+set showcmd
+set hlsearch
 set winminheight=0
 set scrolloff=4
 set laststatus=2
@@ -80,7 +85,7 @@ else
 endif
 
 
-" {{{1  key mappings
+"{{{1  key mappings
 
 " swap ' and ` (makes ' go to exact position)
 noremap ' `
@@ -169,7 +174,7 @@ command! -bar -nargs=1 Man
 \|  %s/.//g
 
 
-" {{{1 load local settings
+"{{1 load local settings
 
 if filereadable($HOME . "/.vimrc_local")
 	source ~/.vimrc_local
