@@ -9,30 +9,31 @@ function log()
 
 function add_to_path()
 {
-	local end='tail'
+	local position='tail'
 	while test -n "$1"; do
-		case "$1" in
+		local dir="$1"
+		case "$dir" in
 			-t)
-				end='tail'
+				position='tail'
 			;;
 			-h)
-				end='head'
+				position='head'
 			;;
 			*)
-			if test -d "$1"; then
+			if test -d "$dir"; then
 				if
-					! expr match "$PATH"    "$1:"  >/dev/null &&
-					! expr match "$PATH" ".*:$1:"  >/dev/null &&
-					! expr match "$PATH" ".*:$1$"  >/dev/null
+					! expr match "$PATH"    "$dir:"  >/dev/null &&
+					! expr match "$PATH" ".*:$dir:"  >/dev/null &&
+					! expr match "$PATH" ".*:$dir$"  >/dev/null
 				then
-					if test "$end" == 'tail'; then
-						export PATH="$PATH:$1"
+					if test "$position" == 'tail'; then
+						export PATH="$PATH:$dir"
 					else
-						export PATH="$1:$PATH"
+						export PATH="$dir:$PATH"
 					fi
 				fi
 			else
-				echo "\"$1\": not a directory"
+				echo "\"$dir\": not a directory"
 			fi
 			;;
 		esac
