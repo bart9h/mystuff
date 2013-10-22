@@ -107,6 +107,8 @@ nmap <F8> :set spelllang=en spell!<CR>
 " quick macro
 nmap <F9> @q
 
+" makes * highlight the word, but don't jump to next occurrence
+"map <silent> * yiw:let @/="\\<".@0."\\>"<CR>:set hls<CR>
 " makes * stay on current word
 map <silent> * *N
 
