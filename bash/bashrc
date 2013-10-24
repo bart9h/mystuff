@@ -382,13 +382,17 @@ alias ea='vim ~/.bashrc && source ~/.bashrc'
 alias www='ifconfig | grep "192\."; python -m SimpleHTTPServer'
 
 alias taillog='sudo tail -f $(file $(sudo find /var/log -type f -not -name "*.[0-9]*") | grep text | cut -d : -f 1)'
-alias rawbatch='ufraw-batch --wb=camera --exposure=auto --out-type=jpeg --compression=80'
-
-alias raw2jpg='rawbatch --size=`show res` --out-path=.. *'
+alias rawbatch='ufraw-batch --wb=camera --gamma=0.45 --linearity=0.10 --exposure=0 --restore=lch --clip=digital --saturation=1.0 --wavelet-denoising-threshold=0.0 --base-curve=camera --curve=linear --black-point=0.0 --interpolation=ahd --color-smoothing --grayscale=none'
+#      --base-curve-file=/dev/null
+#      --curve-file=<curve-file>
+#      --darkframe=FILE
+alias rawhd='rawbatch --out-type=jpeg --compression=96 --size=1920x1080'
+alias rawn10='rawbatch --out-type=jpeg --compression=96 --size=2560x1600'
+alias rawpreview='rawbatch --out-type=jpeg --compression=80 --size=`show res`'
 
 #TODO: move this to foto.pl
 alias jpg2raw='test -d shot && cd shot; for i in *; do test -f ../`sed "s/.cr2$/.jpg/" <<< "$i"` || mv -v $i ../.qiv-trash/; done; unset i'
-alias mvufraw='for z in *.ufraw; do mv -iv $z $HOME/fotos/$(echo $z|sed "s/^\([0-9]\{4\}\)\([0-9]\{2\}\)\([0-9]\{2\}\).*$/\1\/\2\/\3/")/; done'
+alias mvufraw='for z in *.ufraw; do d="$HOME/fotos/$(echo "$z"|sed "s/^\([0-9]\{4\}\)\([0-9]\{2\}\)\([0-9]\{2\}\).*$/\1\/\2\/\3/")/"; if test -f "$d/$z"; then diff -u "$d/$z" "$z"; else mv -iv "$z" "$d"; fi; done'
 
 alias kb='$ETC/desktop/switch-kbmap.sh'
 
@@ -523,8 +527,9 @@ alias ntop='sudo jnettop'
 alias g9='gkrellm -w -s 9h &'
 alias irc='irssi -n barrett9h -c irc.freenode.net'
 #alias lm='nice lame -m s -v -h -V 2 -b 32 -B 320'
-alias lm='for i in *.wav; do job nice lame -v "$i" "$(sed "s/wav$/mp3/" <<< "$i")"; done; unset i'
-alias treo='nice lame -m j -v -f'
+alias lm='for i in *.wav *.flac; do job nice lame -v "$i" "$(sed "s/wav$/mp3/;s/flac$/mp3/" <<< "$i")"; done; unset i'
+alias stereo="$ETC/util/flac2mp3.sh"
+alias mono="$ETC/util/flac2mp3.sh --mono"
 #alias v='gvim -geom 80x50 +"set guioptions-=T" +"set guioptions-=m" -font "-misc-fixed-medium-r-semicondensed-*-*-120-*-*-c-*-iso8859-1"'
 
 alias mame='xmame.x11 -rompath .'
