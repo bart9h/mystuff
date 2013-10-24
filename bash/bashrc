@@ -126,13 +126,14 @@ alias greps='grep $(for i in $SOURCE_EXTENSIONS; do echo --include="*."$i; done)
 alias cp='cp -i --preserve=timestamps'
 fi
 
+alias lsof='lsof -nP'
 alias qiv='qiv -e'
-alias tig='tig --all'
-alias xxd='xxd -c $(( (($COLUMNS - 10)/7)*2 ))'
-alias wget='wget -c --timeout=15 --wait=0 --tries=0'
-alias xpdf='xpdf -z width'
 alias rdesktop='rdesktop  -x m -P -a 8 -z'
 #alias tar='tar --exclude=.svn --exclude=CVS'
+alias tig='tig --all'
+alias wget='wget -c --timeout=15 --wait=0 --tries=0'
+alias xpdf='xpdf -z width'
+alias xxd='xxd -c $(( (($COLUMNS - 10)/7)*2 ))'
 
 #{{{1 ls
 
@@ -174,6 +175,7 @@ alias z='f -rt'
 
 #{{{1 abbreviations
 
+alias OFF='sudo poweroff'
 alias p='ps -AH --format "%U %p %a"'
 alias l='less'
 alias cn='cat > /dev/null' # quick volatile writepad
@@ -275,6 +277,7 @@ elif test -e /etc/arch-release; then
 	alias pacs='pacman -Ss'
 	alias ya='yaourt --needed'
 	alias yas='yaourt -Ss'
+	alias pacu='sudo yaourt -Syu; slurpy -u'
 
 elif test -e /etc/slackware-version; then
 
@@ -375,6 +378,8 @@ function update() {
 
 # quick edit&reload this file
 alias ea='vim ~/.bashrc && source ~/.bashrc'
+
+alias www='ifconfig | grep "192\."; python -m SimpleHTTPServer'
 
 alias taillog='sudo tail -f $(file $(sudo find /var/log -type f -not -name "*.[0-9]*") | grep text | cut -d : -f 1)'
 alias rawbatch='ufraw-batch --wb=camera --exposure=auto --out-type=jpeg --compression=80'
