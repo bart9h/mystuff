@@ -11,9 +11,14 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 
 " My Bundles here:
-"
-" original repos on github
 Bundle 'tpope/vim-fugitive'
+Bundle 'gregsexton/gitv'
+Bundle 'netrw.vim'
+Bundle 'bufexplorer.zip'
+Bundle 'a.vim'
+
+" original repos on github
+" Bundle 'tpope/vim-fugitive'
 " Bundle 'Lokaltog/vim-easymotion'
 " Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
 " Bundle 'tpope/vim-rails.git'
