@@ -32,3 +32,8 @@ function job()
 	)&
 }
 
+if test -n "$1" -a -z "$job_function_loaded"; then
+	job "$@"
+else
+	job_function_loaded=1
+fi

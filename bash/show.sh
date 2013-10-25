@@ -97,3 +97,8 @@ function show()
 	esac
 }
 
+if test -n "$1" -a -z "$show_function_loaded"; then
+	show "$@"
+else
+	show_function_loaded=1
+fi
