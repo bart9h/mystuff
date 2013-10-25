@@ -16,7 +16,12 @@ function job()
 		return
 	fi
 
-	local max_jobs=$( show cpus )
+	local max_jobs=
+	if test "$MAX_JOBS" != ""; then
+		max_jobs="$MAX_JOBS"
+	else
+		max_jobs=$(( $( show cpus ) + 1 ))
+	fi
 
 	test -d "$spool_dir" || mkdir "$spool_dir" || exit
 
@@ -27,7 +32,7 @@ function job()
 	(
 		job=$( mktemp "$spool_dir"/job.XXXXXX )
 		test -f "$job" || exit
-		"$@"
+		nice "$@"
 		rm "$job"
 	)&
 }
