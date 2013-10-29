@@ -11,11 +11,11 @@ call vundle#rc()
 Bundle 'gmarik/vundle'
 
 " My Bundles here:
-Bundle 'tpope/vim-fugitive'
+Bundle 'a.vim'
+Bundle 'bufexplorer.zip'
 Bundle 'gregsexton/gitv'
 Bundle 'netrw.vim'
-Bundle 'bufexplorer.zip'
-Bundle 'a.vim'
+Bundle 'tpope/vim-fugitive'
 
 " original repos on github
 " Bundle 'tpope/vim-fugitive'
@@ -161,10 +161,10 @@ nmap <,> :cnext<CR>
 "{{{1 filetype
 
 autocmd! FileType perl FileTypePerl
-command! FileTypePerl setlocal makeprg=perl\ -c\ %
-\	| setlocal keywordprg=perldoc\ -f
+command! FileTypePerl setlocal number
 \	| setlocal cindent
-\	| setlocal number
+\	| setlocal keywordprg=perldoc\ -f
+\	| setlocal makeprg=perl\ -c\ %
 \	| setlocal errorformat=
 \%-G%.%#had\ compilation\ errors.,
 \%-G%.%#syntax\ OK,
