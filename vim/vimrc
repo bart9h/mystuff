@@ -188,6 +188,21 @@ command! -bar -nargs=1 Man
 \|  goto 1
 \|  %s/.//g
 
+command! AcentoToUtf
+\  't,'Ts/\~a/ã/ge  |  't,'Ts/\~A/Ã/ge
+\| 't,'Ts/\~o/õ/ge  |  't,'Ts/\~O/Õ/ge
+\| 't,'Ts/\~n/ñ/ge  |  't,'Ts/\~N/Ñ/ge
+\| 't,'Ts/\`a/à/ge  |  't,'Ts/\`A/À/ge
+\| 't,'Ts/\^a/â/ge  |  't,'Ts/\^A/Â/ge
+\| 't,'Ts/\^e/ê/ge  |  't,'Ts/\^E/Ê/ge
+\| 't,'Ts/\^o/ô/ge  |  't,'Ts/\^O/Ô/ge
+\| 't,'Ts/\'a/á/ge  |  't,'Ts/\'A/Á/ge
+\| 't,'Ts/\'e/é/ge  |  't,'Ts/\'E/É/ge
+\| 't,'Ts/\'i/í/ge  |  't,'Ts/\'I/Í/ge
+\| 't,'Ts/\'o/ó/ge  |  't,'Ts/\'O/Ó/ge
+\| 't,'Ts/\'u/ú/ge  |  't,'Ts/\'U/Ú/ge
+\| 't,'Ts/\'c/ç/ge  |  't,'Ts/\'C/Ç/ge
+
 
 "{{1 load local settings
 
