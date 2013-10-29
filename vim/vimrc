@@ -29,6 +29,12 @@ Bundle 'a.vim'
 " Bundle 'git://git.wincent.com/command-t.git'
 " ...
 
+" Makes Gitv diff start unfolded
+augroup git
+	au!
+	autocmd FileType git :setlocal foldlevel=99
+augroup END
+
 filetype plugin indent on     " required!
 "
 " Brief help
