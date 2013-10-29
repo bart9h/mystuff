@@ -12,6 +12,7 @@ Bundle 'gmarik/vundle'
 
 " My Bundles here:
 Bundle 'a.vim'
+Bundle 'airblade/vim-gitgutter'
 Bundle 'bufexplorer.zip'
 Bundle 'gregsexton/gitv'
 Bundle 'netrw.vim'
