@@ -1,11 +1,19 @@
+
 [default]
+#vo=vdpau
+#vo=xv
+#vo=sdl
 ao=alsa
 subfont-text-scale=3
 subpos=96
+#hr-seek=always
 mixer-channel=Master
+
 stop-xscreensaver=1
+cache=10240
 
 [gnome-mplayer]
 msglevel=all=5
+softvol=1
 
 # vim:ft=mplayerconf:

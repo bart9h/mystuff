@@ -37,16 +37,16 @@ foreach my $path (`find "$collection_dir" -type f`) {
 
 	$args{genre} = $parent;
 
-	#  Artist.1900.Album/
-	if( $dir =~ m{^(.+?)\.([0-9]{4}[a-z]?)\.(.+)$} or
-		$dir =~ m{^(.+?)\.([0-9]{4}-[0-9]{2,4})\.(.+)$} )
+	#  Artist__1900__Album/  ou  Artist__1900b__Album/
+	if( $dir =~ m{^(.+?)__([0-9]{4}[a-z]?)__(.+)$} or
+		$dir =~ m{^(.+?)__([0-9]{4}-[0-9]{2,4})__(.+)$} )
 	{
 		$args{artist} = $1;
 		$args{year} = $2;
 		$args{album} = $3;
 	}
-	#  Artist..Album/
-	elsif( $dir =~ m{^(.+?)\.\.(.+)$} ) {
+	#  Artist__Album/
+	elsif( $dir =~ m{^(.+?)__(.+)$} ) {
 		$args{artist} = $1;
 		$args{album} = $2;
 	}
@@ -55,8 +55,13 @@ foreach my $path (`find "$collection_dir" -type f`) {
 		$args{artist} = $dir;
 	}
 
-	#  01.Title
-	if( $file =~ m{^([0-9]{2,3})\.(.+)$} ) {
+	#  01-04__Title
+	if( $file =~ m{^([0-9]{2,3})(-[0-9]{2,3})__(.+)$} ) {
+		$args{track} = $1;
+		$args{song}  = $3;
+	}
+	#  01__Title
+	elsif( $file =~ m{^([0-9]{2,3})__(.+)$} ) {
 		$args{track} = $1;
 		$args{song}  = $2;
 	}
@@ -64,18 +69,18 @@ foreach my $path (`find "$collection_dir" -type f`) {
 
 		$args{album} = $args{artist};
 
-		#  Artist..Title  or  Artist::Title
-		if( $file =~ m{^(.*?)(\.\.|::)(.+)$} ) {
+		#  Artist__Title
+		if( $file =~ m{^(.*?)__(.+)$} ) {
 			$args{artist} = $1;
-			$args{song}   = $3;
+			$args{song}   = $2;
 		}
 		#  Title
 		else {
 			$args{song} = $file;
 		}
 	}
+	#  Title
 	else {
-		#  Title
 		$args{song} = $file;
 	}
 
@@ -87,7 +92,7 @@ foreach my $path (`find "$collection_dir" -type f`) {
 		$args{album} = "$args{year}:$args{album}"  if $args{year};
 	}
 
-	sub x(@) {
+	sub x {
 		my $cmd = join ' ', @_;
 		print "$cmd\n"        if     $ENV{NOP}||$ENV{VERBOSE};
 		if(!$ENV{NOP}) {

@@ -5,7 +5,8 @@
 #
 
 # Configuration variables:
-script="`mktemp /tmp/vimv.XXXXXX`"
+#script="`mktemp /tmp/vimv.XXXXXX`"
+script='/tmp/vimv.tmp'
 include_instructions=false
 
 
@@ -83,10 +84,11 @@ EOF
 		done
 		echo " \"$q\""
 	done
-} > $script
+} > "$script"
+chmod +x "$script"
 
 
 # Call the editor, then execute the resulting script:
 vim "+set nowrap" "+set filetype=sh" "$script" \
-&& sh "$script"
+&& "$script"
 
