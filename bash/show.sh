@@ -86,7 +86,7 @@ function show()
 				;;
 			esac
 		done
-		echo -e "#include <stdio.h>\n#include <time.h>\nint main() { printf(\"%d\\\n\", sizeof($*)); return 0; }" | crun $arg
+		echo -e "#include <stdio.h>\n#include <time.h>\nint main() { printf(\"%zd\\\n\", sizeof($*)); return 0; }" | crun $arg
 	;;#
 
 	*)# help
