@@ -1,0 +1,14 @@
+.android/*
+.cache/*
+.dbus/*
+.gvfs
+.thumbnails/*
+*/Cache/*
+*/Temp/*
+*/Trash/*
+*/chromium/Default/Local Storage/*
+.shotwell/mimics
+.shotwell/thumbs
+Downloads
+Download
+Public
