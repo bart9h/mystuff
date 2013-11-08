@@ -217,21 +217,21 @@ function gl() {
 }
 alias gr='(git log --color --stat -1; git diff -b --word-diff --color HEAD~ HEAD)|less'
 alias gspop='git stash pop'
-alias gsp='git_stash_do "pull"'
-alias gsd='git_stash_do "svn dcommit"'
-alias gsr='git_stash_do "svn rebase"'
+alias gsp='git_stash_do pull'
+alias gsd='git_stash_do svn dcommit'
+alias gsr='git_stash_do svn rebase'
+alias gsdo='git_stash_do'
 function git_stash_do()
 {
 	if git status --porcelain | grep -q '^M'; then
 		echo 'You have changes marked to be commited:'
 		git status --short | grep -q '^M'
 	elif git status --porcelain | grep -q '^ M'; then
-		for i in stash "$1" "stash pop"; do
-			echo "[$i]"
-			git $i || break
-		done
+		echo '[stash]'     &&  git stash       && \
+		echo "[$@]"        &&  git "$@"        && \
+		echo '[stash pop]' &&  git stash pop
 	else
-		git $1
+		git "$@"
 	fi
 }
 
