@@ -163,6 +163,7 @@ nmap <,> :cnext<CR>
 
 autocmd! FileType perl FileTypePerl
 command! FileTypePerl setlocal number
+\	| set iskeyword-=:
 \	| setlocal cindent
 \	| setlocal keywordprg=perldoc\ -f
 \	| setlocal makeprg=perl\ -c\ %
