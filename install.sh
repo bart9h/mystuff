@@ -1,9 +1,15 @@
 #!/bin/sh
-cd "$HOME" || exit
+
+cd "$HOME"  || exit 1
+
 test -z "$ETC" && ETC='etc'
+if ! test -d "$ETC"; then
+	echo "no directory \"$ETC\""
+	exit 1
+fi
 
 function L() {
-	ln -sv "$ETC/$1" "$2"
+	ln -sv "$ETC/$1" "$2"  || exit 1
 }
 
 L bash/bashrc    .bashrc
