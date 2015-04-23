@@ -256,7 +256,6 @@ alias mpw='while pgrep mplayer; do sleep 1s; done'
 alias mpf='mplayer -fs -osdlevel 0'
 alias mpdvd='mplayer -identify dvd://1 -dvd-device "$PWD"'
 alias mpq='mplayer -nosound -osdlevel 0'
-alias ponte='mplayer mms://201.18.53.75:80/trecho1'
 alias mistureba='mplayer http://74.86.142.195:8690'
 alias ytdl='youtube-dl -t -c --max-quality=22'
 alias ion='ionice -c2 -n7'
@@ -528,8 +527,6 @@ alias ntop='sudo jnettop'
 #alias dif='diff --unified=5 --show-c-function --recursive --ignore-all-space'
 #alias dif='diff --unified=5 --show-c-function --recursive --ignore-space-change --ignore-blank-lines --ignore-all-space'
 
-alias g9='gkrellm -w -s 9h &'
-alias irc='irssi -n barrett9h -c irc.freenode.net'
 #alias lm='nice lame -m s -v -h -V 2 -b 32 -B 320'
 alias lm='for i in *.wav *.flac; do job nice lame -v "$i" "$(sed "s/wav$/mp3/;s/flac$/mp3/" <<< "$i")"; done; unset i'
 alias stereo="$ETC/util/flac2mp3.sh"
@@ -606,8 +603,6 @@ function bk() {
 #export -f which
 
 export LS_COLORS='no=00:fi=00:di=01;31:ln=01;36:pi=40;33:so=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arj=01;31:*.taz=01;31:*.lzh=01;31:*.zip=01;31:*.z=01;31:*.Z=01;31:*.gz=01;31:*.bz2=01;31:*.deb=01;31:*.rpm=01;31:*.jpg=01;35:*.png=01;35:*.gif=01;35:*.bmp=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.png=01;35:*.mpg=01;35:*.avi=01;35:*.fli=01;35:*.gl=01;35:*.dl=01;35:';
-
-alias tetrinet='tetrinet -noslide -fancy bart9h games03.click21.com.br'
 
 alias black='xsetroot -solid black'
 
