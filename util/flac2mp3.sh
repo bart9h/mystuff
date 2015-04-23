@@ -32,7 +32,7 @@ for flac in "$1/"*.flac; do
 		echo "nice lame $LAMEOPTS \"$wav\" \"$mp3\""
 		nice lame $LAMEOPTS "$wav" "$mp3"
 	fi
-	rm -v "$wav"
+	rm -f -v "$wav"
 
 done
 cp -v "$1/"*.jpg "$dest/$folder/"
