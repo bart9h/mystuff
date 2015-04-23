@@ -4,8 +4,19 @@ function s()
 {
 	which screen >/dev/null || return
 
-	# if no arg, list existing screens
-	if test "$1" == ""; then
+	if test "$1" == "--help" -o "$1" == "-h"; then
+		cat <<EOF
+(no args)       list existing screens
+name            attach to named screen if it exists, otherwise creates
+_               create a second-level screen named "_"
+_ name          create a second-level screen named "name"
+
+If name is ".", name is basename of current directory.
+If name is an existing directory, chdir into it and starts screen there.
+If directory ends in "src" or "build", use parent dir as label (no chdir is done).
+EOF
+		return
+	elif test "$1" == ""; then
 		screen -wipe | \grep '([AD][te]tached)'
 		return
 	fi
