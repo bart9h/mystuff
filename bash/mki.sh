@@ -21,13 +21,13 @@ function mki()
 		local rev=$( svn info | grep '^Revision:\ \+[0-9]\+$' | cut -d ' ' -f 2 )
 		local ver
 		if test "$rev" -ge 1; then
-			ver="r$rev"
+			ver="$rev"
 		else
 			ver="$date"
 		fi
-		args="--pkgversion=svn-$ver"
+		args="--pkgversion=$ver-svn"
 	elif test -d '.git'; then
-		args="--pkgversion=git-$date"
+		args="--pkgversion=$date-git"
 	else
 		name="`echo "$name" | cut -d - -f 1`"
 	fi
