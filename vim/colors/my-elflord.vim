@@ -21,8 +21,8 @@ hi TabLineSel    ctermfg=none  ctermbg=darkgreen
 hi TabLine       ctermfg=black      ctermbg=white
 hi TabLineFill   ctermfg=none     ctermbg=none
 
-hi StatusLine    ctermfg=2     ctermbg=White
-hi StatusLineNC  ctermfg=none     ctermbg=none
+hi StatusLine    ctermfg=darkgreen cterm=bold ctermbg=black
+hi StatusLineNC  ctermfg=darkgray
 hi VertSplit     ctermfg=none     ctermbg=none
 
 hi Cursor        term=underline
@@ -34,6 +34,7 @@ hi Folded ctermfg=blue cterm=bold
 hi Comment  ctermfg=darkblue  ctermbg=none guifg=#80a0ff
 " asd  asdf
 hi Search ctermbg=green ctermfg=white
+
 
 
 " {{{1 reference
