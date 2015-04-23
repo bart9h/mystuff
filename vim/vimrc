@@ -48,6 +48,13 @@ filetype plugin indent on     " required!
 " NOTE: comments after Bundle command are not allowed..
 
 
+"{{{1  plugins
+
+let g:Gitv_CommitStep = 1000
+let g:Gitv_OpenHorizontal = 0
+let g:Gitv_TruncateCommitSubjects = 1
+
+
 "{{{1  behaviour
 
 set nobackup
