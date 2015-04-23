@@ -6,9 +6,14 @@
 */Cache/*
 */Temp/*
 */Trash/*
-*/chromium/Default/Local Storage/*
+*/chromium/*/Local Storage/*
 .shotwell/mimics
 .shotwell/thumbs
 Downloads
 Download
 Public
+.wine/drive_c/
+Pictures/
+Videos/
+sft/
+*/.*-trash/
