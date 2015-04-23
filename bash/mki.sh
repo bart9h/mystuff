@@ -12,7 +12,7 @@ function mki()
 	*)
 	local date=`date +%Y%m%d`
 	local name="`basename $PWD`"
-	[ "$name" == "src" ] && name="`basename $(cd ..; echo $PWD)`"
+	[ "$name" == "src" -o "$name" == "build" ] && name="`basename $(cd ..; echo $PWD)`"
 
 	local args
 	if test -d 'CVS'; then
