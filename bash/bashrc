@@ -139,7 +139,7 @@ fi
 alias A='a -A'  # single column if fits screen, multi otherwise
 alias D='d -A'  # ls long listing format
 alias F='f -A'  # with size/date/time info
-alias Z='Z -A'  # like F, but ordered by date
+alias Z='z -A'  # like F, but ordered by date
 
 # the lowercase versions (that don't show hidden files):
 function a() {
