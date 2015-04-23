@@ -160,7 +160,7 @@ nmap <c-c> :!cd "`dirname "%:p"`"; grep -n "\<<cword>\>" *.[cChd] *.cpp *.cxx *.
 nmap <c-n> :wall<CR>:make<CR>
 
 " man
-nmap <K> :Man <C-R><C-W><CR>
+nmap <K> :Man <C-R><C-W><CR>:set foldnestmax=1<CR>
 
 " navitage through compiler errors
 nmap <,> :cnext<CR>
