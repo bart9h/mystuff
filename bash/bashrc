@@ -250,7 +250,7 @@ alias mpw='while pgrep mplayer; do sleep 1s; done'
 alias mpf='mplayer -fs -osdlevel 0'
 alias mpdvd='mplayer -identify dvd://1 -dvd-device "$PWD"'
 alias mpq='mplayer -nosound -osdlevel 0'
-alias mistureba='mplayer http://74.86.142.195:8690'
+alias mistureba='mplayer http://paineldj4.com.br:8136/stream'
 alias ytdl='youtube-dl -t -c --max-quality=22'
 alias ion='ionice -c2 -n7'
 
