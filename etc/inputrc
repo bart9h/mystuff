@@ -14,5 +14,9 @@ set output-meta on
 "\e[A":history-search-backward
 "\e[B":history-search-forward
 
-set show-all-if-ambiguous on
+#set show-all-if-ambiguous on
+set show-all-if-unmodified on
 #set completion-ignore-case on
+
+set completion-query-items 1000
+set expand-tilde off
