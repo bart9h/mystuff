@@ -84,12 +84,6 @@ export CHOICESPATH="${HOME}/.Choices:/usr/local/share/Choices:/usr/share/Choices
 # dev
 export ACLOCAL_FLAGS='-I /usr/local/share/aclocal'
 
-# shell
-export INPUTRC="$HOME/.inputrc"
-if true && [ -f /etc/bash_completion ]; then
-	. /etc/bash_completion
-fi
-
 
 #{{{1 path
 
@@ -609,6 +603,11 @@ alias black='xsetroot -solid black'
 
 #{{{1 shell setup
 
+export INPUTRC="$HOME/.inputrc"
+if true && [ -f /etc/bash_completion ]; then
+	. /etc/bash_completion
+fi
+
 if test -t 0 ; then
 	stty -ixon -ixoff
 fi
@@ -628,6 +627,7 @@ set -o vi
 # prohibits overwriting files with '>'.
 # use '>|' to force overwriting.
 set -o noclobber
+
 
 #{{{ ulimit
 
