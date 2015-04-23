@@ -115,7 +115,7 @@ noremap ` '
 nnoremap Q <nop>
 
 " <c-l> also clear search highlight
-nnoremap <C-L> :nohlsearch<CR><C-L>
+nnoremap <C-L> :nohlsearch<CR>:GitGutter<CR><C-L>
 
 " cycle through tabs
 nmap <tab> :tabnext<CR>
