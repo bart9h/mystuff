@@ -253,13 +253,6 @@ alias mistureba='mplayer http://paineldj4.com.br:8136/stream'
 alias ytdl='youtube-dl -t -c --max-quality=22'
 alias ion='ionice -c2 -n7'
 
-function v() {
-	if test "$1"; then
-		vim -o "$@"
-	else
-		vim .
-	fi
-}
 alias Con="vim -o \$(git status --porcelain | grep '^UU' | cut -d ' ' -f 2-) +'set nofoldenable' +Conflict"
 alias TODO="vim -o \$(grep -rl '\<\(TODO\|FIXME\|XXX\|HACK\)\>' $SOURCE_EXTGLOB 2>/dev/null) +'set nofoldenable' +Todo"
 
