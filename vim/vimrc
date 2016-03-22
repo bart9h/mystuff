@@ -107,6 +107,16 @@ endif
 
 "{{{1  key mappings
 
+map <space> <leader>
+
+nmap <leader>a :A<CR>
+
+" quit
+nmap <leader>q :q<CR><C-W>_
+nmap <leader>ww :w<CR>
+nmap <leader>wa :wa<CR>
+nmap <leader>wq :wq<CR><C-W>_
+
 " swap ' and ` (makes ' go to exact position)
 noremap ' `
 noremap ` '
@@ -118,7 +128,7 @@ nnoremap Q <nop>
 nnoremap <C-L> :nohlsearch<CR>:GitGutter<CR><C-L>
 
 " cycle through tabs
-nmap <tab> :tabnext<CR>
+nmap <leader><tab> :tabnext<CR>
 
 " toggle spell cheching
 nmap <F8> :set spelllang=en spell!<CR>
@@ -148,22 +158,20 @@ vmap <f1> "ay
 vmap <f2> "by:tabnew<CR>"bP:diffthis<CR>:set buftype=nofile<CR>:vnew<CR>"aP:set buftype=nofile<CR>:diffthis<CR>
 
 " close/open folders
-nmap <space> za
+nmap <leader><space> za
 
-" quit
-nmap <c-x> :q<CR>
-
-" search for current word on all source files
-nmap <c-c> :!cd "`dirname "%:p"`"; grep -n "\<<cword>\>" *.[cChd] *.cpp *.cxx *.pl *.pm *.java *.pc *.f 2> /dev/null; true<CR>
+" search for current word on all source files (<l>ocal and <g>lobal)
+nmap <leader>l :!cd "`dirname "%:p"`"; grep -n "\<<cword>\>" *.[cChd] *.cpp *.cxx *.pl *.pm *.java *.pc *.f 2> /dev/null; true<CR>
+nmap <leader>g :!cd "`dirname "%:p"`"; cd "`git rev-parse --show-toplevel`" 2>/dev/null ; pwd; ag -s --color "\b<cword>\b" 2>/dev/null \| less; true<CR>
 
 " make
-nmap <c-n> :wall<CR>:make<CR>
+nmap <leader>m :wall<CR>:make<CR>
 
 " man
 nmap <K> :Man <C-R><C-W><CR>:set foldnestmax=1<CR>
 
 " navitage through compiler errors
-nmap <,> :cnext<CR>
+nmap <leader>n :cnext<CR>
 
 
 "{{{1 filetype
