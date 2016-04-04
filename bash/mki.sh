@@ -35,6 +35,8 @@ function mki()
 	local cmd
 	if test -f SConstruct -o -f Sconstruct -o -f sconstruct; then
 		cmd="scons install"
+	elif test -f build.ninja; then
+		cmd="ninja install"
 	else
 		cmd="make install"
 	fi
