@@ -3,7 +3,7 @@ set -e
 
 case "$1" in
 	""|--help)
-		echo "$0 [--mono] [<destination-basedir> (default=/tmp)]"
+		echo "$0  [--mono]  <source-dir>  [<destination-basedir> (default=/tmp)]"
 		exit
 		;;
 	--mono)
@@ -14,6 +14,11 @@ esac
 
 folder="$(basename "$1")"
 if test -z "$2"; then dest="/tmp"; else dest="$2"; fi
+
+echo "Convert these files to mp3 in folder \"$dest/$folder\":"
+ls "$1"/*.flac
+echo -n "Enter to proceed..."
+read
 
 mkdir -pv "$dest/$folder"
 
