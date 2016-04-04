@@ -39,7 +39,7 @@ function show()
 		# colorcube
 		for (( i=0; i<2; i++ )); do
 			for (( green=0; green<6; green++ )); do
-				for (( red=$i*3; red<($i+1)*3; red++ )); do
+				for (( red=$i*3; red<$(( ($i+1)*3 )); red++ )); do
 					for (( blue=0; blue<6; blue++ )); do
 						color=$(( 16 + $red*36 + $green*6 + $blue ))
 						printf "\x1b[48;5;${color}m ${fmt} " $color
