@@ -44,7 +44,7 @@ function mki()
 	local t
 	if test -e /etc/slackware-version; then
 		t=slackware
-	elif test -e /etc/debian_version; then
+	elif test -e /etc/debian_version -o -e /etc/devuan_version; then
 		t=debian
 	else
 		echo 'nope'; false; return
