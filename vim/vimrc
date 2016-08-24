@@ -108,16 +108,6 @@ endif
 
 "{{{1  key mappings
 
-map <space> <leader>
-
-nmap <leader>a :A<CR>
-
-" quit
-nmap <leader>q :q<CR><C-W>_
-nmap <leader>ww :w<CR>
-nmap <leader>wa :wa<CR>
-nmap <leader>wq :wq<CR><C-W>_
-
 " swap ' and ` (makes ' go to exact position)
 noremap ' `
 noremap ` '
@@ -127,9 +117,6 @@ nnoremap Q <nop>
 
 " <c-l> also clear search highlight
 nnoremap <C-L> :nohlsearch<CR>:GitGutter<CR><C-L>
-
-" cycle through tabs
-nmap <leader><tab> :tabnext<CR>
 
 " toggle spell cheching
 nmap <F8> :set spelllang=en spell!<CR>
@@ -143,24 +130,26 @@ nmap <F9> @q
 " makes * go back to current word
 map <silent> * *N
 
-" rotate windows
-nmap <leader>k <C-W>r<C-W>k<C-w>_
-nmap <leader>j <C-W>j<C-W>R<C-w>_
-imap <C-k> <ESC><C-k>
-imap <C-j> <ESC><C-j>
-
-" resize window
-nmap <C-kPlus> <C-W>+
-nmap <C-kMinus> <C-W>-
-nmap <+> <C-W>+
-nmap <-> <C-W>-
-
 " diff selections
 vmap <f1> "ay
 vmap <f2> "by:tabnew<CR>"bP:diffthis<CR>:set buftype=nofile<CR>:vnew<CR>"aP:set buftype=nofile<CR>:diffthis<CR>
 
+" man
+nmap <K> :Man <C-R><C-W><CR>:set foldnestmax=1<CR>
+
+
+"{{{1  <leader> key mappings
+
+map <space> <leader>
+
+" navitage through compiler errors
+nmap <leader>n :cnext<CR>
+
 " close/open folders
 nmap <leader><space> za
+
+" cycle through tabs
+nmap <leader><tab> :tabnext<CR>
 
 " search for current word on all source files (<l>ocal and <g>lobal)
 nmap <leader>l :!cd "`dirname "%:p"`"; grep -n "\<<cword>\>" *.[cChd] *.cpp *.cxx *.pl *.pm *.java *.pc *.f 2> /dev/null; true<CR>
@@ -169,11 +158,25 @@ nmap <leader>g :!cd "`dirname "%:p"`"; cd "`git rev-parse --show-toplevel`" 2>/d
 " make
 nmap <leader>m :wall<CR>:make<CR>
 
-" man
-nmap <K> :Man <C-R><C-W><CR>:set foldnestmax=1<CR>
+nmap <leader>a :A<CR>
 
-" navitage through compiler errors
-nmap <leader>n :cnext<CR>
+" quit
+nmap <leader>q :q<CR><C-W>_
+nmap <leader>ww :w<CR>
+nmap <leader>wa :wa<CR>
+nmap <leader>wq :wq<CR><C-W>_
+
+" rotate windows
+nmap <leader>k <C-W>r<C-W>k<C-w>_
+nmap <leader>j <C-W>j<C-W>R<C-w>_
+nmap <leader>- <C-W>_
+nmap <leader>= <C-W>=
+
+" resize window
+nmap <C-kPlus> <C-W>+
+nmap <C-kMinus> <C-W>-
+nmap <+> <C-W>+
+nmap <-> <C-W>-
 
 
 "{{{1 filetype
