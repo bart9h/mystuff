@@ -143,8 +143,8 @@ nmap <F9> @q
 map <silent> * *N
 
 " rotate windows
-nmap <C-k> <C-W>r<C-W>k<C-w>_
-nmap <C-j> <C-W>j<C-W>R<C-w>_
+nmap <leader>k <C-W>r<C-W>k<C-w>_
+nmap <leader>j <C-W>j<C-W>R<C-w>_
 imap <C-k> <ESC><C-k>
 imap <C-j> <ESC><C-j>
 
