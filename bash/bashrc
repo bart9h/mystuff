@@ -484,12 +484,6 @@ function waitload() {
 	done
 }
 
-function waitfor() {
-	while pidof "$1" >/dev/null; do
-		sleep 1
-	done
-}
-
 #alias mem='free; kill `pidof WMxmms`; sleep 1s; WMxmms &; sleep 1s; dk kill; sleep 1s; ml &; sleep 3s; free'
 alias updb='sudo updatedb &'
 
