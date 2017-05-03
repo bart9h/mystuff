@@ -10,11 +10,12 @@
 	ca = commit -a
 	ci = commit --interactive
 	co = checkout
-	d  = diff
-	st = status -a
+	d  = diff -p --stat -b --patience
+	l  = log --pretty=format:'%h %Cblue%cr%Creset %cn %Cred%d %Cgreen%s%Creset' --graph --all
 	ri = rebase -i
+	s  = status -sb --untracked-files=no
+	sa = status -sb
 	fixup = commit --amend -C HEAD
-	l = log --pretty=format:'%h %Cblue%cr%Creset %cn %Cred%d %Cgreen%s%Creset' --graph --all
 
 [apply]
 	whitespace = strip

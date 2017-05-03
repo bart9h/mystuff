@@ -192,15 +192,7 @@ alias pgo='ping google.com'
 
 alias gitv='vim "$(git rev-parse --show-toplevel)"/.git/index -c "Gitv --all" -c "tabonly"'
 alias gk='(while test ! -d .git -a "$PWD" != /; do cd .. || exit; done; test -d .git && ( exec gitk --all & ) || echo .git not found)'
-alias gc='git commit'
-alias gca='git commit -a'
-alias gci='git commit --interactive'
-alias gco='git checkout'
-alias gsa='git status -sb'
-alias gs='gsa --untracked-files=no'
 alias gs.="gs |\grep -v '\.\.\/'"
-alias gd='git diff -p --stat -b --patience'
-alias gds='gd --staged'
 alias gsl='git stash list'
 alias gspop='git stash pop'
 function gri() {
