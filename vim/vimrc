@@ -139,7 +139,8 @@ nmap <F9> @q
 
 " makes * highlight the word, but don't jump to next occurrence
 "map <silent> * yiw:let @/="\\<".@0."\\>"<CR>:set hls<CR>
-" makes * stay on current word
+
+" makes * go back to current word
 map <silent> * *N
 
 " rotate windows
@@ -163,7 +164,7 @@ nmap <leader><space> za
 
 " search for current word on all source files (<l>ocal and <g>lobal)
 nmap <leader>l :!cd "`dirname "%:p"`"; grep -n "\<<cword>\>" *.[cChd] *.cpp *.cxx *.pl *.pm *.java *.pc *.f 2> /dev/null; true<CR>
-nmap <leader>g :!cd "`dirname "%:p"`"; cd "`git rev-parse --show-toplevel`" 2>/dev/null ; pwd; ag -s --color "\b<cword>\b" 2>/dev/null \| less; true<CR>
+nmap <leader>g :!cd "`dirname "%:p"`"; cd "`git rev-parse --show-toplevel`" 2>/dev/null && pwd && ag -s --color "\b<cword>\b" 2>/dev/null \| less; true<CR>
 
 " make
 nmap <leader>m :wall<CR>:make<CR>
