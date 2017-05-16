@@ -1,0 +1,10 @@
+#!/bin/bash
+
+op="$1"
+shift
+
+if test -z "$op" -o "$op" == "--help"; then
+	echo "usage: $0  [+|-]=HH:MM:SS  <files>"
+fi
+
+exiftool -overwrite_original -ModifyDate${op} -DateTimeOriginal${op} -CreateDate${op} "$@"
