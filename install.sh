@@ -9,7 +9,22 @@ if ! test -d "$ETC"; then
 fi
 
 function L() {
-	ln -sv "$ETC/$1" "$2"  || exit 1
+	local from="$ETC/$1"
+	local to="$HOME/$2"
+
+	if test -e "$to"; then
+		if test "`readlink "$to"`" == "$from"; then
+			echo "$to already points to $from, skipping."
+			return
+		fi
+		local bk="${to}.before-install"
+		if test -e "$bk"; then
+			echo "$bk already exists, aborting."
+			exit 1
+		fi
+		mv -v "$to" "$bk"
+	fi
+	ln -sv "$from" "$to"  || exit 1
 }
 
 L bash/bashrc    .bashrc
@@ -21,5 +36,10 @@ L etc/tigrc      .tigrc
 L vim/vimrc      .vimrc
 L vim            .vim
 
-git clone https://github.com/gmarik/vundle.git ~/.vim/bundle/vundle \
-	&& vim +BundleInstall +qall
+vundle_dir="$HOME/.vim/bundle/vundle"
+if test -e "$vundle_dir"; then
+	echo "$vundle_dir already exists, skipping."
+else
+	git clone https://github.com/gmarik/vundle.git "$vundle_dir" \
+		&& vim +BundleInstall +qall
+fi
