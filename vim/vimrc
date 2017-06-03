@@ -152,8 +152,10 @@ nmap <leader><space> za
 nmap <leader><tab> :tabnext<CR>
 
 " search for current word on all source files (<l>ocal and <g>lobal)
-nmap <leader>l :!cd "`dirname "%:p"`"; grep -n "\<<cword>\>" *.[cChd] *.cpp *.cxx *.pl *.pm *.java *.pc *.f 2> /dev/null; true<CR>
-nmap <leader>g :!cd "`dirname "%:p"`"; cd "`git rev-parse --show-toplevel`" 2>/dev/null && pwd && ag -s --color "\b<cword>\b" 2>/dev/null \| less; true<CR>
+nmap <leader>l  :!cd "`dirname "%:p"`";       pwd; ag -s --color "\b<cword>\b" 2> /dev/null \| less -F; true<CR>
+nmap <leader>2l :!cd "`dirname "%:p"`"/..;    pwd; ag -s --color "\b<cword>\b" 2> /dev/null \| less -F; true<CR>
+nmap <leader>3l :!cd "`dirname "%:p"`"/../..; pwd; ag -s --color "\b<cword>\b" 2> /dev/null \| less -F; true<CR>
+nmap <leader>g  :!cd "`dirname "%:p"`"; cd "`git rev-parse --show-toplevel`" 2>/dev/null && pwd && ag -s --color "\b<cword>\b" 2>/dev/null \| less -F; true<CR>
 
 " make
 nmap <leader>m :wall<CR>:make<CR>
