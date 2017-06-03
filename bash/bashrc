@@ -254,6 +254,10 @@ alias mpf='mpv --fs --osd-level=0'
 alias mpq='mpv --aid=no --osd-level=0'
 alias mpdvd='mplayer -identify dvd://1 -dvd-device "$PWD"'
 alias mistureba='mplayer http://paineldj4.com.br:8136/stream'
+function clima()
+{
+	curl http://wttr.in/"$*"
+}
 alias ytdl='youtube-dl -t -c --max-quality=22'
 alias ion='ionice -c2 -n7'
 
