@@ -136,12 +136,23 @@ if [ "$OSTYPE" == "linux-gnu"  -a  "$TERM" != "dumb" ]; then
 	alias ls='ls --color=auto'
 fi
 
-alias A='a -A'  # single column if fits screen, multi otherwise
-alias D='d -A'  # ls long listing format
-alias F='f -A'  # with size/date/time info
-alias Z='z -A'  # like F, but ordered by date
 
-# the lowercase versions (that don't show hidden files):
+# long format
+alias d='ls -lF'
+
+# custumized long format
+function f() {
+	\ls -FGhln --color=always --time-style=long-iso "$@" |
+	sed 's/^[^\ ]\+\ \+[^\ ]\+\ \+[^\ ]\+\ \+\(.....?\)\ \(20[^\ ]\+\ [^\ ]\+\)\ \(.*\)$/\2\ \ [0;37m\1\ \ \3/'
+}
+
+# same as `f`, sorted by timestamp
+alias z='f -rt'
+
+# du
+alias F='find . -maxdepth 1 -not -name . -exec du -shc {} +'
+
+# short format; with single column if fits screen, multi otherwise
 function a() {
     local n=$( ls "$@" | wc -l )
 	if test $n -gt 0; then
@@ -149,16 +160,17 @@ function a() {
 			ls -1F "$@"
 		else
 			ls -F "$@"
-		fi  
+		fi
 	fi
 }
+
+# same as `a`, but only on source files
 alias c='a $SOURCE_EXTGLOB 2>/dev/null'
-alias d='ls -lF'
-function f() {
-	\ls -FGhln --color=always --time-style=long-iso "$@" |
-	sed 's/^[^\ ]\+\ \+[^\ ]\+\ \+[^\ ]\+\ \+\(.....?\)\ \(20[^\ ]\+\ [^\ ]\+\)\ \(.*\)$/\2\ \ [0;37m\1\ \ \3/'
-}
-alias z='f -rt'
+
+# -A version of `a` and `d`
+alias A='a -A'
+alias D='d -A'
+
 
 # deprecated stuff:
 #alias _sd='find -type d -maxdepth 1 -name "[^\.]*" -print0 | xargs -0 du -sc | sed "s/\.\///" | sort -n'
