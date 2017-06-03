@@ -1,0 +1,33 @@
+#!/bin/sh
+export SDL_VIDEO_ALLOW_SCREENSAVER=1
+
+#xterm -geometry 132x80 &
+#exec twm
+
+cancel_or_not()
+{
+	local delay="$1"; shift
+	local command="$1"; shift
+	if zenity \
+		--timeout "$delay" --question \
+		--text "Vou iniciar o $command\n$delay segundos pra cancelar..." \
+		--ok-label "Cancelar" \
+		--cancel-label "Rodar Agora"
+	then
+		echo "Cancelado."
+	else
+		echo "Chamando o $command com parametros ($*) (sqn)"
+		"$command" "$@"
+	fi
+}
+
+xcape -e 'Caps_Lock=Escape'
+(
+	sleep 3
+	gkrellm &
+	sleep 5
+	cancel_or_not 5 transmission-gtk &
+	sleep 1
+	cancel_or_not 8 pidgin &
+) &
+exec mate-session
