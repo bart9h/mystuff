@@ -181,7 +181,7 @@ alias D='d -A'
 
 #{{{1 abbreviations
 
-alias OFF='sudo poweroff'
+alias OFF='if test -x `which transmission-remote` && pidof transmission-gtk >/dev/null 2>/dev/null; then transmission-remote --exit; waitfor -t 15 transmission-gtk; fi; sudo poweroff'
 alias p='ps -AH --format "%U %p %a"'
 alias l='less'
 alias cn='cat > /dev/null' # quick volatile writepad
