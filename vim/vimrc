@@ -12,32 +12,13 @@ Bundle 'gmarik/vundle'
 
 " My Bundles here:
 Bundle 'a.vim'
+Bundle 'tpope/vim-fugitive'
 Bundle 'airblade/vim-gitgutter'
-Bundle 'bufexplorer.zip'
 Bundle 'gregsexton/gitv'
 Bundle 'netrw.vim'
-Bundle 'tpope/vim-fugitive'
-
-" original repos on github
-" Bundle 'tpope/vim-fugitive'
-" Bundle 'Lokaltog/vim-easymotion'
-" Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
-" Bundle 'tpope/vim-rails.git'
-" vim-scripts repos
-" Bundle 'L9'
-" Bundle 'FuzzyFinder'
-" non github repos
-" Bundle 'git://git.wincent.com/command-t.git'
-" ...
-
-" Makes Gitv diff start unfolded
-augroup git
-	au!
-	autocmd FileType git :setlocal foldlevel=99
-augroup END
 
 filetype plugin indent on     " required!
-"
+
 " Brief help
 " :BundleList          - list configured bundles
 " :BundleInstall(!)    - install(update) bundles
@@ -53,6 +34,12 @@ filetype plugin indent on     " required!
 let g:Gitv_CommitStep = 1000
 let g:Gitv_OpenHorizontal = 0
 let g:Gitv_TruncateCommitSubjects = 1
+
+" Makes Gitv diff start unfolded
+augroup git
+	au!
+	autocmd FileType git :setlocal foldlevel=99
+augroup END
 
 
 "{{{1  behaviour
