@@ -1,8 +1,9 @@
 #!/bin/bash
 max_dist=8
 location_delay=5
-delay0=5
-delay1=10
+click_delay=60
+last_click=-9999
+verbose=0
 
 echo 'Move the mouse pointer to the clicky location.'
 for i in `seq $location_delay -1 1`; do
@@ -15,20 +16,22 @@ OX=$X
 OY=$Y
 echo "Got ($X,$Y)."
 
-while sleep $delay0; do
-	for i in `seq $delay1`; do
-		echo -n .
-		sleep 1 || break
-	done
+while sleep 1; do
 	eval $(xdotool getmouselocation --shell)
 	DX=$(($OX-$X))
 	DY=$(($OY-$Y))
 	dx=$( sed 's/-//' <<< $DX )
 	dy=$( sed 's/-//' <<< $DY )
 	if [[ $dx -le $max_dist && $dy -le $max_dist ]]; then
-		echo "click"
-		xdotool click 1
+		if [[ $(( $SECONDS - $last_click )) -ge $click_delay ]]; then
+			test "$verbose" == "1" && echo "click"
+			xdotool click 1
+			last_click=$SECONDS
+		else
+			test "$verbose" == "1" && echo -n "$(( $click_delay - $SECONDS + $last_click )) "
+		fi
 	else
-		echo "($DX,$DY)"
+		test "$verbose" == "1" && echo "($DX,$DY)"
+		last_click=-9999
 	fi
 done
