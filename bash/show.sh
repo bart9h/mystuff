@@ -6,12 +6,12 @@ function show()
 	local what="$1"; shift
 	case "$what" in
 
-	ip)#
+	ip)#                 : external IP address (via checkip.dyndns.org)
 		wget -O - checkip.dyndns.org 2>/dev/null |
 		sed 's/^.*IP Address: \([^<]*\).*$/\1/'
 	;;#
 
-	colors)#
+	colors)#             : system colors
 		for b in 0 1; do
 			for j in 3 4; do
 				i=0
@@ -24,7 +24,8 @@ function show()
 		done
 	;;#
 
-	256)#
+	256)#                : 256-color cube
+
 		local i red green blue fmt="%02x" reset="\x1b[0m\x1b[38;5;16m"
 		test "$1" && fmt="%03d"
 		printf "$reset"
@@ -60,19 +61,28 @@ function show()
 		printf "\x1b[0m\n"
 	;;#
 
-	cpus)#
+	cpus)#               : number of CPUs
 		cat /proc/cpuinfo | grep '^processor\>' | wc -l
 	;;#
 
-	resolution|res)#
-		echo $(xwininfo -root|grep Width:|cut -d : -f 2)x$(xwininfo -root|grep Height:|cut -d : -f 2|sed s/\ //g)
+	resolution|res)#  : resolution of the X display
+
+		if test -z "$DISPLAY"; then
+			echo "no X display set"
+		else
+			if test -x "$(which xwininfo)"; then
+				echo $(xwininfo -root|grep Width:|cut -d : -f 2)x$(xwininfo -root|grep Height:|cut -d : -f 2|sed s/\ //g)
+			else
+				echo "xwininfo not available"
+			fi
+		fi
 	;;#
 
-	termsize|rez)#
+	termsize|rez)#    : resolution of the text terminal
 		echo ${COLUMNS}x${LINES}
 	;;#
 
-	sizeof)# #<C-type>
+	sizeof)# <C-type>    : size of C type (calls gcc)
 		test -z "$1" && echo "sizeof what?" && return
 		local arg
 		while true; do
