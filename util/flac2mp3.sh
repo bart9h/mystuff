@@ -10,15 +10,21 @@ case "$1" in
 		mono="-m s -a"
 		shift
 		;;
+	--dont-ask)
+		dontask=1
+		shift
+		;;
 esac
 
 folder="$(basename "$1")"
 if test -z "$2"; then dest="/tmp"; else dest="$2"; fi
 
-echo "Convert these files to mp3 in folder \"$dest/$folder\":"
-ls "$1"/*.flac
-echo -n "Enter to proceed..."
-read
+if test "$dontask" != "1"; then
+	echo "Convert these files to mp3 in folder \"$dest/$folder\":"
+	ls "$1"/*.flac
+	echo -n "Enter to proceed..."
+	read
+fi
 
 mkdir -pv "$dest/$folder"
 
@@ -40,4 +46,10 @@ for flac in "$1/"*.flac; do
 	rm -f -v "$wav"
 
 done
-cp -v "$1/"*.jpg "$dest/$folder/"
+
+for ext in jpg png tif txt; do
+	if ls "$1"/*.$ext >/dev/null 2>/dev/null
+	then
+		cp -v "$1/"*.$ext "$dest/$folder/" 2>/dev/null
+	fi
+done
