@@ -37,6 +37,8 @@ function mki()
 		cmd="scons install"
 	elif test -f build.ninja; then
 		cmd="ninja install"
+	elif test -f waf; then
+		cmd="./waf install"
 	else
 		cmd="make install"
 	fi

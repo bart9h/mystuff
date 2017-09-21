@@ -5,7 +5,7 @@ use warnings;
 #
 #  IMPORTANT NOTICE:
 #  This is modeled based on the way I arrange my music:
-#  genre/artist.year.album/tracknr.songtitle.ext
+#  genre/artist__year__album/tracknr__songtitle.ext
 #
 
 #TODO: check if external tools are installed
@@ -126,7 +126,8 @@ foreach my $path (`find "$collection_dir" -type f`) {
 			$r->{cmd},
 			(
 				map { $r->{arg}."\"$m2v{$_}=$args{$_}\"" }
-				grep( defined $args{$_}, keys %args )
+				grep { defined $args{$_} and $args{$_} ne '' }
+				keys %args
 			),
 			"\"$path\"";
 	}

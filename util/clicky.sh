@@ -1,7 +1,7 @@
 #!/bin/bash
 max_dist=8
 location_delay=5
-click_delay=60
+click_delay=10
 last_click=-9999
 verbose=0
 

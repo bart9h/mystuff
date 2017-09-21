@@ -1,0 +1,1 @@
+while sleep 5s; do for i in `seq 10`; do echo -n .; sleep 1 || break; done; echo click; xdotool click 1; done

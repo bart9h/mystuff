@@ -1,0 +1,6 @@
+#!/bin/sh
+for file in "$@"; do
+	tmp="/tmp/thumbview.jpg"
+	exiftool -b -PreviewImage "$file" > "$tmp"
+	qiv "$tmp"
+done

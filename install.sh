@@ -33,7 +33,6 @@ L etc/inputrc    .inputrc
 L mplayer        .mplayer
 L etc/screenrc   .screenrc
 L etc/tigrc      .tigrc
-L vim/vimrc      .vimrc
 L vim            .vim
 L x11/xsession   .xsession
 

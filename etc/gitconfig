@@ -11,8 +11,7 @@
 	ci = commit --interactive
 	co = checkout
 	d  = diff -p --stat -b --patience
-	ll = log --pretty=format:'%h %Cblue%cr%Creset %cn %Cred%d %Cgreen%s%Creset' --graph --all
-	l  = log --pretty=format:'%h %Cblue%cr%Creset %cn %Cred%d %Cgreen%s%Creset' --graph --all -$(( $LINES / 3 ))
+	l  = log --pretty=format:'%h %Cblue%cr%Creset %cn %Cred%d %Cgreen%s%Creset' --graph --all
 	ri = rebase -i
 	s  = status -sb --untracked-files=no
 	sa = status -sb
