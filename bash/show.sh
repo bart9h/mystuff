@@ -35,6 +35,7 @@ function show()
 			printf "\x1b[48;5;${color}m ${fmt} " $color
 			test $color == 7 && printf "$reset\n"
 		done
+		printf "$reset"
 		printf "\n\n"
 
 		# colorcube
