@@ -33,7 +33,7 @@ hi LineNr ctermfg=DarkRed
 hi Folded ctermfg=blue cterm=bold
 hi Comment  ctermfg=darkblue  ctermbg=none guifg=#80a0ff
 " asd  asdf
-hi Search ctermbg=green ctermfg=white
+hi Search ctermbg=green ctermfg=black
 
 
 

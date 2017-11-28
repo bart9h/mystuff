@@ -17,6 +17,12 @@ Plugin 'gregsexton/gitv'
 Plugin 'info.vim'
 Plugin 'netrw.vim'
 
+" colorschemes
+"Plugin 'romainl/Apprentice'
+Plugin 'morhetz/gruvbox'
+"Plugin 'gosukiwi/vim-atom-dark'
+"Plugin 'toupeira/vim-desertink'
+
 call vundle#end()
 filetype plugin indent on
 
@@ -77,12 +83,13 @@ if has("gui_running")
 	set number
 	set guioptions -=T
 	set guifont=Inconsolata\ 12
-	colorscheme darkblue
+	colorscheme gruvbox
 	hi CursorLine guibg=#0000b0 guifg=white
 else
 	set background=dark
+	set t_Co=256
+	colorscheme gruvbox
 	hi Cursor ctermbg=yellow ctermfg=black
-	colorscheme my-elflord
 endif
 
 
