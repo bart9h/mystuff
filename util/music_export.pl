@@ -30,13 +30,12 @@ foreach my $genre (glob "$input_dir/*") {
 				$album =~ m{^.*/([^/]*)$}  or die;
 				my $album_basename = $1;
 
-				my $output_album = "$output_dir/$genre_basename/$album_basename";
-				my @flacs = <"$album"/*.flac>;
-				if (scalar @flacs) {
-					system "\"$ENV{ETC}/util/flac2mp3.sh\" --dont-ask \"$album\" \"$output_album\"";
+				my $output_genre = "$output_dir/$genre_basename";
+				if (`ls "$album"/*.flac 2>/dev/null` ne '') {
+					system "\"$ENV{ETC}/util/flac2mp3.sh\" --dont-ask \"$album\" \"$output_genre\"";
 				}
 				else {
-					system "cp -v -R \"$album\" \"$output_album\"";
+					system "cp -v -R \"$album\"/ \"$output_genre\"";
 				}
 			}
 			else {
