@@ -46,7 +46,7 @@ set nobackup
 set noswapfile
 
 set hidden
-set switchbuf=usetab
+set switchbuf=useopen
 
 set wildmenu
 set wildmode=list:longest,full
@@ -122,7 +122,7 @@ vmap <f1> "ay
 vmap <f2> "by:tabnew<CR>"bP:diffthis<CR>:set buftype=nofile<CR>:vnew<CR>"aP:set buftype=nofile<CR>:diffthis<CR>
 
 " man
-nmap <K> :Man <C-R><C-W><CR>:set foldnestmax=1<CR>
+nmap <leader>M :Man <C-R><C-W><CR>
 
 
 "{{{1  <leader> key mappings
@@ -131,6 +131,7 @@ map <space> <leader>
 
 " navitage through compiler errors
 nmap <leader>n :cnext<CR>
+nmap <leader>p :cprevious<CR>
 
 " close/open folders
 nmap <leader><space> za
@@ -201,6 +202,7 @@ command! -bar -nargs=1 Man
 \|  set filetype=man
 \|  set buftype=nofile
 \|  set foldmethod=indent
+\|  set foldnestmax=1
 \|  goto 1
 \|  %s/.//g
 
