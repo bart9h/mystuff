@@ -41,5 +41,5 @@ if test -e "$vundle_dir"; then
 	echo "$vundle_dir already exists, skipping."
 else
 	git clone https://github.com/gmarik/vundle.git "$vundle_dir" \
-		&& vim +BundleInstall +qall
+		&& vim +PluginInstall +qall
 fi

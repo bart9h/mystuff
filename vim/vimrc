@@ -1,34 +1,24 @@
 "{{{1 Vundle
 
-set nocompatible               " be iMproved
-filetype off                   " required!
+set nocompatible
+filetype off
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+set rtp+=~/.vim/bundle/vundle
+call vundle#begin()
 
-" let Vundle manage Vundle
-" required!
-Bundle 'gmarik/vundle'
+Plugin 'gmarik/vundle'
 
-" My Bundles here:
-Bundle 'a.vim'
-Bundle 'tpope/vim-fugitive'
-Bundle 'airblade/vim-gitgutter'
-Bundle 'gregsexton/gitv'
-"Bundle 'HiPhish/info.vim'
-Bundle 'info.vim'
-Bundle 'netrw.vim'
+" plugins
+Plugin 'a.vim'
+Plugin 'tpope/vim-fugitive'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'gregsexton/gitv'
+"Plugin 'HiPhish/info.vim'
+Plugin 'info.vim'
+Plugin 'netrw.vim'
 
-filetype plugin indent on     " required!
-
-" Brief help
-" :BundleList          - list configured bundles
-" :BundleInstall(!)    - install(update) bundles
-" :BundleSearch(!) foo - search(or refresh cache first) for foo
-" :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
-"
-" see :h vundle for more details or wiki for FAQ
-" NOTE: comments after Bundle command are not allowed..
+call vundle#end()
+filetype plugin indent on
 
 
 "{{{1  plugins
