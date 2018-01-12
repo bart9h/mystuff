@@ -72,11 +72,11 @@ export LESS='-X -F -M -R -f -J -W -j4'
 export PAGER='less'
 export MANPAGER="$PAGER"
 #export MANPAGER="col -b | view -c 'set ft=man nomod nolist' -"
-[ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
+export LESSOPEN="|lesspipe %s"
 
 export EDITOR="vim"
 export SVN_EDITOR="$EDITOR"
-export GREP_OPTIONS='--exclude="*.svn-base" --exclude="\.git"'
+#export GREP_OPTIONS='--exclude="*.svn-base" --exclude="\.git"'
 export GREP_COLOR="1;33"
 export TIG_DIFF_OPTS='-b'
 
