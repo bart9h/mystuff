@@ -184,7 +184,7 @@ alias D='d -A'
 
 #{{{1 abbreviations
 
-alias OFF='transmission_stop && sudo poweroff'
+alias OFF='$ETC/sys/transmission_stop.sh && sudo poweroff'
 alias p='ps -AH --format "%U %p %a"'
 alias l='less'
 alias cn='cat > /dev/null' # quick volatile writepad
