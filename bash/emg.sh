@@ -14,6 +14,11 @@ function _emg_update_cache()
 	echo "... done."
 }
 
+function _emg_emerge()
+{
+	sudo nice ionice -c 3 emerge -v --ask --ask-enter-invalid "$@"
+}
+
 function emg()
 {
 	local cachefile="$HOME/.local/emg.cache"
@@ -27,13 +32,15 @@ function emg()
             n:  read the news (eselect news read)
             u:  update package info (emerge --sync; update quick search cache)
             w:  upgrade all (emerge --deep --newuse @world)
-			c:  clean (eclean disfiles)
+            c:  clean (eclean disfiles)
 anything else:  emerge ...
+
+NOTE: emerge always called as:
+sudo nice ionice -c 3 emerge -v --ask --ask-enter-invalid
 EOF
 		;;
 
 	s)
-		shift
 		test -s "$cachefile" || _emg_update_cache
 		grep -i "$*" "$cachefile" | less --quit-if-one-screen
 		;;
@@ -47,25 +54,20 @@ EOF
 		;;
 
 	u)
-		shift
-		sudo ionice -c 3 emerge --sync &&
+		_emg_emerge --sync &&
 		_emg_update_cache
 		;;
 
 	w)
-		sudo emerge --ask --ask-enter-invalid --update --deep --newuse @world
+		_emg_emerge --update --deep --newuse @world
 		;;
 
 	c)
 		sudo eclean distfiles
 		;;
 
-	m)
-		fluxbox-generate_menu -is -ds
-		;;
-
 	*)
-		sudo nice ionice -c 3 emerge -v --ask --ask-enter-invalid "$@"
+		_emg_emerge "$@"
 		;;
 
 	esac
