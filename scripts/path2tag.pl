@@ -1,6 +1,8 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use v5.10;
+use Data::Dumper;
 
 #
 #  IMPORTANT NOTICE:
@@ -84,6 +86,8 @@ foreach my $path (`find "$collection_dir" -type f`) {
 		$args{song} = $file;
 	}
 
+	$args{track} =~ s/^0+//  if exists $args{track};
+
 	if( ! $has_genre_field ) {
 		$args{artist} = "$args{genre}:$args{artist}";
 	}
@@ -101,10 +105,82 @@ foreach my $path (`find "$collection_dir" -type f`) {
 	}
 
 	if( $format eq 'mp3' ) {
+		my %rfc2t = (  # translate mp3 tag names to vorbis
+			TPE1 => 'artist',
+			TYER => 'year',
+			TALB => 'album',
+			TRCK => 'track',
+			TIT2 => 'song',
+			TCON => 'genre',
+		);
+
+		my %cur;
+		foreach (`id3v2 -R \"$path\"`) {
+			if (m/^([A-Z0-9]{4}): (.*)$/) {
+				my ($tag, $value) = ($1, $2);
+				if (exists $rfc2t{$tag}) {
+					$tag = $rfc2t{$tag};
+					if ($tag eq 'genre') { # remove (255)
+						if ($value =~ m{^(.*) \(\d+\)$}) {
+							$value = $1;
+						}
+					}
+					$cur{$tag} = $value;
+				}
+			}
+		}
+
+		my $needs_update = 0;
+		foreach my $key (keys %args) {
+			if (not defined $cur{$key} or $cur{$key} ne $args{$key}) {
+				$needs_update = 1;
+				last;
+			}
+		}
+
 		#x "id3v2 -D \"$path\"" unless $ENV{NOP};
-		x 'id3v2', ( map { "--$_=\"$args{$_}\"" } keys %args ), "\"$path\"";
+		if ($needs_update) {
+			x 'id3v2', ( map { "--$_=\"$args{$_}\"" } keys %args ), "\"$path\"";
+		}
+		else {
+			say "Skipping \"$path\"."  if $ENV{VERBOSE};
+		}
 	}
 	elsif( $format =~ /(ogg|flac)/ ) {
+
+		my %v2m = (  # translate mp3 tag names to vorbis
+			ARTIST      => 'artist',
+			DATE        => 'year',
+			ALBUM       => 'album',
+			TRACKNUMBER => 'track',
+			TITLE       => 'song',
+			GENRE       => 'genre',
+		);
+
+		my %cur;
+		foreach (`vorbiscomment \"$path\"`) {
+			if (m/^([A-Z]+)=(.*)$/) {
+				my ($tag, $value) = ($1, $2);
+				if (exists $v2m{$tag}) {
+					$tag = $v2m{$tag};
+					$cur{$tag} = $value;
+				}
+			}
+		}
+
+		my $needs_update = 0;
+		foreach my $key (keys %args) {
+			if (not defined $cur{$key} or $cur{$key} ne $args{$key}) {
+				#print Dumper $path, \%args, \%cur; exit;
+				$needs_update = 1;
+				last;
+			}
+		}
+
+		if (not $needs_update) {
+			say "Skipping \"$path\"."  if $ENV{VERBOSE};
+			next;
+		}
 
 		my %m2v = (  # translate mp3 tag names to vorbis
 			artist => 'ARTIST',
