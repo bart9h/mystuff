@@ -6,7 +6,9 @@
 #  -  Show the list of files to be rm'ed, and asks just once.
 #  -  First if checks if all files exists, aborting otherwise.
 #
-if [ "$OSTYPE" == "linux-gnu" ]; then
+
+case "$OSTYPE" in
+	linux-gnu*)
 
 function rm()
 {
@@ -52,4 +54,5 @@ function rm()
 
 }
 
-fi
+;;
+esac
