@@ -8,6 +8,13 @@ if ! test -d "$ETC"; then
 	exit 1
 fi
 
+for cmd in git vim; do
+	if test "$(which $cmd)" == ""; then
+		echo "$cmd not found."
+		exit
+	fi
+done
+
 function L() {
 	local from="$ETC/$1"
 	local to="$HOME/$2"
