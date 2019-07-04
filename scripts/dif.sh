@@ -32,22 +32,14 @@ while test "$1"; do
 #echo loop "$1"
 	x="$1"
 	dir=
-	tar_type=
-	if test -f "$1" && echo "$1" | grep -q "\.tar\.gz$\|\.tgz$"; then
-		tar_type='xz'
-	elif test -f "$1" && echo "$1" | grep "\.tar\.bz2$\|\.tbz$"; then
-		tar_type='xj'
-	elif test -f "$1" && echo "$1" | grep "\.tar$"; then
-		tar_type='x'
-	fi
 
-	if test -n "$tar_type"; then
+	if test -f "$1" && echo "$1" | grep -q "\.tar$\|\.tar\.gz$\|\.tgz$\|\.tar$\.xz$\|\.tar$\.bz2$\|\.tar\.bz$"; then
 		target="/tmp/`basename "$1"`"
 		test -d "$target" && target="${target}-2"
 		mkdir $verbose "$target" || exit
 		dir="$target"
 		test -n "$verbose" && echo "untaring \"$1\" to \"$target\""
-		tar -C "$target" $verbose -$tar_type -f "$1" || exit
+		tar -C "$target" $verbose -x -f "$1" || exit
 		# check if it has a single directory (or file):
 		if test `ls -A "$target" | wc -l` -eq 1; then
 			x="$target/`ls -A $target`"
