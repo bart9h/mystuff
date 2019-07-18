@@ -221,7 +221,6 @@ function gl() {
 	| sed 's/\((\|,\ \)refs\/\w\+\//\1/g;s/origin\//o\//g' \
 	| less
 }
-alias gr='(git log --color --stat -1; git diff -b --word-diff --color HEAD~ HEAD)|less'
 alias gspop='git stash pop'
 alias gsp='git_stash_do pull'
 alias gsd='git_stash_do svn dcommit'
