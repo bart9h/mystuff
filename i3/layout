@@ -1,0 +1,24 @@
+[
+{
+    "layout": "tabbed",
+    "percent": 0.7,
+    "type": "con",
+    "swallows": [
+        { "class": "^Firefox$" },
+        { "class": "^Sakura$" }
+    ]
+},
+{
+    "layout": "splitv",
+    "percent": 0.3,
+    "swallows": [
+        {
+            "class": "^Firefox$",
+            "title": "WhatsApp"
+        },
+        {
+            "class": "^Pidgin$"
+        }
+    ]
+}
+]

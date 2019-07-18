@@ -1,0 +1,18 @@
+#!/bin/bash
+test -z "$ETC" && ETC="$HOME/etc"
+. "$ETC/bash/show.sh"
+cd "$(dirname "$0")" || exit
+last_ip="$(cat last_ip.txt)"
+curr_ip="$(show ip)"
+if test "$last_ip" == "$curr_ip"; then
+	echo "IP address $curr_ip up to date"
+else
+	curl_rc="$(curl 'https://freemyip.com/update?token=a705cea508b70013118e919e&domain=bambu.freemyip.com')"
+	if test "$curl_rc" == "OK"; then
+		echo "$curr_ip" > last_ip.txt
+		echo "IP address updated to $curr_ip"
+	else
+		echo "IP address not updated:"
+		echo "$curl_rc"
+	fi
+fi

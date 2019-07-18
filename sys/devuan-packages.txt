@@ -1,0 +1,69 @@
+### add non-free, updates and backports to /etc/apt/sources.list:
+
+deb      http://deb.devuan.org/merged ascii            main  non-free
+deb-src  http://deb.devuan.org/merged ascii            main  non-free
+deb      http://deb.devuan.org/merged ascii-security   main  non-free
+deb-src  http://deb.devuan.org/merged ascii-security   main  non-free
+deb      http://deb.devuan.org/merged ascii-updates    main  non-free
+deb-src  http://deb.devuan.org/merged ascii-updates    main  non-free
+deb      http://deb.devuan.org/merged ascii-backports  main  non-free
+deb-src  http://deb.devuan.org/merged ascii-backports  main  non-free
+
+
+### apt update && install these packages:
+
+screen
+aptitude
+vim
+git
+tig
+silversearcher-ag
+
+gitk
+xcape
+ffmpeg
+youtube-dl
+firmware-linux
+fonts-inconsolata
+firmware-amd-graphics
+
+checkinstall
+mlocate
+aria2
+curl
+htop
+
+
+### BaPhO
+
+libsdl-perl
+libimage-exiftool-perl
+graphicsmagick
+mpv
+
+
+
+### to compile darktable:
+
+g++
+cmake
+intltool
+xsltproc
+llvm-6.0
+clang-6.0
+libpng-dev
+libjpeg-dev
+libcups2-dev
+libexiv2-dev
+libgtk-3-dev
+liblcms2-dev
+librsvg2-dev
+libtiff5-dev
+liblensfun-dev
+libopenexr-dev
+libpugixml-dev
+libsoup2.4-dev
+libsqlite3-dev
+libjson-glib-dev
+libdbus-glib-1-dev
+libcurl4-gnutls-dev

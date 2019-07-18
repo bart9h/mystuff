@@ -1,0 +1,5 @@
+list files provided by a (possibly uninstalled) package:
+(after installing apt-file, it requires a lengthy `apt update` before it can do it's magic)
+
+	apt-file list <package-name>
+

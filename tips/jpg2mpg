@@ -1,0 +1,2 @@
+fps=20
+ffmpeg -i 'input/%04d.jpg' -r $fps output.mpg
