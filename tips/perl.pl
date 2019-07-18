@@ -1,9 +1,11 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-$\ = "\n";
+use v5.10;
 
-sub increment_suffix($;$)
+#{# increment filename suffix
+
+sub increment_filename_suffix($;$)
 {#
 	my ($ref, $sep) = @_;
 	defined $sep or $sep = '-';
@@ -11,16 +13,26 @@ sub increment_suffix($;$)
 	$$ref;
 }#
 
-sub autoincrement_filename_suffix
+sub increment_filename_suffix_test
 {#
-	print "auto-incrementing a filename suffix:";
+	say "auto-incrementing a filename suffix:";
 	my $a = "\tfilename.ext";
-	print $a;
+	say $a;
 	foreach (1 .. 3) {
-		print increment_suffix \$a;
+		say increment_filename_suffix \$a;
 	}
 }#
 
-autoincrement_filename_suffix;
+#}#
+
+#{#  Carp cheat-sheet
+#
+#                           DIE          WARN
+#
+#		FROM CALLER         croak        carp
+#
+#		WITH BACKTRACE      confess      cluck
+#
+#}#
 
 # vim600:fdm=marker:fmr={#,}#:

@@ -1,10 +1,11 @@
 #!/bin/bash
+test -z "$click_delay" && click_delay=60
 max_dist=8
 location_delay=5
-click_delay=10
 last_click=-9999
 verbose=0
 
+echo '(note: you can use $click_delay to customize the interval (in seconds) between clicks)'
 echo 'Move the mouse pointer to the clicky location.'
 for i in `seq $location_delay -1 1`; do
 	echo -n "$i ... "

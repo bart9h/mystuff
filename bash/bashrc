@@ -621,6 +621,7 @@ if test -t 0 ; then
 fi
 
 #test "$TERM" == "vt100" && export TERM="xterm"
+#test "$TERM" == "xterm" && export TERM="xterm-256color"
 
 # append on history, instead of overwriting
 shopt -s histappend

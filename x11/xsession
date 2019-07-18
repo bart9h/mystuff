@@ -1,6 +1,7 @@
 #!/bin/sh
 export ETC="$HOME/etc"
 export SDL_VIDEO_ALLOW_SCREENSAVER=1
+export TERMINAL="sakura"
 
 #xterm -geometry 132x80 &
 #exec twm
@@ -23,12 +24,16 @@ cancel_or_not()
 }
 
 xcape -e 'Caps_Lock=Escape'
-(
+true && (
 	sleep 1
-	gkrellm &
+	#gkrellm &
+	if test -n "$(ls /wd/)"; then
+		sleep 1
+		cancel_or_not 7 transmission-gtk &
+	fi
+	#sleep 1
+	#cancel_or_not 8 /opt/Signal/signal-desktop &
 	sleep 1
-	cancel_or_not 5 transmission-gtk &
-	sleep 1
-	cancel_or_not 8 pidgin &
+	cancel_or_not 9 pidgin &
 ) &
 exec mate-session

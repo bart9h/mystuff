@@ -23,4 +23,5 @@ echo "$sink_output" > "$dir/current.index"
 pacmd 'set-default-sink' "$sink_output"
 for i in $sink_inputs; do
 	pacmd 'move-sink-input' "$i" "$sink_output"
+	pacmd 'move-source-output' "$i" "$sink_output"
 done

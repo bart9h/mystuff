@@ -1,5 +1,7 @@
 #!/bin/bash
 
+_emg_cachefile="$HOME/.local/emg.cache"
+
 function _emg_update_cache()
 {
 	echo "Updating emg quick search (emg s) cache..."
@@ -10,18 +12,17 @@ function _emg_update_cache()
 			grep -m 1 'DESCRIPTION' "$a" | \
 			sed 's/^DESCRIPTION=//'
 		done
-	) >| "$cachefile"
+	) >| "$_emg_cachefile"
 	echo "... done."
 }
 
 function _emg_emerge()
 {
-	sudo nice ionice -c 3 emerge -v --ask --ask-enter-invalid "$@"
+	sudo nice -15 ionice -c 3 emerge -v --ask --ask-enter-invalid "$@"
 }
 
 function emg()
 {
-	local cachefile="$HOME/.local/emg.cache"
 
 	case "$1" in
 
@@ -41,8 +42,9 @@ EOF
 		;;
 
 	s)
-		test -s "$cachefile" || _emg_update_cache
-		grep -i "$*" "$cachefile" | less --quit-if-one-screen
+		shift
+		test -s "$_emg_cachefile" || _emg_update_cache
+		grep --color=yes -i "$*" "$_emg_cachefile" | less --quit-if-one-screen
 		;;
 
 	d)

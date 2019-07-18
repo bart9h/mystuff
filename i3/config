@@ -5,16 +5,24 @@ bindsym $mod+Shift+r restart
 
 set $mod Mod4
 floating_modifier $mod
+focus_follows_mouse no
 
-font pango:DejaVu Sans 14
+font pango:DejaVu Sans 12
 
 bindsym $mod+Shift+q   kill
+bindsym Mod1+F4        kill
+bindsym $mod+Pause exec /home/doti/etc/sys/suspend.sh
 
 # change focus
 bindsym $mod+h  focus left
 bindsym $mod+j  focus down
 bindsym $mod+k  focus up
 bindsym $mod+l  focus right
+
+bindsym $mod+Left  focus left
+bindsym $mod+Down  focus down
+bindsym $mod+Up  focus up
+bindsym $mod+Right  focus right
 
 # move focused window
 bindsym $mod+Shift+h  move left
@@ -26,12 +34,27 @@ bindsym $mod+Shift+l  move right
 bindsym $mod+Mod1+l  workspace next
 bindsym $mod+Mod1+h  workspace prev
 
+#FIXME pq nao funfa?
+#mode "split" {
+#	bindsym h split h; mode "default"
+#	bindsym j split v; mode "default"
+#	bindsym k split v; mode "default"
+#	bindsym l split h; mode "default"
+#}
+#bindsym $mod+p mode "split"
+
+mode "teste" {
+	bindsym h focus left;  mode "default"
+	bindsym l focus right; mode "default"
+}
+bindsym $mod+semicolon mode "teste"
+
 bindsym $mod+n split h
 bindsym $mod+m split v
 
 bindsym $mod+f fullscreen toggle
 
-bindsym $mod+s layout stacking
+#bindsym $mod+s layout stacking
 bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 
@@ -65,6 +88,11 @@ bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
 
+#bindsym $mod+a mark a
+#bindsym $mod+s swap container with mark a
+
+bindsym $mod+s sticky toggle
+
 mode "resize" {
         bindsym h resize shrink width 10 px or 10 ppt
         bindsym j resize grow height 10 px or 10 ppt
@@ -84,9 +112,22 @@ bindsym $mod+z mode "resize"
 #}
 
 #bindsym $mod+Return exec i3-sensible-terminal
-bindsym $mod+Return    exec sakura
+bindsym $mod+Return    exec mate-terminal
 bindsym $mod+d         exec dmenu_run
+bindsym $mod+Control+F4 exec sudo s2ram
 #bindsym $mod+d         exec --no-startup-id i3-dmenu-desktop
+
+bindsym $mod+p append_layout /home/doti/etc/i3/layout
 
 for_window [title="uxterm"] floating enable
 for_window [title=".* - mpv"] floating enable
+#for_window [id="Calendar"] floating enable
+#for_window [class=".*-applet"] floating enable
+#for_window [title="Minecraft"] floating enable
+for_window [title="^Drawer$"] floating enable
+for_window [title="Drawer"] floating enable
+for_window [class="mate-panel"] floating enable
+for_window [class="^mate-panel$"] floating enable
+for_window [class="Mate-panel"] floating enable
+for_window [class="^Mate-panel$"] floating enable
+for_window [class="Clock-applet"] floating enable

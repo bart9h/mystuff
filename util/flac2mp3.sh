@@ -3,7 +3,7 @@ set -e
 
 case "$1" in
 	""|--help)
-		echo "$0  [--mono]  <source-dir>  [<destination-basedir> (default=/tmp)]"
+		echo "[dontask=1]  $0  [--mono]  <source-dir>  [<destination-basedir> (default=/tmp)]"
 		exit
 		;;
 	--mono)
