@@ -186,6 +186,7 @@ alias D='d -A'
 alias OFF='$ETC/sys/transmission_stop.sh && sudo poweroff'
 alias p='ps -AH --format "%U %p %a"'
 alias l='less'
+alias lsblk='lsblk -o SIZE,LABEL,NAME,MOUNTPOINT,FSTYPE,UUID'
 alias cn='cat > /dev/null' # quick volatile writepad
 alias data='date +%Y-%m-%d'
 function h()
@@ -203,6 +204,7 @@ alias u='if test $( ls *.rar 2>/dev/null | wc -l ) == 1; then unrar x *.rar && r
 alias pgw='ping gw'
 alias pwl='ping wl'
 alias pgo='ping google.com'
+alias pgh='ping github.com'
 
 alias gitv='vim "$(git rev-parse --show-toplevel)"/.git/index -c "Gitv --all" -c "tabonly"'
 alias gk='(while test ! -d .git -a "$PWD" != /; do cd .. || exit; done; test -d .git && ( exec gitk --all & ) || echo .git not found)'
@@ -257,6 +259,7 @@ alias confh='./configure --help | less'
 alias cmi='conf && mk && mki'
 alias qpro='rm Makefile *.pro; qmake -project && qmake && make clean'
 
+alias mpvmono='mpv --af=pan=1:[1,1,1,1,1,1,1,1,1]'
 alias mpw='while pgrep -l mplayer || pgrep -l mpv; do sleep 2s; done'
 alias mpf='mpv --fs --osd-level=0'
 alias mpq='mpv --aid=no --osd-level=0'

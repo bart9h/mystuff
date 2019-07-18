@@ -11,6 +11,7 @@
 	ci = commit --interactive
 	co = checkout
 	d  = diff -p --stat -b --patience
+	ds = diff -p --stat -b --patience --staged
 	l  = log --pretty=format:'%h %Cblue%cr%Creset %cn %Cred%d %Cgreen%s%Creset' --graph --all
 	r  = diff --patch-with-stat --ignore-space-change --word-diff --color HEAD~ HEAD
 	ri = rebase -i
