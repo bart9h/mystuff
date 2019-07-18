@@ -12,22 +12,36 @@ Plugin 'gmarik/vundle'
 Plugin 'a.vim'
 Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'gregsexton/gitv'
-"Plugin 'HiPhish/info.vim'
-Plugin 'info.vim'
+Plugin 'junegunn/gv.vim'
+"Plugin 'gregsexton/gitv'
+Plugin 'HiPhish/info.vim'
+"Plugin 'info.vim'
 Plugin 'netrw.vim'
+Plugin 'rust-lang/rust.vim'
+"Plugin 'vim-syntastic/syntastic'
+Plugin 'aars/syntastic-platformio'
+
 
 " colorschemes
-"Plugin 'romainl/Apprentice'
+Plugin 'romainl/Apprentice'
 Plugin 'morhetz/gruvbox'
-"Plugin 'gosukiwi/vim-atom-dark'
-"Plugin 'toupeira/vim-desertink'
+"Plugin 'tomasr/molokai'
+"Plugin 'junegunn/seoul256.vim'
+"Plugin 'jnurmine/Zenburn'
+"Plugin 'whatyouhide/vim-gotham'
+"Plugin 'sjl/badwolf'
+"Plugin 'nhooyr/elysian.vim'
+Plugin 'gosukiwi/vim-atom-dark'
+Plugin 'toupeira/vim-desertink'
+"Plugin 'sheerun/vim-wombat-scheme'
 
 call vundle#end()
 filetype plugin indent on
 
 
 "{{{1  plugins
+
+"{{{2 Gitv
 
 let g:Gitv_CommitStep = 1000
 let g:Gitv_OpenHorizontal = 0
@@ -39,6 +53,24 @@ augroup git
 	autocmd FileType git :setlocal foldlevel=99
 augroup END
 
+
+"{{{2 Syntastic
+
+command E Ex
+
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
+let g:syntastic_rust_checkers = [ 'cargo' ]
+
+let g:syntastic_java_javac_config_file_enabled = 1
+
+"}}}
 
 "{{{1  behaviour
 
@@ -78,17 +110,23 @@ let perl_fold=1
 highlight RedundantSpaces ctermbg=red guibg=red
 match RedundantSpaces /\s\+$\| \+\ze\t/
 
+try
+	colorscheme gruvbox
+catch /^Vim\%((\a\+)\)\=:E185/
+	colorscheme my-elflord
+endtry
+
+
 if has("gui_running")
 	set novisualbell
 	set number
 	set guioptions -=T
 	set guifont=Inconsolata\ 12
-	colorscheme gruvbox
 	hi CursorLine guibg=#0000b0 guifg=white
 else
 	set background=dark
 	set t_Co=256
-	colorscheme gruvbox
+	hi! link Operator GruvboxYellow
 	hi Cursor ctermbg=yellow ctermfg=black
 endif
 
@@ -149,6 +187,8 @@ nmap <leader>g  :!cd "`dirname "%:p"`"; cd "`git rev-parse --show-toplevel`" 2>/
 nmap <leader>m :wall<CR>:make<CR>
 
 nmap <leader>a :A<CR>
+nmap <leader>e :Explore<CR>
+nmap <leader>s :Sexplore<CR>
 
 " quit
 nmap <leader>q :q<CR><C-W>_
@@ -171,11 +211,15 @@ nmap <-> <C-W>-
 
 "{{{1 filetype
 
-autocmd! FileType c    FileTypeCode
-autocmd! FileType cpp  FileTypeCode
-autocmd! FileType sh   FileTypeCode
-autocmd! FileType vim  FileTypeCode
-command! FileTypeCode setlocal number
+autocmd! FileType arduino  FileTypeCode
+autocmd! FileType c        FileTypeCode
+autocmd! FileType cpp      FileTypeCode
+autocmd! FileType sh       FileTypeCode
+autocmd! FileType vim      FileTypeCode
+command! FileTypeCode setlocal number | set cindent
+
+autocmd! FileType rust FileTypeRust
+command! FileTypeRust setlocal number | set cindent | set noexpandtab
 
 autocmd! FileType perl FileTypePerl
 command! FileTypePerl setlocal number
@@ -224,8 +268,8 @@ command! AcentoToUtf
 
 "{{1 load local settings
 
-if filereadable($HOME . "/.vimrc_local")
-	source ~/.vimrc_local
+if filereadable($HOME . "/.vim/vimrc.local")
+	source ~/.vim/vimrc.local
 endif
 
 
