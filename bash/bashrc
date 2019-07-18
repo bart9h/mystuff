@@ -247,6 +247,8 @@ function mk()
 {
 	if test -f build.ninja; then
 		nice ninja "$@"
+	elif test -f Cargo.toml; then
+		nice cargo build "$@"
 	else
 		nice make -j $(( `show cpus` + 1 )) "$@"
 	fi
