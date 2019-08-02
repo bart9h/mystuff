@@ -12,8 +12,9 @@
 	co = checkout
 	d  = diff -p --stat -b --patience
 	ds = diff -p --stat -b --patience --staged
-	l  = log --pretty=format:'%h %Cblue%cr%Creset %cn %Cred%d %Cgreen%s%Creset' --graph --all
-	r  = diff --patch-with-stat --ignore-space-change --word-diff --color HEAD~ HEAD
+	ll = log --pretty=format:'%h %Cblue%cr%Creset %cn %Cred%d %Cgreen%s%Creset' --graph --all
+	l  = log --pretty=format:'%h %Cblue%cr%Creset %cn %Cred%d %Cgreen%s%Creset' --graph --all -n 12
+	r  = log --patch-with-stat --ignore-space-change -n 1
 	ri = rebase -i
 	s  = status -sb --untracked-files=no
 	sa = status -sb
