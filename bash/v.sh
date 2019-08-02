@@ -4,6 +4,8 @@ function v()
 {
 	if test "$1"; then
 		vim -o "$@"
+	elif test -r 'Session.vim'; then
+		vim -S 'Session.vim'
 	elif git rev-parse --git-dir >/dev/null 2>&1 \
 	&&   git status --porcelain --untracked-files=no | grep '^.M' >/dev/null
 	then
