@@ -24,7 +24,7 @@ cancel_or_not()
 }
 
 xcape -e 'Caps_Lock=Escape'
-true && (
+false && (
 	sleep 1
 	#gkrellm &
 	if test -n "$(ls /wd/)"; then
