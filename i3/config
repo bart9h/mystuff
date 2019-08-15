@@ -1,15 +1,29 @@
 # http://i3wm.org/docs/userguide.html
-
-bindsym $mod+Shift+c reload
-bindsym $mod+Shift+r restart
-
 set $mod Mod4
 floating_modifier $mod
+hide_edge_borders both
+
+bindsym $mod+q kill
+bindsym $mod+w exec firefox
+bindsym $mod+e exec mate-terminal
+bindsym $mod+Return exec mate-terminal
+bindsym $mod+r restart
+
+bindsym $mod+a layout stacking
+bindsym $mod+s layout toggle split
+bindsym $mod+d layout tabbed
+bindsym $mod+f fullscreen toggle
+
+mode "teste" {
+	bindsym h focus left;  mode "default"
+	bindsym l focus right; mode "default"
+}
+bindsym $mod+semicolon mode "teste"
+
 focus_follows_mouse no
 
 font pango:DejaVu Sans 12
 
-bindsym $mod+Shift+q   kill
 bindsym Mod1+F4        kill
 bindsym $mod+Pause exec /home/doti/etc/sys/suspend.sh
 
@@ -43,20 +57,11 @@ bindsym $mod+Mod1+h  workspace prev
 #}
 #bindsym $mod+p mode "split"
 
-mode "teste" {
-	bindsym h focus left;  mode "default"
-	bindsym l focus right; mode "default"
-}
-bindsym $mod+semicolon mode "teste"
 
 bindsym $mod+n split h
 bindsym $mod+m split v
 
-bindsym $mod+f fullscreen toggle
 
-#bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
 
 bindsym $mod+Shift+space floating toggle
 
@@ -91,7 +96,7 @@ bindsym $mod+Shift+0 move container to workspace 10
 #bindsym $mod+a mark a
 #bindsym $mod+s swap container with mark a
 
-bindsym $mod+s sticky toggle
+#bindsym $mod+s sticky toggle
 
 mode "resize" {
         bindsym h resize shrink width 10 px or 10 ppt
@@ -111,9 +116,9 @@ bindsym $mod+z mode "resize"
 #        status_command i3status
 #}
 
+#bindsym $mod+Shift+c reload
 #bindsym $mod+Return exec i3-sensible-terminal
-bindsym $mod+Return    exec mate-terminal
-bindsym $mod+d         exec dmenu_run
+#bindsym $mod+d         exec dmenu_run
 bindsym $mod+Control+F4 exec sudo s2ram
 #bindsym $mod+d         exec --no-startup-id i3-dmenu-desktop
 
