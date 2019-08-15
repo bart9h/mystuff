@@ -172,7 +172,11 @@ nmap <leader>n :cnext<CR>
 nmap <leader>p :cprevious<CR>
 
 " close/open folders
-nmap <leader><space> za
+"nmap <leader><space> za
+
+" switch buffers
+nmap <leader>b :b<space>
+nmap <leader><space> :b#<CR>
 
 " cycle through tabs
 nmap <leader><tab> :tabnext<CR>
@@ -204,8 +208,8 @@ nmap <leader>= <C-W>=
 " resize window
 nmap <C-kPlus> <C-W>+
 nmap <C-kMinus> <C-W>-
-nmap <+> <C-W>+
-nmap <-> <C-W>-
+nmap + <C-W>+
+nmap - <C-W>-
 
 
 "{{{1 filetype
