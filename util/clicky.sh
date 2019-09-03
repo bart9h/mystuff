@@ -26,7 +26,9 @@ while sleep 1; do
 	if [[ $dx -le $max_dist && $dy -le $max_dist ]]; then
 		if [[ $(( $SECONDS - $last_click )) -ge $click_delay ]]; then
 			test "$verbose" == "1" && echo "click"
+			active_window=$(xdotool getactivewindow)
 			xdotool click 1
+			xdotool windowactivate $active_window
 			last_click=$SECONDS
 		else
 			test "$verbose" == "1" && echo -n "$(( $click_delay - $SECONDS + $last_click )) "
