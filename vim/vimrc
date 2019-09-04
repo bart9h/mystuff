@@ -24,7 +24,7 @@ Plugin 'aars/syntastic-platformio'
 
 " colorschemes
 Plugin 'romainl/Apprentice'
-Plugin 'morhetz/gruvbox'
+Plugin 'gruvbox-community/gruvbox'
 "Plugin 'tomasr/molokai'
 "Plugin 'junegunn/seoul256.vim'
 "Plugin 'jnurmine/Zenburn'
@@ -175,7 +175,7 @@ nmap <leader>p :cprevious<CR>
 "nmap <leader><space> za
 
 " switch buffers
-nmap <leader>b :b<space>
+nmap <leader>b :b<space><C-D>
 nmap <leader><space> :b#<CR>
 
 " cycle through tabs
