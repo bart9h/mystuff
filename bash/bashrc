@@ -122,6 +122,7 @@ alias greps='grep $(for i in $SOURCE_EXTENSIONS; do echo --include="*."$i; done)
 alias cp='cp -i --preserve=timestamps'
 fi
 
+alias bc='bc -lq'
 alias lsof='lsof -nP'
 alias qiv='qiv -e'
 alias rdesktop='rdesktop  -x m -P -a 8 -z'
