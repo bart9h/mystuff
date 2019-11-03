@@ -20,6 +20,7 @@ Plugin 'netrw.vim'
 "Plugin 'rust-lang/rust.vim'
 "Plugin 'vim-syntastic/syntastic'
 "Plugin 'aars/syntastic-platformio'
+Plugin 'bfrg/vim-cpp-modern'
 
 
 " colorschemes
