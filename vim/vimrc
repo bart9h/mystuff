@@ -17,13 +17,13 @@ Plugin 'junegunn/gv.vim'
 Plugin 'HiPhish/info.vim'
 "Plugin 'info.vim'
 Plugin 'netrw.vim'
-Plugin 'rust-lang/rust.vim'
+"Plugin 'rust-lang/rust.vim'
 "Plugin 'vim-syntastic/syntastic'
-Plugin 'aars/syntastic-platformio'
+"Plugin 'aars/syntastic-platformio'
 
 
 " colorschemes
-Plugin 'romainl/Apprentice'
+"Plugin 'romainl/Apprentice'
 Plugin 'gruvbox-community/gruvbox'
 "Plugin 'tomasr/molokai'
 "Plugin 'junegunn/seoul256.vim'
@@ -31,8 +31,8 @@ Plugin 'gruvbox-community/gruvbox'
 "Plugin 'whatyouhide/vim-gotham'
 "Plugin 'sjl/badwolf'
 "Plugin 'nhooyr/elysian.vim'
-Plugin 'gosukiwi/vim-atom-dark'
-Plugin 'toupeira/vim-desertink'
+"Plugin 'gosukiwi/vim-atom-dark'
+"Plugin 'toupeira/vim-desertink'
 "Plugin 'sheerun/vim-wombat-scheme'
 
 call vundle#end()
