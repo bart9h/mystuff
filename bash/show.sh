@@ -16,7 +16,7 @@ function show()
 			for j in 3 4; do
 				i=0
 				while test $i -le 7; do
-					echo -ne "\e[${b};${j}${i}m [$b;$j$i] "
+					printf "\x1b[${b};${j}${i}m [$b;$j$i] "
 					let i=i+1
 				done
 				echo -e "\e[0;0m"
@@ -63,7 +63,17 @@ function show()
 	;;#
 
 	cpus)#               : number of CPUs
-		cat /proc/cpuinfo | grep '^processor\>' | wc -l
+		case $OSTYPE in
+			darwin*)
+				sysctl -n hw.ncpu
+				;;
+			linux*)
+				cat /proc/cpuinfo | grep '^processor\>' | wc -l
+				;;
+			*)
+				echo 1
+				;;
+		esac
 	;;#
 
 	resolution|res)#  : resolution of the X display
