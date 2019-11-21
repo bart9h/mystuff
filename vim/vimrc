@@ -117,6 +117,7 @@ catch /^Vim\%((\a\+)\)\=:E185/
 	colorscheme my-elflord
 endtry
 
+set background=dark
 
 if has("gui_running")
 	set novisualbell
@@ -125,7 +126,6 @@ if has("gui_running")
 	set guifont=Inconsolata\ 12
 	hi CursorLine guibg=#0000b0 guifg=white
 else
-	set background=dark
 	set t_Co=256
 	hi! link Operator GruvboxYellow
 	hi Cursor ctermbg=yellow ctermfg=black
@@ -167,6 +167,7 @@ nmap <leader>M :Man <C-R><C-W><CR>
 "{{{1  <leader> key mappings
 
 map <space> <leader>
+nmap <leader>V :sp ~/.vim/vimrc<CR>
 
 " navitage through compiler errors
 nmap <leader>n :cnext<CR>
@@ -196,6 +197,7 @@ nmap <leader>s :Sexplore<CR>
 
 " quit
 nmap <leader>q :q<CR><C-W>_
+nmap <leader>Q :mksession!<CR>:wqa<CR>
 nmap <leader>ww :w<CR>
 nmap <leader>wa :wa<CR>
 nmap <leader>wq :wq<CR><C-W>_

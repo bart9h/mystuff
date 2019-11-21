@@ -24,14 +24,20 @@ while sleep 1; do
 	dx=$( sed 's/-//' <<< $DX )
 	dy=$( sed 's/-//' <<< $DY )
 	if [[ $dx -le $max_dist && $dy -le $max_dist ]]; then
-		if [[ $(( $SECONDS - $last_click )) -ge $click_delay ]]; then
-			test "$verbose" == "1" && echo "click"
-			active_window=$(xdotool getactivewindow)
-			xdotool click 1
-			xdotool windowactivate $active_window
-			last_click=$SECONDS
+		if test -z "$clicky"; then
+			if [[ $(( $SECONDS - $last_click )) -ge $click_delay ]]; then
+				test "$verbose" == "1" && echo "click"
+				active_window=$(xdotool getactivewindow)
+				xdotool click 1
+				xdotool windowactivate $active_window
+				last_click=$SECONDS
+			else
+				test "$verbose" == "1" && echo -n "$(( $click_delay - $SECONDS + $last_click )) "
+			fi
 		else
-			test "$verbose" == "1" && echo -n "$(( $click_delay - $SECONDS + $last_click )) "
+			while sleep 1; do
+				xdotool click --repeat 999 --delay 1 1
+			done
 		fi
 	else
 		test "$verbose" == "1" && echo "($DX,$DY)"

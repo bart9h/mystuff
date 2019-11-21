@@ -3,6 +3,8 @@ use strict;
 use warnings;
 use v5.10;
 
+# find ~/fotos/ -name '*.jpg' | sort | xargs exiftool -Model -DateTimeOriginal | less
+
 my $source_path = '/sdcard/DCIM/Camera';
 my $ultima_baixada = '20190217';
 

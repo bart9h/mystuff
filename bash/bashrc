@@ -92,6 +92,7 @@ export ACLOCAL_FLAGS='-I /usr/local/share/aclocal'
 add_to_path \
 		-t "/usr/sbin" \
 		-t "/sbin" \
+		-t "$HOME/.local/bin" \
 #		-h "/usr/local/lib/cw" \
 
 alias dif="$ETC/scripts/dif.sh"
@@ -131,6 +132,7 @@ alias tig='tig --all'
 alias wget='wget -c --timeout=15 --wait=0 --tries=0'
 alias xpdf='xpdf -z width'
 alias xxd='xxd -c $(( (($COLUMNS - 10)/7)*2 ))'
+alias caja='caja --no-desktop'
 
 #{{{1 ls
 
@@ -255,7 +257,7 @@ alias mpvmono='mpv --af=pan=1:[1,1,1,1,1,1,1,1,1]'
 alias mpw='while pgrep -l mplayer || pgrep -l mpv; do sleep 2s; done'
 alias mpf='mpv --fs --osd-level=0'
 alias mpq='mpv --aid=no --osd-level=0'
-alias mpdvd='mplayer -identify dvd://1 -dvd-device "$PWD"'
+alias mpdvd='mpv dvd://1 -dvd-device "$PWD"'
 alias mistureba='mplayer http://paineldj4.com.br:8136/stream'
 function clima()
 {
