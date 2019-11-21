@@ -207,11 +207,8 @@ alias pwl='ping wl'
 alias pgo='ping google.com'
 alias pgh='ping github.com'
 
-alias gitv='vim "$(git rev-parse --show-toplevel)"/.git/index -c "Gitv --all" -c "tabonly"'
+alias g='git'
 alias gk='(while test ! -d .git -a "$PWD" != /; do cd .. || exit; done; test -d .git && ( exec gitk --all & ) || echo .git not found)'
-alias gs.="gs |\grep -v '\.\.\/'"
-alias gsl='git stash list'
-alias gspop='git stash pop'
 function gri() {
 	if test -n "$1"; then
 		git rebase -i "$@"
@@ -219,16 +216,8 @@ function gri() {
 		git rebase -i "origin"
 	fi
 }
-function gl() {
-	git log --pretty=format:"%h %Cblue%cr%Creset %cn %Cred%d %Cgreen%s%Creset" --graph --all "$@" \
-	| sed 's/\((\|,\ \)refs\/\w\+\//\1/g;s/origin\//o\//g' \
-	| less
-}
-alias gspop='git stash pop'
-alias gsp='git_stash_do pull'
-alias gsd='git_stash_do svn dcommit'
-alias gsr='git_stash_do svn rebase'
-alias gsdo='git_stash_do'
+alias gsp='git_stash_do pull --rebase'
+alias gsd='git_stash_do'
 function git_stash_do()
 {
 	if git status --porcelain | grep -q '^M'; then

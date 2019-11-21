@@ -6,19 +6,31 @@
 	excludesfile = ~/.gitignore
 
 [alias]
+
+	# recent log
+	l  = log --pretty=format:'%h %Cblue%cr%Creset %cn %Cred%d %Cgreen%s%Creset' --graph --all -n 12
+
+	# complete log
+	ll = log --pretty=format:'%h %Cblue%cr%Creset %cn %Cred%d %Cgreen%s%Creset' --graph --all
+
+	# review last commit
+	r  = log --patch-with-stat --ignore-space-change -n 1
+
+	# commit
 	c  = commit
 	ca = commit -a
 	ci = commit --interactive
-	co = checkout
+	fixup = commit --amend -C HEAD
+	ri = rebase -i
+
 	d  = diff -p --stat -b --patience
 	ds = diff -p --stat -b --patience --staged
-	ll = log --pretty=format:'%h %Cblue%cr%Creset %cn %Cred%d %Cgreen%s%Creset' --graph --all
-	l  = log --pretty=format:'%h %Cblue%cr%Creset %cn %Cred%d %Cgreen%s%Creset' --graph --all -n 12
-	r  = log --patch-with-stat --ignore-space-change -n 1
-	ri = rebase -i
+
 	s  = status -sb --untracked-files=no
 	sa = status -sb
-	fixup = commit --amend -C HEAD
+
+	co = checkout
+	p  = pull --rebase
 
 [apply]
 	whitespace = strip
