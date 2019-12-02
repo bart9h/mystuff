@@ -84,6 +84,8 @@ set switchbuf=useopen
 set wildmenu
 set wildmode=list:longest,full
 set nostartofline
+set modeline
+set modelines=3
 
 
 "{{{1 tab
