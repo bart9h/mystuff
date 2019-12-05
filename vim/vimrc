@@ -195,7 +195,9 @@ nmap <leader>m :wall<CR>:make<CR>
 
 nmap <leader>a :A<CR>
 nmap <leader>e :Explore<CR>
-nmap <leader>s :Sexplore<CR>
+nmap <leader>S :Sexplore<CR>
+nmap <leader>s :split<CR>
+nmap <leader>v :vsplit<CR>
 
 " quit
 nmap <leader>q :q<CR><C-W>_
