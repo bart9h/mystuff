@@ -33,7 +33,7 @@ while test "$1"; do
 	x="$1"
 	dir=
 
-	if test -f "$1" && echo "$1" | grep -q "\.tar$\|\.tar\.gz$\|\.tgz$\|\.tar$\.xz$\|\.tar$\.bz2$\|\.tar\.bz$"; then
+	if test -f "$1" && echo "$1" | grep -q -E -e '\.tar$|\.tar\.gz$|\.tgz$|\.tar\.xz$|\.tar$\.bz2$|\.tar\.bz$'; then
 		target="/tmp/`basename "$1"`"
 		test -d "$target" && target="${target}-2"
 		mkdir $verbose "$target" || exit
