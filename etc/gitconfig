@@ -17,10 +17,11 @@
 	r  = log --patch-with-stat --ignore-space-change -n 1
 
 	# commit
-	c  = commit
-	ca = commit -a
-	ci = commit --interactive
+	c     = commit
+	ca    = commit -a
+	ci    = commit --interactive
 	fixup = commit --amend -C HEAD
+
 	ri = rebase -i
 
 	d  = diff -p --stat -b --patience
@@ -28,6 +29,9 @@
 
 	s  = status -sb --untracked-files=no
 	sa = status -sb
+
+	st = stash
+	sp = stash pop
 
 	co = checkout
 	p  = pull --rebase
