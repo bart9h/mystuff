@@ -308,86 +308,6 @@ fi
 
 #___
 #}}}
-#{{{  version control
-
-alias svnbk='svnadmin dump /home/svn | bzip2 -9 > bart.svndump.`date +%Y-%m-%d`.bz2'
-
-function svndiff() {
-	svn diff $args \
-		--diff-cmd /usr/bin/diff -x \
-		"-U 5 -rpbB --ignore-all-space --ignore-blank-lines" \
-		"$@"
-}
-function svndif_tmp() {
-	local args
-	if test "$1" == "-h"; then
-		shift
-		args="-r BASE:HEAD"
-	fi
-	tmp=`mktemp /tmp/svndif.XXXXXX`
-	svndiff $args "$@" >| "$tmp" || return
-	test -s "$tmp" && echo "$tmp" || /bin/rm "$tmp"
-}
-function svndif() {
-	tmp=`svndif_tmp "$@"`; test "$tmp" || return
-	vim +'set filetype=diff' +'set nomodified' "$tmp"
-	/bin/rm "$tmp"
-}
-
-function svnci() {
-	tmp=`svndif_tmp "$@"`; test "$tmp" || return
-	SVN_EDITOR="vim -o \"$tmp\" +\"set filetype=diff\"" svn commit "$@"
-	/bin/rm "$tmp"
-}
-
-function ci() {
-	if test -d .svn; then
-		svnci "$@"
-	elif test -d CVS; then
-		echo 'nao sei fazer CVS ainda'
-	else # assumes git
-		tmp=`mktemp /tmp/gitdif.XXXXXX` || return
-		git-diff "$@" >| "$tmp" || return
-		if test -s "$tmp"; then
-			tmp2=`mktemp /tmp/gitdif.XXXXXX` || return
-			echo "#!/bin/sh" >> $tmp2 || return
-			echo "vim -c \"set filetype=diff\" -c \"set nofen\" -o \"$tmp\" \"\$@\"" >> $tmp2 || return
-			chmod +x $tmp2 || return
-			test "$*" && quem="$@" || quem=-a
-			EDITOR="$tmp2" git-commit $quem
-			rm "$tmp2"
-		fi
-		rm "$tmp"
-	fi
-}
-
-function svnst() {
-	svn st "$@" | grep -v '^\?'
-}
-
-function update() {
-	if test -d .svn; then
-		local rev1=`svn info | grep '^Revision:' | cut -d ' ' -f 2`
-		echo "Local revision: $rev1"
-		svn up "$@"
-		local rev2=`svn info | grep '^Revision:' | cut -d ' ' -f 2`
-		if test "$rev1" != "$rev2"; then
-			local dif="svndif -r $rev1:$rev2"
-			echo "$dif"
-			echo "`date +%Y-%m-%d`  $dif" >> .svn/_updates
-		fi
-	elif test -d .git; then
-		git pull "$@"
-	elif test -d CVS; then
-		cvs -z3 -q up -dP "$@" | grep -v '^\?' #grep -v '^cvs\ update:\ Updating\ ' #grep nao funciona pq ta no stderr
-	else
-		echo 'Found no ".svn", "CVS", or ".git" directory.'
-		false
-	fi
-}
-
-
-#}}} version control
 #{{{ #TODO: organizar o resto abaixo..
 #{{{1          util
 
@@ -624,6 +544,7 @@ if true && [ -f /etc/bash_completion ]; then
 fi
 
 if test -t 0 ; then
+	# disable START/STOP control chars
 	stty -ixon -ixoff
 fi
 
