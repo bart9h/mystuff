@@ -10,6 +10,7 @@ Plugin 'gmarik/vundle'
 
 " plugins
 Plugin 'a.vim'
+Plugin 'bfrg/vim-cpp-modern'
 Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'junegunn/gv.vim'
