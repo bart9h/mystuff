@@ -8,71 +8,18 @@ call vundle#begin()
 
 Plugin 'gmarik/vundle'
 
-" plugins
 Plugin 'a.vim'
 Plugin 'bfrg/vim-cpp-modern'
 Plugin 'tpope/vim-fugitive'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'junegunn/gv.vim'
-"Plugin 'gregsexton/gitv'
-Plugin 'HiPhish/info.vim'
-"Plugin 'info.vim'
-Plugin 'netrw.vim'
-"Plugin 'rust-lang/rust.vim'
-"Plugin 'vim-syntastic/syntastic'
-"Plugin 'aars/syntastic-platformio'
-Plugin 'bfrg/vim-cpp-modern'
-
-
-" colorschemes
-"Plugin 'romainl/Apprentice'
 Plugin 'gruvbox-community/gruvbox'
-"Plugin 'tomasr/molokai'
-"Plugin 'junegunn/seoul256.vim'
-"Plugin 'jnurmine/Zenburn'
-"Plugin 'whatyouhide/vim-gotham'
-"Plugin 'sjl/badwolf'
-"Plugin 'nhooyr/elysian.vim'
-"Plugin 'gosukiwi/vim-atom-dark'
-"Plugin 'toupeira/vim-desertink'
-"Plugin 'sheerun/vim-wombat-scheme'
+Plugin 'junegunn/gv.vim'
+Plugin 'HiPhish/info.vim'
+Plugin 'netrw.vim'
 
 call vundle#end()
 filetype plugin indent on
 
-
-"{{{1  plugins
-
-"{{{2 Gitv
-
-let g:Gitv_CommitStep = 1000
-let g:Gitv_OpenHorizontal = 0
-let g:Gitv_TruncateCommitSubjects = 1
-
-" Makes Gitv diff start unfolded
-augroup git
-	au!
-	autocmd FileType git :setlocal foldlevel=99
-augroup END
-
-
-"{{{2 Syntastic
-
-command! E Ex
-
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-let g:syntastic_rust_checkers = [ 'cargo' ]
-
-let g:syntastic_java_javac_config_file_enabled = 1
-
-"}}}
 
 "{{{1  behaviour
 
@@ -144,13 +91,13 @@ noremap ` '
 "disable ex mode
 nnoremap Q <nop>
 
-" <c-l> also clear search highlight
+" <c-l> also clear search highlight, refresh git gutter
 nnoremap <C-L> :nohlsearch<CR>:GitGutter<CR><C-L>
 
 " toggle spell cheching
 nmap <F8> :set spelllang=en spell!<CR>
 
-" quick macro
+" quick macro replay
 nmap <F9> @q
 
 " makes * highlight the word, but don't jump to next occurrence
