@@ -19,6 +19,11 @@ my %engines = (
 		args => [ '-c',  '--cpan' ],
 		url => 'http://search.cpan.org/search?mode=module&query=',
 	},
+	duckduckgo => {
+		description => 'Duck Duck Go',
+		args => [ '-ddg', '--duckduckgo', '--duck-duck-go' ],
+		url => 'https://duckduckgo.com/?q=',
+	},
 	def => {
 		description => 'Google Define',
 		args => [ '-def', '--define' ],
@@ -203,7 +208,7 @@ sub main()
 			$engine = `basename $0 .pl`;
 			chomp $engine;
 		}
-		exists $engines{$engine} or $engine = 'google';
+		exists $engines{$engine} or $engine = 'duckduckgo';
 	}#
 
 
