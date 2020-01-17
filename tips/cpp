@@ -1,0 +1,26 @@
+/* RED FLAGS:
+ * new / delete  <- se você estiver usando tem uma forma melhor de fazer
+ * for loop antigo <- normalmente tem algum algoritimo que vai te ajudar
+ * Referencias membros de objetos <- Isso faz com que o objeto não suporte move
+ */
+
+// reading text files:
+
+#include <fstream>
+#include <string>
+
+std::string line;
+std::ifstream f ("file");
+if (!f.is_open())
+	perror("error while opening file");
+
+while(getline(f, line)) {
+	if (line.back() == '\r')
+		line.pop_back();
+	process(&line);
+}
+if (f.bad())
+	perror("error while reading file");
+
+
+// vim:ft=cpp:
