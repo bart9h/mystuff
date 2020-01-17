@@ -468,6 +468,7 @@ function cd..() {
 	cd .. || return
 	rmdir --ignore-fail-on-non-empty "$dir"
 	test -d "$dir" &&
+	ls -F "$dir" &&
 	read -p "rm -rf \"$dir\" (y/[n])? " &&
 	test "$REPLY" == "y" -o "$REPLY" == "r" &&
 	rm -rf "$dir"
