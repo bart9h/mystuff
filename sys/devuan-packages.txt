@@ -17,6 +17,12 @@ aptitude
 vim
 git
 tig
+lftp
+htop
+ncdu
+aria2
+mlocate
+checkinstall
 silversearcher-ag
 
 gitk
@@ -26,12 +32,7 @@ youtube-dl
 firmware-linux
 fonts-inconsolata
 firmware-amd-graphics
-
-checkinstall
-mlocate
-aria2
 curl
-htop
 
 
 ### BaPhO
