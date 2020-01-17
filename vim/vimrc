@@ -136,7 +136,7 @@ nmap <leader><tab> :tabnext<CR>
 " search for current word on all source files (<l>ocal and <g>lobal)
 "nmap <leader>l  :vimgrep /\<<cword>\>/gj `for i in *; do file $i | grep -q text && echo "\"$i\""; done`
 nmap <leader>l  :!cd "`dirname "%:p"`"; pwd; ag -s --color "\b<cword>\b" 2> /dev/null \| less -F; true<CR>
-nmap <leader>g  :vimgrep <cword> `cd "$(git rev-parse --show-toplevel)"; git ls-files`<CR>
+nmap <leader>g  :vimgrep <cword> `git ls-files "$(git rev-parse --show-toplevel)"`<CR>
 
 " make
 nmap <leader>m :wall<CR>:make<CR>
