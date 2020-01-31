@@ -62,6 +62,8 @@ highlight RedundantSpaces ctermbg=red guibg=red
 match RedundantSpaces /\s\+$\| \+\ze\t/
 
 try
+	let g:gruvbox_contrast_dark = 'medium'
+	let g:gruvbox_contrast_light = 'hard'
 	colorscheme gruvbox
 catch /^Vim\%((\a\+)\)\=:E185/
 	colorscheme my-elflord
