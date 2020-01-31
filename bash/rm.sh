@@ -55,4 +55,9 @@ function rm()
 }
 
 ;;
+
+*)
+	alias rm='rm -i'
+	;;
+
 esac
