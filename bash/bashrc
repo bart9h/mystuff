@@ -100,9 +100,10 @@ case "$OSTYPE" in
 		add_to_path \
 				-t "/usr/sbin" \
 				-t "/sbin" \
-				-t "$HOME/.local/bin" \
 	;;
 esac
+
+export PATH="$HOME/.local/bin:$PATH"
 
 alias dif="$ETC/scripts/dif.sh"
 alias vimv="$ETC/scripts/vimv.sh"
