@@ -4,7 +4,7 @@ if mount | grep -q ' on /wd '; then
 	exit
 fi
 
-echo "- - -" > /sys/class/scsi_host/host2/scan || exit
+echo "- - -" > /sys/class/scsi_host/host3/scan || exit
 sync
 sleep 2
 mount /wd

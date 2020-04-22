@@ -9,4 +9,4 @@ test -z "$ETC" && export ETC="/home/doti/etc"
 
 "$ETC"/sys/transmission_stop.sh
 
-umount -v /wd && echo 1 > /sys/bus/scsi/devices/2:0:0:0/delete
+umount -v /wd && echo 1 > /sys/bus/scsi/devices/3:0:0:0/delete

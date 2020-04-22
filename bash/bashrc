@@ -105,8 +105,6 @@ case "$OSTYPE" in
 esac
 
 alias dif="$ETC/scripts/dif.sh"
-alias undeaf="$ETC/util/undeaf.sh"
-alias path2tag="$ETC/scripts/path2tag.pl"
 alias vimv="$ETC/scripts/vimv.sh"
 alias web="$ETC/scripts/web.pl"
 

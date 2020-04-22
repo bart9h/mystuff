@@ -12,27 +12,27 @@ deb-src  http://deb.devuan.org/merged ascii-backports  main  non-free
 
 ### apt update && install these packages:
 
-screen
-aptitude
-vim
-git
-tig
-lftp
-htop
-ncdu
-aria2
-mlocate
-checkinstall
-silversearcher-ag
+ screen
+ aptitude
+ vim
+ git
+ tig
+ lftp
+.htop
+.ncdu
+ aria2
+.mlocate
+-checkinstall
+ silversearcher-ag
 
-gitk
-xcape
-ffmpeg
-youtube-dl
-firmware-linux
-fonts-inconsolata
-firmware-amd-graphics
-curl
+ gitk
+ xcape
+.ffmpeg
+.youtube-dl
+ firmware-linux
+ fonts-inconsolata
+ firmware-amd-graphics
+.curl
 
 
 ### BaPhO

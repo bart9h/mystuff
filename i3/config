@@ -22,7 +22,7 @@ bindsym $mod+semicolon mode "teste"
 
 focus_follows_mouse no
 
-font pango:DejaVu Sans 12
+font pango:DejaVu Sans 9
 
 bindsym Mod1+F4        kill
 bindsym $mod+Pause exec /home/doti/etc/sys/suspend.sh
