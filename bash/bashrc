@@ -147,25 +147,23 @@ alias caja='caja --no-desktop'
 
 if [ "$OSTYPE" == "linux-gnu"  -a  "$TERM" != "dumb" ]; then
 	eval "`dircolors -b`"
-	alias ls='ls --color=auto'
 
 	# custumized long format
 	function f() {
-		\ls -FGhln --color=always --time-style=long-iso "$@" |
+		\ls --color=always -FGhln --time-style=long-iso "$@" |
 		sed 's/^[^\ ]\+\ \+[^\ ]\+\ \+[^\ ]\+\ \+\(.....?\)\ \(20[^\ ]\+\ [^\ ]\+\)\ \(.*\)$/\2\ \ [0;37m\1\ \ \3/'
 	}
 else
-	alias ls='ls -G'
-	alias f='ls -Fhln'
+	alias f='ls --color=always -FGhln'
 fi
 
 
 # long format
-alias d='ls -lF'
+alias d='ls --color=always -lFG'
 
 
 # same as `f`, sorted by timestamp
-alias z='f -rt'
+alias z='f --color=always -rt'
 
 # du
 alias F='find . -maxdepth 1 -not -name . -exec du -shc {} +'
@@ -175,9 +173,9 @@ function a() {
     local n=$( ls "$@" | wc -l )
 	if test $n -gt 0; then
 		if test $n -lt $(( $LINES / 2 )); then
-			ls -1F "$@"
+			ls --color=always -1F "$@"
 		else
-			ls -F "$@"
+			ls --color=always -F "$@"
 		fi
 	fi
 }
