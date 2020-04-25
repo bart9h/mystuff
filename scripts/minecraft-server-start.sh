@@ -6,6 +6,19 @@ if test -z "$STY"; then
 	exit
 fi
 
+# Function to create and rotate a backup.
+backup() {
+	world="$1"
+	sufix="$2"
+	if test -e "${world}-${sufix}-1.tar"; then
+		test -e "${world}-${sufix}-2.tar" && rm -v "${world}-${sufix}-2.tar"
+		mv -v "${world}-${sufix}-1.tar" "${world}-${sufix}-2.tar"
+	fi
+	test -e "${world}-${sufix}-0.tar" && mv -v "${world}-${sufix}-0.tar" "${world}-${sufix}-1.tar"
+	echo "Creating \"${world}-${sufix}-0.tar\""
+	tar cf "${world}-${sufix}-0.tar" "${world}"/
+}
+
 # Automatic world backup thread.
 if test "$1" == "--backup-thread"; then
 	world="$2"
@@ -17,7 +30,7 @@ if test "$1" == "--backup-thread"; then
 		sleep "$1"
 	}
 	while true; do
-		sleep 1200
+		sleep 1500
 		mc_cmd 45 "say backup iniciando 1 minuto"
 		mc_cmd 10 "say backup iniciando 15 segundos"
 		for i in $(seq 5 -1 1); do
@@ -26,7 +39,7 @@ if test "$1" == "--backup-thread"; then
 		mc_cmd 0 "say FAZENDO BACKUP..."
 		mc_cmd 1 save-off
 		mc_cmd 1 save-all
-		tar cf "$world-auto.tar" "$world"/
+		backup "$world" "auto"
 		mc_cmd 0 save-on
 		mc_cmd 0 "say BACKUP PRONTO."
 	done
@@ -51,12 +64,7 @@ set -e
 if test -n "$1" -a "$1" == "f"; then
 	echo "Skipping backup!"
 else
-	if test -e "$world-1.tar"; then
-		test -e "$world-2.tar" && rm -v "$world-2.tar"
-		mv -v "$world"-1.tar "$world"-2.tar
-	fi
-	test -e "$world-0.tar" && mv -v "$world-0.tar" "$world-1.tar"
-	test -e "$world" && tar cf "$world-0.tar" "$world"/
+	backup "$world" "start"
 fi
 
 # Start the automatic world backup thread.
