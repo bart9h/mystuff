@@ -124,6 +124,7 @@ function mv() {
 	command mv "$@"
 }
 
+alias ag='ag --pager less'
 alias mv='mv -i'
 if [ "$OSTYPE" == "linux-gnu" ]; then
 alias grep='grep --exclude="*.svn-base" --exclude=".git" --devices=skip --color=auto'
@@ -133,6 +134,7 @@ fi
 
 alias bc='bc -lq'
 alias lsof='lsof -nP'
+alias mpv='mpv --audio-display=no'
 alias qiv='qiv -e'
 alias rdesktop='rdesktop  -x m -P -a 8 -z'
 #alias tar='tar --exclude=.svn --exclude=CVS'
