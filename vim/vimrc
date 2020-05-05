@@ -197,6 +197,7 @@ command! FileTypePerl setlocal number
 
 "{{{1 commands
 
+command! -nargs=1 Grep vimgrep <args> `git ls-files "$(git rev-parse --show-toplevel)"`
 command! Conflict /^\(=======$\|<<<<<<< \|>>>>>>> \)/
 
 command! -bar -nargs=1 DoMan %!/usr/bin/man -a -S 3:2:1:5:8:4:7:6:9 -P cat <args>
