@@ -24,7 +24,7 @@ function waitfor() {
 		progname="$1"
 	fi
 
-	while pidof "$progname" >/dev/null; do
+	while pgrep -x "$progname" >/dev/null; do
 		if test -n "$timeout"; then
 			test "$timeout" == "0" && return 1
 			let timeout=timeout-1
