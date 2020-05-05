@@ -219,7 +219,14 @@ alias pwl='ping wl'
 alias pgo='ping google.com'
 alias pgh='ping github.com'
 
-alias g='git'
+function g() {
+	if test -z "$1"; then
+		sed -n -e '/^\[alias/,/\[/p' "$HOME/.gitconfig" | grep -v '^\['
+	else
+		git "$@"
+	fi
+}
+
 alias gk='(while test ! -d .git -a "$PWD" != /; do cd .. || exit; done; test -d .git && ( exec gitk --all & ) || echo .git not found)'
 function gri() {
 	if test -n "$1"; then
