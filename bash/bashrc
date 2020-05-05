@@ -283,7 +283,7 @@ function clima()
 alias ytdl='youtube-dl -t -c --max-quality=22'
 alias ion='ionice -c2 -n7'
 
-alias Con="( files=\$(git status --porcelain | grep '^UU' | cut -d ' ' -f 2-) && if test -n \"\$files\"; then cd "$(git rev-parse --show-toplevel)" && vim -o \$files +'set nofoldenable' +/'^\(=======$\|<<<<<<< \|>>>>>>> \)'; else echo 'No conflict.'; fi )"
+alias Con="( files=\$(git status --porcelain | grep '^UU' | cut -d ' ' -f 2-) && if test -n \"\$files\"; then cd \"\$\(git rev-parse --show-toplevel\)\" && vim -o \$files +'set nofoldenable' +/'^\(=======$\|<<<<<<< \|>>>>>>> \)'; else echo 'No conflict.'; fi )"
 alias TODO="( files=\$(grep -rl '\<\(TODO\|FIXME\|XXX\|HACK\)\>' $SOURCE_EXTGLOB 2>/dev/null); if test -n \"\$files\"; then vim -o \$files +'set nofoldenable' +/'\<\(TODO\|FIXME\|XXX\|HACK\)\>'; else echo 'Nothing to do.'; fi )"
 
 if test -e /etc/debian_version; then
