@@ -6,8 +6,12 @@
 test -z "$PS1" && return
 
 case "$OSTYPE" in
+	linux-gnu*)
+		export GNU_COREUTILS=1
+		;;
 	darwin*)
 		export BASH_SILENCE_DEPRECATION_WARNING=1
+		test "$(which ls) != /bin/ls" && export GNU_COREUTILS=1
 		;;
 esac
 
@@ -129,8 +133,8 @@ alias mv='mv -i'
 if [ "$OSTYPE" == "linux-gnu" ]; then
 alias grep='grep --exclude="*.svn-base" --exclude=".git" --devices=skip --color=auto'
 alias greps='grep $(for i in $SOURCE_EXTENSIONS; do echo --include="*."$i; done)'
-alias cp='cp -i --preserve=timestamps'
 fi
+test "$GNU_COREUTILS" == "1" && alias cp='cp -i --preserve=timestamps'
 
 alias bc='bc -lq'
 alias lsof='lsof -nP'
@@ -146,7 +150,7 @@ alias caja='caja --no-desktop'
 
 #{{{1 ls
 
-if [ "$OSTYPE" == "linux-gnu"  -a  "$TERM" != "dumb" ]; then
+if [ "$GNU_COREUTILS" == "1"  -a  "$TERM" != "dumb" ]; then
 	eval "`dircolors -b`"
 
 	# custumized long format

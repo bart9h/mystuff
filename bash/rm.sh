@@ -7,8 +7,7 @@
 #  -  First if checks if all files exists, aborting otherwise.
 #
 
-case "$OSTYPE" in
-	linux-gnu*)
+if test "$GNU_COREUTILS" == "1"; then
 
 function rm()
 {
@@ -54,10 +53,6 @@ function rm()
 
 }
 
-;;
-
-*)
+else
 	alias rm='rm -i'
-	;;
-
-esac
+fi
