@@ -40,10 +40,15 @@ Plugin 'tpope/vim-flagship'
 " Nicer statusline and tabline.
 
 call vundle#end()
-filetype plugin indent on
 
 
 "{{{1  behaviour
+
+unlet! skip_defaults_vim
+source $VIMRUNTIME/defaults.vim
+set noincsearch
+set mouse=
+unlet c_comment_strings
 
 set nobackup
 set noswapfile
@@ -51,7 +56,6 @@ set noswapfile
 set hidden
 set switchbuf=useopen
 
-set wildmenu
 set wildmode=list:longest,full
 set nostartofline
 set modeline
@@ -69,11 +73,8 @@ set softtabstop=0
 "{{{1 visual
 
 syntax on
-set ruler
-set showcmd
 set hlsearch
 set winminheight=0
-set scrolloff=4
 set laststatus=2
 
 let loaded_matchparen=1   " don't highlight matching ()[]{}s
