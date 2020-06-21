@@ -3,3 +3,6 @@ list files provided by a (possibly uninstalled) package:
 
 	apt-file list <package-name>
 
+list what (possibly uninstalled) package(s) provide a file:
+
+	apt-file search <file>
