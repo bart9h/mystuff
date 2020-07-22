@@ -1,0 +1,1 @@
+ffmpeg -i in.mp4 -vf deshake out.mp4
