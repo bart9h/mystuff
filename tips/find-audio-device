@@ -1,0 +1,1 @@
+for z in $(aplay -l|perl -nle 'm/^card (\d+): .*, device (\d+):.*$/ and print "$1,$2"'); do echo $z; aplay -D plughw:$z a.wav; done
