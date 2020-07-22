@@ -216,6 +216,10 @@ command! FileTypePerl setlocal number
 \%+A%.%#\ at\ %f\ line\ %l\\,%.%#,
 \%+C%.%#
 
+autocmd! FileType tex FileTypeTeX
+command! FileTypeTeX setlocal number
+\	| setlocal makeprg=pdflatex\ -file-line-error\ -halt-on-error\ %
+
 
 "{{{1 commands
 
