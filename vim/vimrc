@@ -137,8 +137,6 @@ vmap <f2> "by:tabnew<CR>"bP:diffthis<CR>:set buftype=nofile<CR>:vnew<CR>"aP:set 
 " resize window
 nmap <C-kPlus> <C-W>+
 nmap <C-kMinus> <C-W>-
-nmap + <C-W>+
-nmap - <C-W>-
 
 
 "{{{1  <leader> key mappings
