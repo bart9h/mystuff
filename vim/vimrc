@@ -134,14 +134,19 @@ map <silent> * *N
 vmap <f1> "ay
 vmap <f2> "by:tabnew<CR>"bP:diffthis<CR>:set buftype=nofile<CR>:vnew<CR>"aP:set buftype=nofile<CR>:diffthis<CR>
 
-" man
-nmap <leader>M :Man <C-R><C-W><CR>
+" resize window
+nmap <C-kPlus> <C-W>+
+nmap <C-kMinus> <C-W>-
+nmap + <C-W>+
+nmap - <C-W>-
 
 
 "{{{1  <leader> key mappings
 
 map <space> <leader>
-nmap <leader>V :sp ~/.vim/vimrc<CR>
+
+nmap <leader>V :split $MYVIMRC<CR>
+nmap <leader>S :source $MYVIMRC<CR>
 
 " navitage through compiler errors
 nmap <leader>n :cnext<CR>
@@ -159,17 +164,19 @@ nmap <leader><tab> :tabnext<CR>
 
 " search for current word on all source files (<l>ocal and <g>lobal)
 "nmap <leader>l  :vimgrep /\<<cword>\>/gj `for i in *; do file $i | grep -q text && echo "\"$i\""; done`
-nmap <leader>l  :!cd "`dirname "%:p"`"; pwd; ag -s --color "\b<cword>\b" 2> /dev/null \| less -F; true<CR>
-nmap <leader>g  :vimgrep <cword> `git ls-files "$(git rev-parse --show-toplevel)"`<CR>
+nmap <leader>l :AgFileDir <cword><CR>
+nmap <leader>g :GrepGit <cword><CR>
 
 " make
 nmap <leader>m :wall<CR>:make<CR>
 
 nmap <leader>a :A<CR>
 nmap <leader>e :Explore<CR>
-nmap <leader>S :Sexplore<CR>
 nmap <leader>s :split<CR>
 nmap <leader>v :vsplit<CR>
+
+" man
+nmap <leader>M :Man <C-R><C-W><CR>
 
 " quit
 nmap <leader>q :q<CR><C-W>_
@@ -183,12 +190,6 @@ nmap <leader>k <C-W>r<C-W>k<C-w>_
 nmap <leader>j <C-W>j<C-W>R<C-w>_
 nmap <leader>- <C-W>_
 nmap <leader>= <C-W>=
-
-" resize window
-nmap <C-kPlus> <C-W>+
-nmap <C-kMinus> <C-W>-
-nmap + <C-W>+
-nmap - <C-W>-
 
 
 "{{{1 filetype
@@ -219,7 +220,12 @@ command! FileTypePerl setlocal number
 
 "{{{1 commands
 
-command! -nargs=1 Grep vimgrep <args> `git ls-files "$(git rev-parse --show-toplevel)"`
+command! -bar -nargs=1 AgFileDir
+\   !cd "`dirname "%:p"`"; pwd; ag -s --color "\b<args>\b" 2> /dev/null \| less -F; true
+
+command! -nargs=1 GrepGit
+\   vimgrep <args> `git ls-files "$(git rev-parse --show-toplevel)"`
+
 command! Conflict /^\(=======$\|<<<<<<< \|>>>>>>> \)/
 
 command! -bar -nargs=1 DoMan %!/usr/bin/man -a -S 3:2:1:5:8:4:7:6:9 -P cat <args>
