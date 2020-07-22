@@ -1,4 +1,4 @@
-"{{{1 Vundle
+"{{{1 Vundle plugin manager
 
 set nocompatible
 filetype off
@@ -8,14 +8,14 @@ call vundle#begin()
 
 Plugin 'gmarik/vundle'
 
-Plugin 'a.vim'
-Plugin 'bfrg/vim-cpp-modern'
-Plugin 'tpope/vim-fugitive'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'gruvbox-community/gruvbox'
-Plugin 'junegunn/gv.vim'
-Plugin 'HiPhish/info.vim'
-Plugin 'netrw.vim'
+Plugin 'a.vim'                      " Jump to alternate (.h) file and back.
+Plugin 'bfrg/vim-cpp-modern'        " Better C++ syntax highlighting.
+Plugin 'tpope/vim-fugitive'         " Git integration.
+Plugin 'airblade/vim-gitgutter'     " Quick per-line git diff status on the left gutter.
+Plugin 'gruvbox-community/gruvbox'  " A colorscheme.
+Plugin 'junegunn/gv.vim'            " Browse git history.
+Plugin 'HiPhish/info.vim'           " Browse GNU Info articles.
+Plugin 'netrw.vim'                  " File browser.
 
 call vundle#end()
 filetype plugin indent on
