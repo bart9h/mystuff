@@ -31,17 +31,18 @@ if test "$1" == "--backup-thread"; then
 	}
 	while true; do
 		sleep 1500
-		mc_cmd 45 "say backup iniciando 1 minuto"
-		mc_cmd 10 "say backup iniciando 15 segundos"
+		mc_cmd 45 "say §2backup iniciando 1 minuto"
+		mc_cmd 10 "say §2backup iniciando 15 segundos"
 		for i in $(seq 5 -1 1); do
-			mc_cmd 1 "say backup em ${i}s..."
+			mc_cmd 1 "say §2backup em ${i}s..."
 		done
-		mc_cmd 0 "say FAZENDO BACKUP..."
-		mc_cmd 1 save-off
-		mc_cmd 1 save-all
+		mc_cmd 0 "say §2FAZENDO BACKUP..."
+		mc_cmd 1 "save-off"
+		mc_cmd 1 "save-all"
+		sleep 5
 		backup "$world" "auto"
-		mc_cmd 0 save-on
-		mc_cmd 0 "say BACKUP PRONTO."
+		mc_cmd 0 "save-on"
+		mc_cmd 0 "say §2backup pronto."
 	done
 fi
 
