@@ -27,6 +27,7 @@ deb-src  http://deb.devuan.org/merged ascii-backports  main  non-free
 
  gitk
  xcape
+ clipit
 .ffmpeg
 .youtube-dl
  firmware-linux
