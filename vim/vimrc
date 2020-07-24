@@ -10,12 +10,16 @@ Plugin 'gmarik/vundle'
 
 Plugin 'a.vim'                      " Jump to alternate (.h) file and back.
 Plugin 'bfrg/vim-cpp-modern'        " Better C++ syntax highlighting.
+Plugin 'tpope/vim-flagship'         " Nicer statusline and tabline.
 Plugin 'tpope/vim-fugitive'         " Git integration.
 Plugin 'airblade/vim-gitgutter'     " Quick per-line git diff status on the left gutter.
 Plugin 'gruvbox-community/gruvbox'  " A colorscheme.
 Plugin 'junegunn/gv.vim'            " Browse git history.
 Plugin 'HiPhish/info.vim'           " Browse GNU Info articles.
 Plugin 'netrw.vim'                  " File browser.
+Plugin 'tpope/vim-obsession'        " :Obsession to start recording a session.
+Plugin 'tpope/vim-repeat'           " make . work with plugins
+Plugin 'tpope/vim-surround'         " cs({ change, ds( remove, ys{ add
 
 Plugin 'tpope/vim-eunuch'
 " Interface to shell commands:
@@ -25,9 +29,6 @@ Plugin 'tpope/vim-eunuch'
 "    :Rename    :Move relative to file's basedir
 " plus Mkdir, Cfind, Clocate, SudoWrite, and more.
 
-Plugin 'tpope/vim-obsession'
-" :Obsession  or  :Obsession <session-name> to start recording.
-
 Plugin 'tpope/vim-vinegar'
 " Enhances netrw:
 " -       to go up
@@ -36,8 +37,6 @@ Plugin 'tpope/vim-vinegar'
 " . or !  run :command file or :!command file
 " y.      copy full path
 
-Plugin 'tpope/vim-flagship'
-" Nicer statusline and tabline.
 
 call vundle#end()
 
