@@ -40,6 +40,7 @@ bindsym $mod+Right  focus right
 bindsym $mod+1      focus parent
 bindsym $mod+2      focus child
 
+bindcode $mod+51    exec /home/doti/etc/i3/layout.sh
 
 # move focused window
 bindsym $mod+Shift+h      move left
