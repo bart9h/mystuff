@@ -177,7 +177,7 @@ nmap <leader>v :vsplit<CR>
 nmap <leader>M :Man <C-R><C-W><CR>
 
 " quit
-nmap <leader>q :q<CR><C-W>_
+nmap <leader>q :q<CR>
 nmap <leader>Q :mksession!<CR>:wqa<CR>
 nmap <leader>ww :w<CR>
 nmap <leader>wa :wa<CR>
@@ -186,7 +186,8 @@ nmap <leader>wq :wq<CR><C-W>_
 " rotate windows
 nmap <leader>k <C-W>r<C-W>k<C-w>_
 nmap <leader>j <C-W>j<C-W>R<C-w>_
-nmap <leader>- <C-W>_
+
+nmap <leader>x <C-W>_
 nmap <leader>= <C-W>=
 
 
