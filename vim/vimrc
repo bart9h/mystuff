@@ -2,41 +2,25 @@
 
 set nocompatible
 filetype off
-
 set rtp+=~/.vim/bundle/vundle
 call vundle#begin()
-
 Plugin 'gmarik/vundle'
 
-Plugin 'a.vim'                      " Jump to alternate (.h) file and back.
-Plugin 'bfrg/vim-cpp-modern'        " Better C++ syntax highlighting.
-Plugin 'tpope/vim-flagship'         " Nicer statusline and tabline.
-Plugin 'tpope/vim-fugitive'         " Git integration.
-Plugin 'airblade/vim-gitgutter'     " Quick per-line git diff status on the left gutter.
-Plugin 'gruvbox-community/gruvbox'  " A colorscheme.
-Plugin 'junegunn/gv.vim'            " Browse git history.
-Plugin 'HiPhish/info.vim'           " Browse GNU Info articles.
-Plugin 'netrw.vim'                  " File browser.
-Plugin 'tpope/vim-obsession'        " :Obsession to start recording a session.
-Plugin 'tpope/vim-repeat'           " make . work with plugins
-Plugin 'tpope/vim-surround'         " cs({ change, ds( remove, ys{ add
-
-Plugin 'tpope/vim-eunuch'
-" Interface to shell commands:
-"    :Delete    delete file and buffer
-"    :Unlink    delete file, but keep empty buffer (undo is possible)
-"    :Move      rename file and buffer
-"    :Rename    :Move relative to file's basedir
-" plus Mkdir, Cfind, Clocate, SudoWrite, and more.
-
-Plugin 'tpope/vim-vinegar'
-" Enhances netrw:
-" -       to go up
-" ~       home
-" gh      toggle hidden,
-" . or !  run :command file or :!command file
-" y.      copy full path
-
+" plugins, sorted alphabetically:
+Plugin 'a.vim'                         " jump to alternate (.h) file and back
+Plugin 'bfrg/vim-cpp-modern'           " better C++ syntax highlighting
+Plugin 'tpope/vim-eunuch'              " interface to shell commands
+Plugin 'tpope/vim-flagship'            " nicer statusline and tabline
+Plugin 'tpope/vim-fugitive'            " git integration
+Plugin 'airblade/vim-gitgutter'        " quick per-line git diff status on the left gutter
+Plugin 'gruvbox-community/gruvbox'     " colorscheme
+Plugin 'junegunn/gv.vim'               " browse git history
+Plugin 'HiPhish/info.vim'              " browse GNU Info articles
+Plugin 'netrw.vim'                     " file browser
+Plugin 'tpope/vim-obsession'           " :Obsession to start recording a session
+Plugin 'tpope/vim-repeat'              " make . work with plugins
+Plugin 'tpope/vim-surround'            " cs({ change, ds( remove, ys{ add
+Plugin 'tpope/vim-vinegar'             " enhances netrw
 
 call vundle#end()
 
