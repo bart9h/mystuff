@@ -158,6 +158,7 @@ nmap <leader>s :split<CR>
 nmap <leader>v :vsplit<CR>
 
 " man
+source $VIMRUNTIME/ftplugin/man.vim
 nmap <leader>M :Man <C-R><C-W><CR>
 
 " quit
@@ -214,17 +215,6 @@ command! -nargs=1 GrepGit
 \   vimgrep <args> `git ls-files "$(git rev-parse --show-toplevel)"`
 
 command! Conflict /^\(=======$\|<<<<<<< \|>>>>>>> \)/
-
-command! -bar -nargs=1 DoMan %!/usr/bin/man -a -S 3:2:1:5:8:4:7:6:9 -P cat <args>
-command! -bar -nargs=1 Man
-\   new
-\|  DoMan <args>
-\|  set filetype=man
-\|  set buftype=nofile
-\|  set foldmethod=indent
-\|  set foldnestmax=1
-\|  goto 1
-\|  %s/.//g
 
 command! AcentoToUtf
 \  't,'Ts/\~a/ã/ge  |  't,'Ts/\~A/Ã/ge
