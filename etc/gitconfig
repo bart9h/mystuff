@@ -34,7 +34,7 @@
 	sp = stash pop
 
 	co = checkout
-	p  = pull --rebase
+	p  = pull --autostash --rebase
 
 [apply]
 	whitespace = strip
