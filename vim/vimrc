@@ -163,8 +163,8 @@ nmap <leader><tab> :tabnext<CR>
 
 " search for current word on all source files (<l>ocal and <g>lobal)
 "nmap <leader>l  :vimgrep /\<<cword>\>/gj `for i in *; do file $i | grep -q text && echo "\"$i\""; done`
-nmap <leader>l :AgFileDir <cword><CR>
-nmap <leader>g :GrepGit <cword><CR>
+nmap <leader>l :AgFileDir <cword><CR>:copen<CR>
+nmap <leader>g :GrepGit <cword><CR>:copen<CR>
 
 " make
 nmap <leader>m :wall<CR>:make<CR>
@@ -228,7 +228,7 @@ command! -bar -nargs=1 AgFileDir
 \   !cd "`dirname "%:p"`"; pwd; ag -s --color "\b<args>\b" 2> /dev/null \| less -F; true
 
 command! -nargs=1 GrepGit
-\   vimgrep <args> `git ls-files "$(git rev-parse --show-toplevel)"`
+\   vimgrep! <args> `git ls-files "$(git rev-parse --show-toplevel)"`
 
 command! Conflict /^\(=======$\|<<<<<<< \|>>>>>>> \)/
 
