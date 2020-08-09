@@ -7,20 +7,23 @@ call vundle#begin()
 Plugin 'gmarik/vundle'
 
 " plugins, sorted alphabetically:
-Plugin 'a.vim'                         " jump to alternate (.h) file and back
-Plugin 'bfrg/vim-cpp-modern'           " better C++ syntax highlighting
-Plugin 'tpope/vim-eunuch'              " interface to shell commands
-Plugin 'tpope/vim-flagship'            " nicer statusline and tabline
-Plugin 'tpope/vim-fugitive'            " git integration
-Plugin 'airblade/vim-gitgutter'        " quick per-line git diff status on the left gutter
-Plugin 'gruvbox-community/gruvbox'     " colorscheme
-Plugin 'junegunn/gv.vim'               " browse git history
-Plugin 'HiPhish/info.vim'              " browse GNU Info articles
-Plugin 'netrw.vim'                     " file browser
-Plugin 'tpope/vim-obsession'           " :Obsession to start recording a session
-Plugin 'tpope/vim-repeat'              " make . work with plugins
-Plugin 'tpope/vim-surround'            " cs({ change, ds( remove, ys{ add
-Plugin 'tpope/vim-vinegar'             " enhances netrw
+Plugin                    'a.vim'      " jump to alternate (.h) file and back
+Plugin          'alvan/vim-closetag'   " Auto generate closing xml/html tags.
+Plugin     'bart9h/vim-cpp-modern'     " better C++ syntax highlighting
+Plugin          'tpope/vim-eunuch'     " interface to shell commands
+Plugin          'tpope/vim-flagship'   " nicer statusline and tabline
+Plugin          'tpope/vim-fugitive'   " git integration
+Plugin       'airblade/vim-gitgutter'  " quick per-line git diff status
+Plugin  'gruvbox-community/gruvbox'    " colorscheme
+Plugin 'ludovicchabant/vim-gutentags'  " automatically generate ctags
+Plugin           'junegunn/gv.vim'     " browse git history
+Plugin            'HiPhish/info.vim'   " browse GNU Info articles
+Plugin                    'netrw.vim'  " file browser
+Plugin          'tpope/vim-obsession'  " :Obsession to start recording a session
+Plugin        'romainl/vim-qf'         " quickfix enhancements
+Plugin          'tpope/vim-repeat'     " make . work with plugins
+Plugin          'tpope/vim-surround'   " cs({ change, ds( remove, ys{ add
+Plugin          'tpope/vim-vinegar'    " enhances netrw
 
 call vundle#end()
 
@@ -166,7 +169,6 @@ nmap <leader>g :GrepGit <cword><CR>
 nmap <leader>m :wall<CR>:make<CR>
 
 nmap <leader>a :A<CR>
-nmap <leader>e :Explore<CR>
 nmap <leader>s :split<CR>
 nmap <leader>v :vsplit<CR>
 
