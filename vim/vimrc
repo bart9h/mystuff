@@ -156,6 +156,7 @@ nmap <leader>p :cprevious<CR>
 " switch buffers
 nmap <leader>b :b<space><C-D>
 nmap <leader><space> :b#<CR>
+nmap <leader>o :Old<CR><CR>
 
 " cycle through tabs
 nmap <leader><tab> :tabnext<CR>
