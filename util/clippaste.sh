@@ -1,9 +1,17 @@
 #!/bin/bash
+clips_file="${ETC}/tips/clips"
 if test "$1" == ""; then
-	exec sakura -e "$0" "${ETC}/tips/clips"
+	exec sakura -e "$0" "$clips_file"
 fi
 
-readarray -t lines < "${ETC}/tips/clips"
+if ! test -s "$clips_file"; then
+	echo "$clips_file is missing, or empty."
+	echo -n "(press a key to close)"
+	read -N 1
+	exit
+fi
+
+readarray -t lines < "$clips_file"
 count=${#lines[@]}
 cursor="$(cat /tmp/clippaste-cursor)"
 test -z "$cursor" && cursor=0
