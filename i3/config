@@ -27,6 +27,7 @@ font pango:DejaVu Sans 9
 
 bindsym Mod1+F4        kill
 bindsym $mod+Pause exec /home/doti/etc/sys/suspend.sh
+bindsym $mod+Shift+m exec /home/doti/etc/util/open_mate_menu.sh
 
 # change windows focus
 bindsym $mod+h      focus left
