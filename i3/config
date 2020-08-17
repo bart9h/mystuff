@@ -130,3 +130,4 @@ for_window [class="^mate-panel$"] floating enable
 for_window [class="Mate-panel"] floating enable
 for_window [class="^Mate-panel$"] floating enable
 for_window [class="Clock-applet"] floating enable
+for_window [title="sakura"] floating enable

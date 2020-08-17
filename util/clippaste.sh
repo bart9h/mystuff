@@ -1,6 +1,6 @@
 #!/bin/bash
 if test "$1" == ""; then
-	exec mate-terminal -x "$0" "${ETC}/tips/clips"
+	exec sakura -e "$0" "${ETC}/tips/clips"
 fi
 
 readarray -t lines < "${ETC}/tips/clips"
