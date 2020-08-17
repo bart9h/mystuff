@@ -33,6 +33,8 @@ deb-src  http://deb.devuan.org/merged ascii-backports  main  non-free
  firmware-linux
  fonts-inconsolata
  firmware-amd-graphics
+ xdotool
+ xsel
 .curl
 
 

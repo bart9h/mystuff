@@ -6,6 +6,7 @@ hide_edge_borders both
 bindsym $mod+q kill
 bindsym $mod+w exec firefox
 bindsym $mod+e exec mate-terminal
+bindsym $mod+c exec /home/doti/etc/util/clippaste.sh
 bindsym $mod+Return exec mate-terminal
 bindsym $mod+r restart
 
