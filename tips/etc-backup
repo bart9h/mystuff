@@ -1,0 +1,6 @@
+/etc/fstab
+/etc/hosts
+/etc/apt/sources.list.d
+/etc/group
+/etc/rc.local
+/etc/sudoers
