@@ -9,6 +9,7 @@ cursor="$(cat /tmp/clippaste-cursor)"
 test -z "$cursor" && cursor=0
 done=0
 key=
+echo -e '\e[?25l'
 while test "$done" == "0"; do
 	clear
 	for i in `seq 0 $(( $count - 1 ))`; do
@@ -34,4 +35,5 @@ while test "$done" == "0"; do
 	if test "$cursor" -lt 0; then cursor=$(( $count - 1 )); fi
 	if test "$cursor" -ge $count; then cursor=0; fi
 done
+echo -e '\e[?25h'
 echo $cursor >| /tmp/clippaste-cursor
