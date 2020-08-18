@@ -95,6 +95,10 @@ endif
 
 "{{{1  key mappings
 
+" obtain/put diff of whole file
+nmap dO :%diffget<CR>
+nmap dP :%diffput<CR>
+
 " swap ' and ` (makes ' go to exact position)
 noremap ' `
 noremap ` '
@@ -175,6 +179,9 @@ nmap <leader>k <C-W>k
 nmap <leader>j <C-W>j
 nmap <leader>x <C-W>_
 nmap <leader>= <C-W>=
+
+" collect lines
+nmap <leader>y yy:tabnext<CR>p:tabprev<CR>
 
 
 "{{{1 filetype
