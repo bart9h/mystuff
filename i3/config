@@ -26,8 +26,8 @@ focus_follows_mouse no
 font pango:DejaVu Sans 9
 
 bindsym Mod1+F4        kill
-bindsym $mod+Pause exec /home/doti/etc/sys/suspend.sh
-bindsym $mod+Shift+m exec /home/doti/etc/util/open_mate_menu.sh
+bindsym $mod+Pause exec --no-startup-id /home/doti/etc/sys/suspend.sh
+bindsym $mod+Shift+m exec --no-startup-id /home/doti/etc/util/open_mate_menu.sh
 
 # change windows focus
 bindsym $mod+h      focus left
@@ -42,7 +42,8 @@ bindsym $mod+Right  focus right
 bindsym $mod+1      focus parent
 bindsym $mod+2      focus child
 
-bindcode $mod+51    exec /home/doti/etc/i3/layout.sh
+bindcode $mod+51    exec --no-startup-id /home/doti/etc/i3/layout.sh
+bindcode $mod+107   exec flameshot gui
 
 # move focused window
 bindsym $mod+Shift+h      move left
