@@ -164,17 +164,15 @@ nmap <leader>v :vsplit<CR>
 source $VIMRUNTIME/ftplugin/man.vim
 nmap <leader>M :Man <C-R><C-W><CR>
 
-" quit
+" write, quit
+nmap <leader>w :w<CR>
+nmap <leader>W :wa<CR>
 nmap <leader>q :q<CR>
 nmap <leader>Q :mksession!<CR>:wqa<CR>
-nmap <leader>ww :w<CR>
-nmap <leader>wa :wa<CR>
-nmap <leader>wq :wq<CR><C-W>_
 
-" rotate windows
-nmap <leader>k <C-W>r<C-W>k<C-w>_
-nmap <leader>j <C-W>j<C-W>R<C-w>_
-
+" navigate windows
+nmap <leader>k <C-W>k
+nmap <leader>j <C-W>j
 nmap <leader>x <C-W>_
 nmap <leader>= <C-W>=
 
