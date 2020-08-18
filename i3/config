@@ -10,6 +10,9 @@ bindsym $mod+c exec /home/doti/etc/util/clippaste.sh
 bindsym $mod+Return exec mate-terminal
 bindsym $mod+r restart
 
+bindsym $mod+Up     exec --no-startup-id /home/doti/etc/util/brightness.pl up
+bindsym $mod+Down   exec --no-startup-id /home/doti/etc/util/brightness.pl down
+
 bindsym $mod+a layout stacking
 bindsym $mod+s layout toggle split
 bindsym $mod+d layout tabbed
@@ -34,10 +37,6 @@ bindsym $mod+h      focus left
 bindsym $mod+j      focus down
 bindsym $mod+k      focus up
 bindsym $mod+l      focus right
-bindsym $mod+Left   focus left
-bindsym $mod+Down   focus down
-bindsym $mod+Up     focus up
-bindsym $mod+Right  focus right
 
 bindsym $mod+1      focus parent
 bindsym $mod+2      focus child
