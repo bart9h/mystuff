@@ -48,19 +48,6 @@ set modeline
 set modelines=3
 
 
-function! MRU(arg)
-    execute 'edit ' . a:arg
-endfunction
-
-function! MRUComplete(ArgLead, CmdLine, CursorPos)
-    return filter(copy(v:oldfiles), 'v:val =~ a:ArgLead')
-endfunction
-
-command! -nargs=1 -complete=customlist,MRUComplete MRU call MRU(<f-args>)
-
-command! Old new +setl\ buftype=nofile | 0put =v:oldfiles | 0 | nnoremap <buffer> <CR> :e <C-r>=getline('.')<CR><CR>
-
-
 "{{{1 tab
 
 set tabstop=4
@@ -223,6 +210,8 @@ command! FileTypeTeX setlocal number
 
 
 "{{{1 commands
+
+command! Old new +setl\ buftype=nofile | 0put =v:oldfiles | 0 | nnoremap <buffer> <CR> :e <C-r>=getline('.')<CR><CR>
 
 command! -bar -nargs=1 AgFileDir
 \   !cd "`dirname "%:p"`"; pwd; ag -s --color "\b<args>\b" 2> /dev/null \| less -F; true
