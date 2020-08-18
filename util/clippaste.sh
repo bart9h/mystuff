@@ -1,7 +1,16 @@
 #!/bin/bash
+
 clips_file="${ETC}/tips/clips"
+
+width=80
+height=24
+if test -s "$clips_file"; then
+	width=$(( $( wc -L "$clips_file" | cut -d ' ' -f 1 ) + 8 ))
+	height=$( wc -l "$clips_file" | cut -d ' ' -f 1 )
+fi
+
 if test "$1" == ""; then
-	exec sakura -e "$0" "$clips_file"
+	exec sakura -r "$height" -c "$width" -e "$0" "$clips_file"
 fi
 
 if ! test -s "$clips_file"; then
@@ -18,11 +27,12 @@ test -z "$cursor" && cursor=0
 done=0
 key=
 echo -e '\e[?25l'
-while test "$done" == "0"; do
+while test "$done" -eq "0"; do
 	clear
 	for i in `seq 0 $(( $count - 1 ))`; do
-		if test "$i" == "$cursor"; then echo -n '>>  '; else echo -n '    '; fi
-		echo "${lines[$i]}"
+		test "$i" != 0 && echo
+		if test "$i" -eq "$cursor"; then echo -n '>>  '; else echo -n '    '; fi
+		echo -n "${lines[$i]}"
 	done
 	read -s -N 1 key
 	case "$key" in
