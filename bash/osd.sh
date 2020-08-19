@@ -6,11 +6,7 @@ my_osd_font='9x15'
 
 function my_osd_cat()
 {
-	osd_cat \
-		-p middle -A center -s 3 \
-		-d 1 \
-		-c yellow \
-		-f "$my_osd_font"
+	aosd_cat -p 4 -n "Arial 32" -R yellow
 }
 
 function osd()

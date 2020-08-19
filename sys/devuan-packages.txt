@@ -30,6 +30,7 @@ deb-src  http://deb.devuan.org/merged ascii-backports  main  non-free
  clipit
 .ffmpeg
  sakura
+ aosd_cat
 .youtube-dl
  firmware-linux
  fonts-inconsolata

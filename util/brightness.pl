@@ -3,6 +3,8 @@ use strict;
 use warnings;
 use v5.10;
 
+my $increment_by = 0.1;
+
 #
 #  Parse `xrandr --verbose` output
 #
@@ -35,10 +37,10 @@ if (not $ARGV[0]) {
 	exit;
 }
 elsif ($ARGV[0] eq 'up') {
-	$increment += 0.05;
+	$increment += $increment_by;
 }
 elsif ($ARGV[0] eq 'down') {
-	$increment -= 0.05;
+	$increment -= $increment_by;
 }
 else {
 	say "use $0 <up|down>";
@@ -57,4 +59,16 @@ elsif ($brightness > 1) {
 	$brightness = 1;
 }
 
-`xrandr --output $output_argument --brightness $brightness`
+`xrandr --output $output_argument --brightness $brightness`;
+
+
+#
+#  OSD feedback
+#
+
+`pkill aosd_cat`;
+if (open (my $fh, '|-', '/usr/bin/aosd_cat -u 500 -f 0 -p 4 -n "Courier 32" -R yellow')) {
+	my $bar = int($brightness*20);
+	print $fh 'birghtness ['.('=' x $bar).('-' x (20-$bar)).']';
+	close $fh;
+}
