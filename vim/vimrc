@@ -176,8 +176,8 @@ nmap <leader>q :q<CR>
 nmap <leader>Q :mksession!<CR>:wqa<CR>
 
 " navigate windows
-nmap <leader>k <C-W>k
-nmap <leader>j <C-W>j
+nmap <leader>k <C-W>k<C-w>=
+nmap <leader>j <C-W>j<C-w>=
 nmap <leader>x <C-W>_
 nmap <leader>= <C-W>=
 
