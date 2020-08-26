@@ -184,6 +184,9 @@ nmap <leader>= <C-W>=
 " collect lines
 nmap <leader>y yy:tabnext<CR>p:tabprev<CR>
 
+" toggle quickfix window (romainl/vim-qf)
+nmap <leader>f <Plug>(qf_qf_toggle)
+
 
 "{{{1  key mappings for plugins
 
