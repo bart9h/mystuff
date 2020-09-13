@@ -1,7 +1,11 @@
 #!/bin/sh
 export ETC="$HOME/etc"
 export SDL_VIDEO_ALLOW_SCREENSAVER=1
-export TERMINAL="sakura"
+#export TERMINAL="sakura"
+
+#pactl 'set-default-sink' 'alsa_output.pci-0000_01_00.1.hdmi-stereo-extra2'
+pactl 'set-default-sink' 'alsa_output.pci-0000_00_14.2.analog-stereo'
+pactl 'set-sink-port' '0' 'analog-output-headphones'
 
 #xterm -geometry 132x80 &
 #exec twm

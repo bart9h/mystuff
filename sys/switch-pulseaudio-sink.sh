@@ -5,17 +5,19 @@
 #
 
 dir="$HOME/.cache/switch-pulseaudio-sink"
+mkdir -vp "$dir"
+
 sink_inputs="$( pacmd list-sink-inputs | grep 'index:' | cut -d : -f 2 )"
 sink_output=
 
 case "$( cat "$dir/current.index" )" in
 	1)
 		sink_output=0
-		ln -s -f "/usr/share/icons/mate/48x48/devices/audio-card.png" "$dir/current.png"
+		#ln -s -f "/usr/share/icons/mate/48x48/devices/audio-card.png" "$dir/current.png"
 		;;
 	*)
 		sink_output=1
-		ln -s -f "/usr/share/icons/mate/48x48/devices/video-display.png" "$dir/current.png"
+		#ln -s -f "/usr/share/icons/mate/48x48/devices/video-display.png" "$dir/current.png"
 		;;
 esac
 
