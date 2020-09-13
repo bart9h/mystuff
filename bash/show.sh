@@ -1,6 +1,21 @@
 # /bin/bash
 # vim600:foldmethod=marker:foldmarker=)#,;;#:
 
+function get_xwininfo()
+{
+	local key="$1"; shift
+
+	if test -z "$DISPLAY"; then
+		echo "no X display set" >/dev/stderr
+	else
+		if test -x "$(which xwininfo)"; then
+			echo $(xwininfo -root|grep "$key":|cut -d : -f 2)
+		else
+			echo "xwininfo not available" >/dev/stderr
+		fi
+	fi
+}
+
 function show()
 {
 	local what="$1"; shift
@@ -76,17 +91,16 @@ function show()
 		esac
 	;;#
 
-	resolution|res)#  : resolution of the X display
+	width)
+		get_xwininfo Width
+	;;
 
-		if test -z "$DISPLAY"; then
-			echo "no X display set"
-		else
-			if test -x "$(which xwininfo)"; then
-				echo $(xwininfo -root|grep Width:|cut -d : -f 2)x$(xwininfo -root|grep Height:|cut -d : -f 2|sed s/\ //g)
-			else
-				echo "xwininfo not available"
-			fi
-		fi
+	height)
+		get_xwininfo Height
+	;;
+
+	resolution|res)#  : resolution of the X display
+		echo $(get_xwininfo Width)x$(get_xwininfo Height)
 	;;#
 
 	termsize|rez)#    : resolution of the text terminal
