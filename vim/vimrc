@@ -146,7 +146,7 @@ nmap <leader>p :cprevious<CR>
 "nmap <leader><space> za
 
 " switch buffers
-nmap <leader>b :b<space><C-D>
+nmap <leader>b :sbuffer<space><C-D>
 nmap <leader><space> :b#<CR>
 nmap <leader>o :Old<CR><CR>
 
