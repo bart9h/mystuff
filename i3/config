@@ -6,12 +6,14 @@ hide_edge_borders both
 bindsym $mod+q kill
 bindsym $mod+w exec firefox
 bindsym $mod+e exec mate-terminal
-bindsym $mod+c exec /home/doti/etc/util/clippaste.sh
 bindsym $mod+Return exec mate-terminal
 bindsym $mod+r restart
 
-bindsym $mod+Up     exec --no-startup-id /home/doti/etc/util/brightness.pl up
-bindsym $mod+Down   exec --no-startup-id /home/doti/etc/util/brightness.pl down
+bindsym $mod+period exec j4-dmenu-desktop
+
+bindsym $mod+Up     exec --no-startup-id $ETC/desktop/brightness.pl up
+bindsym $mod+Down   exec --no-startup-id $ETC/desktop/brightness.pl down
+bindsym $mod+c      exec                 $ETC/desktop/clippaste.sh
 
 bindsym $mod+a layout stacking
 bindsym $mod+s layout toggle split
