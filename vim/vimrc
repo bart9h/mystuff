@@ -123,8 +123,8 @@ nmap <F9> @q
 map <silent> * *N
 
 " diff selections
-vmap <f1> "ay
-vmap <f2> "by:tabnew<CR>"bP:diffthis<CR>:set buftype=nofile<CR>:vnew<CR>"aP:set buftype=nofile<CR>:diffthis<CR>
+vmap <leader>1 "ay
+vmap <leader>2 "by:tabnew<CR>"bP:diffthis<CR>:set buftype=nofile<CR>:vnew<CR>"aP:set buftype=nofile<CR>:diffthis<CR>
 
 " resize window
 nmap <C-kPlus> <C-W>+
