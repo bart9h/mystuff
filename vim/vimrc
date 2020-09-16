@@ -146,7 +146,7 @@ nmap <leader>p :cprevious<CR>
 "nmap <leader><space> za
 
 " switch buffers
-nmap <leader>b :sbuffer<space><C-D>
+nmap <leader>b :Buffers<CR><CR>
 nmap <leader><space> :b#<CR>
 nmap <leader>o :Old<CR><CR>
 
@@ -224,6 +224,15 @@ command! FileTypeTeX setlocal number
 
 
 "{{{1 commands
+
+command! Buffers
+\ new +setl\ buftype=nofile |
+\ 0put =getbufinfo()->sort({ a, b -> b.lastused - a.lastused })->filter({ _, b -> !empty(b.name)})->map({ _, b -> fnamemodify(b.name, ':.')}) |
+\ $ |
+\ delete |
+\ 0 |
+\ nnoremap <buffer> <CR> :e <C-r>=getline('.')<CR><CR> |
+\ nnoremap <buffer> dd :bdelete! <C-r>=getline('.')<CR><CR>:delete<CR>
 
 command! Old new +setl\ buftype=nofile | 0put =v:oldfiles | 0 | nnoremap <buffer> <CR> :e <C-r>=getline('.')<CR><CR>
 
