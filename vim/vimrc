@@ -22,8 +22,11 @@ Plugin     'junegunn/gv.vim'     " browse git history
 " language specific
 Plugin  'alvan/vim-closetag'     " Auto generate closing xml/html tags.
 Plugin 'bart9h/vim-cpp-modern'   " better C++ highlighting
+Plugin 'lifepillar/pgsql.vim'    " PostgreSQL syntax highlighting
+Plugin      'keith/swift.vim'    " Swift syntax highlighting
 
 " misc
+Plugin         '907th/vim-auto-save'  " activate with :AutoSaveToggle
 Plugin         'tpope/vim-commentary' " comment/uncomment stuff with gc
 Plugin         'tpope/vim-eunuch'     " interface to shell commands
 Plugin         'tpope/vim-flagship'   " nicer statusline and tabline
