@@ -118,18 +118,13 @@ alias web="$ETC/scripts/web.pl"
 
 function mv() {
 	local target="${!#}"
-	local dir
-	if [[ "$target" =~ '/$' ]]; then
-		dir="$target"
-	else
-		dir="$(dirname "$target")"
+	if [[ "$target" =~ /$ ]]; then
+		test -d "$target" || mkdir -v -p "$target"
 	fi
-	test -d "$dir" || mkdir -vp "$dir"
-	command mv "$@"
+	command mv -i "$@"
 }
 
 alias ag='ag --pager less'
-alias mv='mv -i'
 if [ "$OSTYPE" == "linux-gnu" ]; then
 alias grep='grep --exclude="*.svn-base" --exclude=".git" --devices=skip --color=auto'
 alias greps='grep $(for i in $SOURCE_EXTENSIONS; do echo --include="*."$i; done)'
