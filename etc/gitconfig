@@ -18,21 +18,23 @@
 
 	# commit
 	c     = commit
-	ca    = commit -a
 	ci    = commit --interactive
 	fixup = commit --amend -C HEAD
 
-	ri = rebase -i
-
+	# diff
 	d  = diff -p --stat -b --patience
 	ds = diff -p --stat -b --patience --staged
 
+	# status
 	s  = status -sb --untracked-files=no
 	sa = status -sb
 
+	# stash
 	st = stash
 	sp = stash pop
 
+	# misc
+	ri = rebase -i
 	co = checkout
 	p  = pull --autostash --rebase
 
