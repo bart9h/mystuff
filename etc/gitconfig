@@ -32,6 +32,8 @@
 	# stash
 	st = stash
 	sp = stash pop
+	sl = stash list
+	ss = stash show -p
 
 	# misc
 	ri = rebase -i
