@@ -235,7 +235,9 @@ command! FileTypeTeX setlocal number
 "{{{1 commands
 
 command! Buffers
-\ new +setl\ buftype=nofile |
+\ enew |
+\ setl buftype=nofile |
+\ set nobuflisted |
 \ 0put =getbufinfo()->sort({ a, b -> b.lastused - a.lastused })->filter({ _, b -> !empty(b.name)})->map({ _, b -> fnamemodify(b.name, ':.')}) |
 \ $ |
 \ delete |
