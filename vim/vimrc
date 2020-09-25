@@ -255,6 +255,8 @@ command! -nargs=1 GrepGit
 
 command! Conflict /^\(=======$\|<<<<<<< \|>>>>>>> \)/
 
+command! Gfixup !git commit --amend -C HEAD
+
 command! AcentoToUtf
 \  't,'Ts/\~a/ã/ge  |  't,'Ts/\~A/Ã/ge
 \| 't,'Ts/\~o/õ/ge  |  't,'Ts/\~O/Õ/ge
