@@ -16,8 +16,8 @@ Plugin          'tpope/vim-vinegar'     " enhances netrw
 
 " git integration
 Plugin    'tpope/vim-fugitive'   " git integration
-Plugin 'airblade/vim-gitgutter'  " quick per-line git diff status
 Plugin     'junegunn/gv.vim'     " browse git history
+Plugin    'mhinz/vim-signify'    " quick per-line git diff status
 
 " language specific
 Plugin  'alvan/vim-closetag'     " Auto generate closing xml/html tags.
@@ -36,6 +36,8 @@ Plugin         'tpope/vim-repeat'     " make . work with plugins
 Plugin         'tpope/vim-surround'   " cs({ change, ds( remove, ys{ add
 
 call vundle#end()
+
+set updatetime=100
 
 
 "{{{1  behaviour
@@ -116,8 +118,8 @@ noremap ` '
 "disable ex mode
 nnoremap Q <nop>
 
-" <c-l> also clear search highlight, refresh git gutter
-nnoremap <C-L> :nohlsearch<CR>:GitGutter<CR><C-L>
+" <c-l> also clear search highlight
+nnoremap <C-L> :nohlsearch<CR>
 
 " toggle spell cheching
 nmap <F8> :set spelllang=en spell!<CR>
@@ -196,9 +198,7 @@ nmap <leader>y yy:tabnext<CR>p:tabprev<CR>
 " toggle quickfix window (romainl/vim-qf)
 nmap <leader>f <Plug>(qf_qf_toggle)
 
-
-"{{{1  key mappings for plugins
-
+" comment/uncomment line (tpope/vim-commentary)
 nmap <leader>c gcc
 
 
