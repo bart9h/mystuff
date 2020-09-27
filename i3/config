@@ -123,16 +123,23 @@ bindsym $mod+Control+F4 exec sudo s2ram
 
 #bindsym $mod+p append_layout /home/doti/etc/i3/layout
 
-for_window [title="uxterm"] floating enable
-for_window [title=".* - mpv"] floating enable
-#for_window [id="Calendar"] floating enable
-#for_window [class=".*-applet"] floating enable
-#for_window [title="Minecraft"] floating enable
-for_window [title="^Drawer$"] floating enable
-for_window [title="Drawer"] floating enable
-for_window [class="mate-panel"] floating enable
-for_window [class="^mate-panel$"] floating enable
-for_window [class="Mate-panel"] floating enable
-for_window [class="^Mate-panel$"] floating enable
-for_window [class="Clock-applet"] floating enable
+# title, id, class
 for_window [title="sakura"] floating enable
+for_window [title=".* - mpv"] floating enable
+
+##### criteria #####
+#
+#  class: the second part of WM_CLASS, or __focused__
+#  instance: the first part of WM_CLASS, __focused__
+#  window_role: WM_WINDOW_ROLE, or __focused__
+#  window_type: _NET_WM_WINDOW_TYPE
+#  id: X11 window ID, which you can get via xwininfo for example
+#  title: _NET_WM_NAME, WM_NAME), or __focused__
+#  urgent: "latest" or "oldest"
+#  workspace: workspace name, or __focused__
+#  con_mark: vim-like marks
+#  con_id: i3-internal container ID, or __focused__
+#  floating
+#  tiling
+#
+###########

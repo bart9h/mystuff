@@ -1,9 +1,9 @@
 #!/bin/sh
 layout() {
 	i3-msg 'exec mate-terminal'
-	sleep .1
+	sleep .2
 	i3-msg 'exec mate-terminal'
-	sleep .1
+	sleep .2
 	i3-msg 'resize grow width 20 px or 20 ppt'
 	i3-msg 'split v'
 	i3-msg 'focus left'
