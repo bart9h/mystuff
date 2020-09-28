@@ -38,6 +38,7 @@ Plugin         'tpope/vim-surround'   " cs({ change, ds( remove, ys{ add
 call vundle#end()
 
 set updatetime=100
+let g:gutentags_enabled=0
 
 
 "{{{1  behaviour
