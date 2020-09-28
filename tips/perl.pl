@@ -1,4 +1,5 @@
 #!/usr/bin/perl
+exit;
 use strict;
 use warnings;
 use v5.10;

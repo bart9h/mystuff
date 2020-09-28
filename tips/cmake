@@ -1,3 +1,25 @@
+# Add UPDATE_DISCONNECTED ON to FetchContent to work offline.
+
+
+##########
+# skeleton
+
+cmake_minimum_required (VERSION 3.0)
+project (MyProject LANGUAGES CXX C VERSION 0.1)
+
+set (SOURCES one.cpp other.cpp)
+# or
+file (GLOB SOURCES src/*.cpp)
+
+add_executable (MyProject ${SOURCES})
+
+target_compile_features (MyProject PRIVATE cxx_std_17)
+target_compile_options (MyProject PRIVATE -ggdb -Wall -Wextra -pedantic -Werror -Wno-unused-parameter)
+
+#
+##########
+
+
 # Print all variables for debug:
 get_cmake_property(_variableNames VARIABLES)
 list (SORT _variableNames)
