@@ -49,6 +49,9 @@ while test "$done" -eq "0"; do
 		h|q|)
 			done=1
 			;;
+		e)
+			exec gvim "$clips_file"
+			;;
 	esac
 	if test "$cursor" -lt 0; then cursor=$(( $count - 1 )); fi
 	if test "$cursor" -ge $count; then cursor=0; fi
