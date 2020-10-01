@@ -243,9 +243,9 @@ command! Buffers
 \ setl buftype=nofile |
 \ set nobuflisted |
 \ 0put =getbufinfo()->sort({ a, b -> b.lastused - a.lastused })->filter({ _, b -> !empty(b.name)})->map({ _, b -> fnamemodify(b.name, ':.')}) |
-\ $ |
+\ keepjumps $ |
 \ delete |
-\ 0 |
+\ keepjumps 0 |
 \ nnoremap <buffer> <CR> :e <C-r>=getline('.')<CR><CR> |
 \ nnoremap <buffer> dd :bdelete! <C-r>=getline('.')<CR><CR>:delete<CR>
 
