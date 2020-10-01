@@ -163,7 +163,9 @@ nmap <leader>b :Buffers<CR><CR>
 nmap <leader><space> :b#<CR>
 nmap <leader>o :Old<CR><CR>
 
-" cycle through tabs
+" tabs
+nmap <leader>t :tabnew<CR>
+nmap <leader>T :0tabnew<CR>
 nmap <leader><tab> :tabnext<CR>
 
 " search for current word on all source files (<l>ocal and <g>lobal)
