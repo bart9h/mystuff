@@ -626,7 +626,7 @@ source "$ETC/sys/git-prompt.sh"
 
 export HISTCONTROL="ignoreboth"
 PS1_sty="$(cut -d . -f 2 <<< $STY)"
-PS1='\[\e[1;33m\]\t\[\e[0;'$prompt_color'm\] [$PS1_sty.$WINDOW] \u@\h \[\e[1;32m\]\w\[\e[1;31m\]$(__git_ps1)\[\e[0m\]\n\$ '
+PS1='\[\e[1;33m\]\t\[\e[0;'$prompt_color'm\] [$PS1_sty.$WINDOW] \u@\h \[\e[1;33m\]\w\[\e[1;31m\]$(__git_ps1)\[\e[0m\]\n\$ '
 export PS1
 export THE_PS1=$PS1
 
