@@ -244,10 +244,10 @@ command! Buffers
 \ set nobuflisted |
 \ 0put =getbufinfo()->sort({ a, b -> b.lastused - a.lastused })->filter({ _, b -> !empty(b.name)})->map({ _, b -> fnamemodify(b.name, ':.')}) |
 \ keepjumps $ |
-\ delete |
+\ delete _ |
 \ keepjumps 0 |
 \ nnoremap <buffer> <CR> :e <C-r>=getline('.')<CR><CR> |
-\ nnoremap <buffer> dd :bdelete! <C-r>=getline('.')<CR><CR>:delete<CR>
+\ nnoremap <buffer> dd :bdelete! <C-r>=getline('.')<CR><CR>:delete _<CR>
 
 command! Old new +setl\ buftype=nofile | 0put =v:oldfiles | 0 | nnoremap <buffer> <CR> :e <C-r>=getline('.')<CR><CR>
 
