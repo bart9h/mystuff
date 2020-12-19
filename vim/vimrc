@@ -205,6 +205,10 @@ nmap <leader>f <Plug>(qf_qf_toggle)
 " comment/uncomment line (tpope/vim-commentary)
 nmap <leader>c gcc
 
+" navigate vcs diff hunks (mhinz/vim-signify)
+nmap <leader>dj <plug>(signify-next-hunk)
+nmap <leader>dk <plug>(signify-prev-hunk)
+
 
 "{{{1 filetype
 
