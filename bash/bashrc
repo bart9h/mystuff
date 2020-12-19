@@ -195,6 +195,20 @@ alias D='d -A'
 #alias dz='du -shc * | grep -v "^0" | grep "[0-9][MG]"'
 
 
+#{{{1 chdir
+
+function ,() {
+	if test -n "$2"; then
+		echo "$@"
+	else
+		cd "$1" && a
+	fi
+}
+
+alias .,='cd .. && a'
+alias ,d='cd - && a'
+
+
 #{{{1 abbreviations
 
 alias OFF='$ETC/sys/transmission_stop.sh && sudo poweroff'
