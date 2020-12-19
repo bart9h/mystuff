@@ -251,21 +251,6 @@ function gri() {
 		git rebase -i "origin"
 	fi
 }
-alias gsp='git_stash_do pull --rebase'
-alias gsd='git_stash_do'
-function git_stash_do()
-{
-	if git status --porcelain | grep -q '^M'; then
-		echo 'You have changes marked to be commited:'
-		git status --short | grep -q '^M'
-	elif git status --porcelain | grep -q '^ M'; then
-		echo '[stash]'     &&  git stash       && \
-		echo "[$@]"        &&  git "$@"        && \
-		echo '[stash pop]' &&  git stash pop
-	else
-		git "$@"
-	fi
-}
 
 alias configure='nice ./configure --disable-nls'
 function mk()
