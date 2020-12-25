@@ -359,7 +359,7 @@ function crun() {
 }
 
 function Crun() {
-	do_crun "g++ -x c++" "$@"
+	do_crun "g++ -x c++ -std=c++17" "$@"
 }
 
 function cmain() {
