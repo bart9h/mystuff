@@ -161,8 +161,9 @@ nmap <leader>p :cprevious<CR>
 
 " switch buffers
 nmap <leader>b :Buffers<CR><CR>
-nmap <leader><space> :b#<CR>
+nmap <leader><space> <leader>bj<CR>
 nmap <leader>o :Old<CR><CR>
+nmap <leader>z :b#<CR>
 
 " tabs
 nmap <leader>t :tabnew<CR>
