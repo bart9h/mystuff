@@ -16,8 +16,14 @@
 	# review last commit
 	r  = log --patch-with-stat --ignore-space-change -n 1
 
+	# add
+	a  = add
+	ap = add -p
+
 	# commit
 	c     = commit
+	cm    = commit -m
+	cam   = commit -a -m
 	ci    = commit --interactive
 	fixup = commit --amend -C HEAD
 
@@ -36,7 +42,7 @@
 	ss = stash show -p
 
 	# misc
-	ri = rebase -i
+	ri = rebase --autostash -i
 	co = checkout
 	p  = pull --autostash --rebase
 
@@ -70,5 +76,6 @@
 	smtpserver = smtp.gmail.com
 	smtpuser = rodolfo.borges@gmail.com
 	smtpserverport = 587
+
 [push]
 	default = simple
