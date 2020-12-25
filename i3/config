@@ -9,14 +9,13 @@ bindsym $mod+e exec mate-terminal
 bindsym $mod+Return exec mate-terminal
 bindsym $mod+r restart
 
-bindsym $mod+period exec j4-dmenu-desktop
-
+bindsym $mod+period exec                 j4-dmenu-desktop
+bindsym $mod+comma  exec                 $ETC/desktop/clippaste.sh
 bindsym $mod+Prior  exec --no-startup-id xdotool mousemove $(( $(xwininfo -root|grep Width:|cut -d : -f 2) - 8 )) 0
 bindsym $mod+Home   exec --no-startup-id xdotool mousemove $(( $(xwininfo -root|grep Width:|cut -d : -f 2) / 2 )) 0
 bindsym $mod+Insert exec --no-startup-id xdotool mousemove 8 0
 bindsym $mod+Up     exec --no-startup-id $ETC/desktop/brightness.pl up
 bindsym $mod+Down   exec --no-startup-id $ETC/desktop/brightness.pl down
-bindsym $mod+c      exec                 $ETC/desktop/clippaste.sh
 
 bindsym $mod+a layout stacking
 bindsym $mod+s layout toggle split
@@ -47,7 +46,9 @@ bindsym $mod+1      focus parent
 bindsym $mod+2      focus child
 
 bindcode $mod+51    exec --no-startup-id /home/doti/etc/i3/layout.sh
-bindcode $mod+107   exec flameshot gui
+
+bindcode $mod+107         exec flameshot gui
+bindcode $mod+Shift+107   exec flameshot full -c -d 5000
 
 # move focused window
 bindsym $mod+Shift+h      move left
