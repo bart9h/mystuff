@@ -1,7 +1,9 @@
 #!/bin/bash
 
+tmp_dir=
 input_list=
 output_file=
+i=1000
 
 function usage() {
 	echo "usage: $0 <output-file> <input-file-1> <input-file-2> [<input-file-n> ...]"
@@ -36,13 +38,16 @@ while test -n "$1"; do
 
 		*)
 			if test -f "$1"; then
-				if test -z "$input_list"; then
-					input_list="$(mktemp -p .)"
-					echo "Created temporary input list file \"$input_list\"."
-					trap "rm -v \"$input_list\"" EXIT
+				if test -z "$tmp_dir"; then
+					tmp_dir="$(mktemp -d -p .)"
+					input_list="$tmp_dir/list"
+					echo "Created temporary dir \"$tmp_dir\"."
+					trap "rm -v -f -r \"$tmp_dir\"" EXIT
 				fi
 				echo "Adding \"$1\" to input list."
-				echo "file '$1'" >> "$input_list"
+				ln "$1" "$tmp_dir/$i"
+				echo "file '$i'" >> "$input_list"
+				let i=i+1
 			else
 				echo "ERROR: Not an existing file: \"$1\"."
 				exit 1
