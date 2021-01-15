@@ -1,0 +1,10 @@
+# remove audio
+ffmpeg -i $input_file -c copy -an $output_file
+
+# stabilization
+ffmpeg -i in.mp4 -vf deshake out.mp4
+
+# capture
+res=`show res`
+fps=25
+ffmpeg -f x11grab -s $res -r $fps -i :0.0 -sameq /tmp/out.mpg
