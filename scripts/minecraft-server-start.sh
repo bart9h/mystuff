@@ -19,24 +19,24 @@ backup() {
 	tar cf "${world}-${sufix}-0.tar" "${world}"/
 }
 
-sleep_if_stop_exit() {
-	seconds="$1"
-	for i in `seq 1 $seconds`; do
-		test -e ".stop" && exit
-		sleep 1
-	done
-}
-
 # Automatic world backup thread.
 if test "$1" == "--backup-thread"; then
 	world="$2"
 	sty="$3"
 	window="$4"
+	sleep_if_stop_exit() {
+		seconds="$1"
+		for i in `seq 1 $seconds`; do
+			test -e ".stop" && exit
+			sleep 1
+		done
+	}
 	mc_cmd() {
 		screen -S "$sty" -p "$window" -X stuff "$2$(printf '\r')"
 		sleep_if_stop_exit "$1"
 	}
-	mc_cmd 45 "say §1Iniciando loop de backup automático"
+	sleep_if_stop_exit 120
+	mc_cmd 0 "say §1Iniciando loop de backup automático"
 	while true; do
 		sleep_if_stop_exit 1500
 		mc_cmd 45 "say §2backup iniciando 1 minuto"
