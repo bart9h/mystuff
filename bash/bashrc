@@ -451,7 +451,20 @@ alias updb='sudo updatedb &'
 
 export GDK_USE_XFT=1
 
-alias fu='du -sc * | sort -n'
+function df() {
+	if test -z "$1"; then
+		command df -h .
+	else
+		command df "$@"
+	fi
+}
+function du() {
+	if test -z "$1"; then
+		command du -shc *
+	else
+		command du "$@"
+	fi
+}
 #alias www='webfsd -d -F -p 8080 -r .'
 alias ntop='sudo jnettop'
 #alias w1='cd ~/fotos/incoming && sudo gphoto2 -P'
