@@ -1,0 +1,2 @@
+#!/bin/sh
+exec recordmydesktop --on-the-fly-encoding --device=pulse --windowid $(xwininfo | awk '"'"'/Window id:/ {print $4}\'"'"')'
