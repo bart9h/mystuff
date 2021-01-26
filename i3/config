@@ -89,10 +89,18 @@ bindsym $mod+m split v
 
 
 
+# show/hide the scratchpad
+bindsym $mod+space scratchpad show
+
+# toggle window floating/tiling mode
 bindsym $mod+Shift+space floating toggle
 
-# change focus between tiling / floating windows
-bindsym $mod+space focus mode_toggle
+# change focus between floating/tiling windows
+bindsym $mod+Control+space focus mode_toggle
+
+# move window to/from scratchpad
+bindsym $mod+Shift+Control+space move scratchpad
+
 
 #bindsym $mod+a mark a
 #bindsym $mod+s swap container with mark a
