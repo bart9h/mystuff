@@ -1,0 +1,1 @@
+list open tcp connections: netstat -natp
