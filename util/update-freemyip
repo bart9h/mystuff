@@ -1,4 +1,9 @@
 #!/bin/bash
+if test -z "$freemyip_domain" -o -z "$freemyip_token"; then
+	echo 'Please define $freemyip_domain and $freemyip_token'
+	exit
+fi
+
 test -z "$ETC" && ETC="$HOME/etc"
 . "$ETC/bash/show.sh"
 cd "$(dirname "$0")" || exit
@@ -7,7 +12,7 @@ curr_ip="$(show ip)"
 if test "$last_ip" == "$curr_ip"; then
 	echo "IP address $curr_ip up to date"
 else
-	curl_rc="$(curl 'https://freemyip.com/update?token=a705cea508b70013118e919e&domain=bambu.freemyip.com')"
+	curl_rc="$(curl "https://freemyip.com/update?token=$freemyip_token&domain=$freemyip_domain")"
 	if test "$curl_rc" == "OK"; then
 		echo "$curr_ip" > last_ip.txt
 		echo "IP address updated to $curr_ip"
