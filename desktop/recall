@@ -1,2 +1,2 @@
 #!/bin/sh
-exec recordmydesktop --on-the-fly-encoding --device=pulse
+exec recordmydesktop --on-the-fly-encoding --device=pulse "$@"
