@@ -6,7 +6,7 @@ output_file=
 i=1000
 
 function usage() {
-	echo "usage: $0 <output-file> <input-file-1> <input-file-2> [<input-file-n> ...]"
+	echo "usage: $0 -o <output-file> <input-file-1> <input-file-2> [... <input-file-n>]"
 	exit 1
 }
 
