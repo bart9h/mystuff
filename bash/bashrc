@@ -30,6 +30,7 @@ _load "$ETC/bash/functions"
 
 SOURCE_EXTENSIONS='d pl pm sh js java py rb c h cpp cxx C hxx hpp'
 SOURCE_EXTGLOB='*.{d,pl,pm,sh,js,java,py,rb,c,h,cpp,cxx,C,hxx,hpp}'
+test -z "$XDG_CONFIG_HOME" && XDG_CONFIG_HOME="$HOME/.config"
 
 
 #{{{1 lazy-loading of functions
@@ -237,7 +238,7 @@ alias pgh='ping github.com'
 
 function g() {
 	if test -z "$1"; then
-		sed -n -e '/^\[alias/,/\[/p' "$HOME/.gitconfig" | grep -v '^\['
+		sed -n -e '/^\[alias/,/\[/p' "$XDG_CONFIG_HOME/git/config" | grep -v '^\['
 	else
 		git "$@"
 	fi
