@@ -2,7 +2,7 @@
 
 cd "$HOME"  || exit 1
 
-test -z "$ETC" && ETC='etc'
+test -z "$ETC" && ETC="$HOME/etc"
 if ! test -d "$ETC"; then
 	echo "no directory \"$ETC\""
 	exit 1
