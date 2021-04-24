@@ -639,26 +639,7 @@ GIT_PS1_SHOWUPSTREAM="auto git"
 source "$ETC/sys/git-prompt.sh"
 
 export HISTCONTROL="ignoreboth"
-PS1_sty="$(cut -d . -f 2 <<< $STY)"
-PS1='\[\e[1;33m\]\t\[\e[0;'$prompt_color'm\] [$PS1_sty.$WINDOW] \u@\h \[\e[1;33m\]\w\[\e[1;31m\]$(__git_ps1)\[\e[0m\]\n\$ '
-export PS1
-export THE_PS1=$PS1
-
-function titlebar()
-{
-	case "$*" in trap|trap\ *|cd|cd\ *|ls|ls\ *|screen|screen\ *) return ;; esac
-	local t="$(cut -d \  -f 1 <<< "$*")"
-	if test -n "$WINDOW" -a "$t" != "trap"; then
-		screen -X title "$t"
-		my_title="$t"
-	fi
-}
-
-if test -n "$WINDOW"; then
-	PROMPT_COMMAND='trap DEBUG; if test -n "$WINDOW"; then my_t="${PWD/$HOME/~}"; if test "$my_t" != "$my_title"; then screen -X title "$my_t"; my_title="$my_t"; unset my_t; fi; fi; trap "titlebar \$BASH_COMMAND" debug'
-fi
-
-trap 'titlebar $BASH_COMMAND' DEBUG
+export PS1='\[\e[1;33m\]\t\[\e[0;'$prompt_color'm\] \u@\h \[\e[1;33m\]\w\[\e[1;31m\]$(__git_ps1)\[\e[0m\]\n\$ '
 
 #}}}
 #{{{1  local stuff from .bashrc_local_post

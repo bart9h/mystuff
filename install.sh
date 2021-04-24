@@ -43,7 +43,7 @@ function L() {
 L bash/bashrc    .bashrc
 L etc/inputrc    .inputrc
 L mplayer        .mplayer
-L etc/screenrc   .screenrc
+L etc/tmux.conf  .tmux.conf
 L etc/tigrc      .tigrc
 L vim            .vim
 L x11/xsession   .xsession
