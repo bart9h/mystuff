@@ -7,39 +7,37 @@ call vundle#begin()
 Plugin 'gmarik/vundle'
 
 " nativagion
-Plugin                    'a.vim'        " jump to alternate (.h) file and back
-Plugin 'ludovicchabant/vim-gutentags'    " automatically generate ctags
-Plugin            'HiPhish/info.vim'     " browse GNU Info articles
-Plugin                    'netrw.vim'    " file browser
-Plugin        'romainl/vim-qf'           " quickfix enhancements
-Plugin          'tpope/vim-vinegar'      " enhances netrw
+Plugin                    'a.vim'           " jump to alternate (.h) file and back
+"Plugin 'ludovicchabant/vim-gutentags'       " automatically generate ctags
+Plugin            'HiPhish/info.vim'        " browse GNU Info articles
+Plugin                    'netrw.vim'       " file browser
+Plugin        'romainl/vim-qf'              " quickfix enhancements
+Plugin          'tpope/vim-vinegar'         " enhances netrw
 
 " git integration
-Plugin          'tpope/vim-fugitive'     " git integration
-Plugin           'junegunn/gv.vim'       " browse git history
-Plugin          'mhinz/vim-signify'      " quick per-line git diff status
+Plugin          'tpope/vim-fugitive'        " git integration
+Plugin           'junegunn/gv.vim'          " browse git history
+Plugin          'mhinz/vim-signify'         " quick per-line git diff status
 
 " language specific
-Plugin          'alvan/vim-closetag'     " Auto generate closing xml/html tags.
-Plugin         'bart9h/vim-cpp-modern'   " better C++ highlighting
-Plugin      'peterhoeg/vim-qml'          " Qt's QML syntax highlighting
-Plugin         'lifepillar/pgsql.vim'    " PostgreSQL syntax highlighting
-Plugin              'keith/swift.vim'    " Swift syntax highlighting
+Plugin         'bart9h/vim-cpp-modern'      " better C++ highlighting
+Plugin         'lifepillar/pgsql.vim'       " PostgreSQL syntax highlighting
+Plugin        'fedorenchik/qt-support.vim'  " Qt's QML and qmake.pro
 
 " misc
-Plugin          '907th/vim-auto-save'    " activate with :AutoSaveToggle
-Plugin          'tpope/vim-commentary'   " comment/uncomment stuff with gc
-Plugin          'tpope/vim-eunuch'       " interface to shell commands
-Plugin          'tpope/vim-flagship'     " nicer statusline and tabline
-Plugin  'gruvbox-community/gruvbox'      " colorscheme
-Plugin          'tpope/vim-obsession'    " :Obsession to start recording a session
-Plugin          'tpope/vim-repeat'       " make . work with plugins
-Plugin          'tpope/vim-surround'     " cs({ change, ds( remove, ys{ add
+Plugin          '907th/vim-auto-save'       " activate with :AutoSaveToggle
+Plugin          'tpope/vim-commentary'      " comment/uncomment stuff with gc
+Plugin          'tpope/vim-eunuch'          " interface to shell commands
+Plugin          'tpope/vim-flagship'        " nicer statusline and tabline
+Plugin  'gruvbox-community/gruvbox'         " colorscheme
+Plugin          'tpope/vim-obsession'       " :Obsession to start recording a session
+Plugin          'tpope/vim-repeat'          " make . work with plugins
+Plugin          'tpope/vim-surround'        " cs({ change, ds( remove, ys{ add
 
 call vundle#end()
 
 set updatetime=100
-let g:gutentags_enabled=0
+"let g:gutentags_enabled=0
 
 
 "{{{1  behaviour
