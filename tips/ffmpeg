@@ -8,3 +8,9 @@ ffmpeg -i in.mp4 -vf deshake out.mp4
 res=`show res`
 fps=25
 ffmpeg -f x11grab -s $res -r $fps -i :0.0 -sameq /tmp/out.mpg
+
+# rotate
+-vf transpose=1 (90 clockwise)
+
+# quality
+-crf 30 (smaller number = higher quality, bigger file)
