@@ -74,7 +74,7 @@ syntax on
 set hlsearch
 set winminheight=0
 set laststatus=2
-set listchars="tab:‣\ :space:·"
+set listchars=tab:‣\ ,space:·
 
 let loaded_matchparen=1   " don't highlight matching ()[]{}s
 let perl_extended_vars=1  " highlight perl $extended->{variables}
@@ -216,6 +216,8 @@ nmap <leader>dk <plug>(signify-prev-hunk)
 autocmd! FileType arduino  FileTypeCode
 autocmd! FileType c        FileTypeCode
 autocmd! FileType cpp      FileTypeCode
+autocmd! FileType cmake    FileTypeCode
+autocmd! FileType qml      FileTypeCode
 autocmd! FileType sh       FileTypeCode
 autocmd! FileType vim      FileTypeCode
 command! FileTypeCode setlocal number | set cindent
@@ -225,7 +227,7 @@ command! FileTypeRust setlocal number | set cindent | set noexpandtab
 
 autocmd! FileType perl FileTypePerl
 command! FileTypePerl setlocal number
-\	| set iskeyword-=:
+\	| setlocal iskeyword-=:
 \	| setlocal cindent
 \	| setlocal keywordprg=perldoc\ -f
 \	| setlocal makeprg=perl\ -c\ %
