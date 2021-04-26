@@ -465,6 +465,14 @@ function du() {
 		command du "$@"
 	fi
 }
+function cal() {
+	if test -z "$1"; then
+		command cal -3
+	else
+		command cal "$@"
+	fi
+}
+
 #alias www='webfsd -d -F -p 8080 -r .'
 alias ntop='sudo jnettop'
 #alias w1='cd ~/fotos/incoming && sudo gphoto2 -P'
