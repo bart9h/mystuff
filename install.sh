@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 cd "$HOME"  || exit 1
 
@@ -11,13 +11,13 @@ if ! test -d "$ETC"; then
 fi
 
 for cmd in git vim; do
-	if test "$(which $cmd)" == ""; then
+	if test "`which $cmd`" == ""; then
 		echo "$cmd not found."
 		exit
 	fi
 done
 
-function LINK() {
+function LINK {
 	local from="$1"
 	local to="$2"
 
@@ -33,23 +33,38 @@ function LINK() {
 		fi
 		mv -v "$to" "$bk"
 	fi
-	ln -sv "$from" "$to"  || exit 1
+	ln -s "$from" "$to"  || exit 1
+	echo "new link $from -> $to"
 }
 
-function L() {
+function L {
 	LINK "$ETC/$1" "$HOME/$2"
 }
 
-L bash/bashrc    .bashrc
+function has {
+	which "$1" >/dev/null 2>/dev/null
+}
+
+if has bash; then
+	L bash/bashrc  .bashrc
+else
+	L etc/profile  .profile
+fi
 L etc/inputrc    .inputrc
-L mplayer        .mplayer
 L etc/tmux.conf  .tmux.conf
 L etc/tigrc      .tigrc
 L vim            .vim
-L x11/xsession   .xsession
+
+if has xinit; then
+	L x11/xsession   .xsession
+	has mplayer && L mplayer .mplayer
+fi
 
 git_dir="$XDG_CONFIG_HOME/git"
-test -d "$git_dir" || mkdir -v -p "$git_dir"
+if ! test -d "$git_dir"; then
+	echo "creating directory \"$git_dir\""
+	mkdir -p "$git_dir"
+fi
 LINK "$ETC/etc/gitconfig"  "$git_dir/config"
 
 vundle_dir="$HOME/.vim/bundle/vundle"
