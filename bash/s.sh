@@ -57,6 +57,10 @@ EOF
 			test "$p" != "/" && session_name="$p"
 		fi
 
-		tmux $escape new-session -s "$session_name"
+		if -n "$escape"; then
+			tmux set-option -g prefix C-s \; new-session -s "$session_name"
+		else
+			tmux new-session -s "$session_name"
+		fi
 	fi
 }
