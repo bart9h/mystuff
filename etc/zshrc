@@ -1,0 +1,145 @@
+#!/bin/zsh
+
+test -z "$ETC" && export ETC="$HOME/etc"
+test -z "$XDG_CONFIG_HOME" && export XDG_CONFIG_HOME="$HOME/.config"
+
+
+#{{{1 load pre-config local setup
+
+test -s "$XDG_CONFIG_HOME/zsh/pre" && source "$XDG_CONFIG_HOME/zsh/pre"
+
+
+#{{{1 system-specific
+
+case "$(uname -s)" in
+	OpenBSD)
+		;;
+	Linux)
+		export GNU_COREUTILS=1
+		;;
+	Darwin)
+		test "$(which ls) != /bin/ls" && export GNU_COREUTILS=1
+		;;
+esac
+
+if test "$GNU_COREUTILS" = "1"; then
+	export GNU_LS_OPTIONS="--color=always"
+	export GNU_LS_LONG_OPTIONS="-G"
+fi
+
+
+#{{{1 shell setup
+
+NEWLINE=$'\n'
+test -z "$COLOR" && COLOR='white'
+PS1="%B%F{yellow}%*%f %F{$COLOR}%n@%m%f %F{yellow}%~%f${NEWLINE}%#%b "
+bindkey -v  # vi command-line editing mode
+set -o noclobber
+
+HISTFILE="$XDG_CONFIG_HOME/zsh/histfile"
+HISTSIZE=1000
+SAVEHIST=1000
+
+
+#{{{1 software setup
+
+export EDITOR='vim'
+export LESS='-X -F -M -R -f -J -W -j4'
+export PAGER='less'
+
+alias ag='ag --pager less'
+alias bc='bc -lq'
+alias tig='tig --all'
+
+
+#{{{1 ls related aliases and functions
+
+function a() {
+    local n=$( ls "$@" | wc -l )
+	if test $n -gt 0; then
+		if test $n -lt $(( $LINES / 2 )); then
+			ls $GNU_LS_OPTIONS -1F "$@"
+		else
+			ls $GNU_LS_OPTIONS -F "$@"
+		fi
+	fi
+}
+
+alias d='ls -lhF $GNU_LS_OPTIONS $GNU_LS_LONG_OPTIONS'
+alias z='d -rt'
+
+
+#{{{1 aliases and functions that mask existing programs
+
+function mv() {
+	local target="${!#}"
+	if [[ "$target" =~ /$ ]]; then
+		test -d "$target" || mkdir -v -p "$target"
+	fi
+	command mv -i "$@"
+}
+
+function df() {
+	if test -z "$1"; then
+		command df -h .
+	else
+		command df "$@"
+	fi
+}
+
+function du() {
+	if test -z "$1"; then
+		command du -shc *
+	else
+		command du "$@"
+	fi
+}
+
+function cal() {
+	if test -z "$1"; then
+		command cal -3
+	else
+		command cal "$@"
+	fi
+}
+
+
+#{{{1 other aliases and functions
+
+source "$ETC/bash/s.sh"
+source "$ETC/bash/v.sh"
+
+function mkcd() { mkdir -p "$1" && cd "$1"; }
+function cd..() {
+	local dir="$PWD"
+	cd .. || return
+	rmdir --ignore-fail-on-non-empty "$dir"
+	test -d "$dir" &&
+	ls -F "$dir" &&
+	read "?rm -rf \"$dir\" (y/[n])? " &&
+	test "$REPLY" = "y" &&
+	rm -rfv "$dir"
+}
+
+function g() {
+	if test -z "$1"; then
+		sed -n -e '/^\[alias/,/\[/p' "$XDG_CONFIG_HOME/git/config" | grep -v '^\['
+	else
+		git "$@"
+	fi
+}
+
+alias Con="( files=\"\$(git status --porcelain | grep '^UU' | cut -d ' ' -f 2-)\" && if test -n \"\$files\"; then cd \"\$(git rev-parse --show-toplevel)\" && vim -o \$files +'set nofoldenable' +/'^\(=======$\|<<<<<<< \|>>>>>>> \)'; else echo 'No conflict.'; fi )"
+
+alias dif="$ETC/scripts/dif.sh"
+alias vimv="$ETC/scripts/vimv.sh"
+
+alias l='less'
+alias data='date +%Y-%m-%d'
+
+
+#{{{1 load post-config local setup
+
+test -s "$XDG_CONFIG_HOME/zsh/post" && source "$XDG_CONFIG_HOME/zsh/post"
+
+# vim600:foldmethod=marker:
