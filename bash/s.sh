@@ -58,9 +58,9 @@ EOF
 		fi
 
 		if [[ -n "$escape" ]]; then
-			tmux set-option -g prefix C-s \; new-session -s "$session_name"
+			tmux -2u set-option -g prefix C-s \; new-session -s "$session_name"
 		else
-			tmux new-session -s "$session_name"
+			tmux -2u new-session -s "$session_name"
 		fi
 	fi
 }
