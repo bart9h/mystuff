@@ -17,9 +17,9 @@ function v()
 				cut -c 4- |
 				exec xargs -d '\n' $ETC/bash/vim_tty +"chdir $pwd" -o
 		)
-	elif find -maxdepth 1 -type f | grep . >/dev/null 2>&1; then
+	elif find . -maxdepth 1 -type f | grep . >/dev/null 2>&1; then
 		vim "$(
-			find -maxdepth 1 -type f -not -name '.*' -print0 |
+			find . -maxdepth 1 -type f -not -name '.*' -print0 |
 			xargs -0 file |
 			grep ':.*\<text\>' |
 			cut -d : -f 1 |
