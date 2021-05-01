@@ -27,9 +27,13 @@ fi
 NEWLINE=$'\n'
 test -z "$COLOR" && COLOR='white'
 PS1="%B%F{yellow}%*%f %F{$COLOR}%n@%m%f %F{yellow}%~%f${NEWLINE}%#%b "
-bindkey -v  # vi command-line editing mode
 set -o noclobber
+set -o inc_append_history
 
+bindkey -v  # vi command-line editing mode
+bindkey -v '^R' 'history-incremental-search-backward'
+
+mkdir -p "$XDG_CONFIG_HOME/zsh"
 HISTFILE="$XDG_CONFIG_HOME/zsh/histfile"
 HISTSIZE=1000
 SAVEHIST=1000
