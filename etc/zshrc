@@ -107,7 +107,7 @@ function mkcd() { mkdir -p "$1" && cd "$1"; }
 function cd..() {
 	local dir="$PWD"
 	cd .. || return
-	rmdir --ignore-fail-on-non-empty "$dir"
+	rmdir "$dir" 2>/dev/null
 	test -d "$dir" &&
 	ls -F "$dir" &&
 	read "?rm -rf \"$dir\" (y/[n])? " &&
