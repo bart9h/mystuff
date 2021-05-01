@@ -230,7 +230,9 @@ autocmd! FileType cpp      FileTypeCode
 autocmd! FileType cmake    FileTypeCode
 autocmd! FileType qml      FileTypeCode
 autocmd! FileType sh       FileTypeCode
+autocmd! FileType zsh      FileTypeCode
 autocmd! FileType vim      FileTypeCode
+autocmd! FileType php      FileTypeCode
 command! FileTypeCode setlocal number | set cindent
 
 autocmd! FileType rust FileTypeRust
