@@ -64,3 +64,9 @@ EOF
 		fi
 	fi
 }
+
+if test -n "$1" -a -z "$s_function_loaded"; then
+	s "$@"
+else
+	s_function_loaded=1
+fi
