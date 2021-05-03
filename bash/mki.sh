@@ -12,41 +12,41 @@ function mki()
 	*)
 	local date=`date +%Y%m%d`
 	local name="`basename $PWD`"
-	[ "$name" == "src" -o "$name" == "build" ] && name="`basename $(cd ..; echo $PWD)`"
+	[[ "$name" == "src" || "$name" == "build" ]] && name="`basename $(cd ..; echo $PWD)`"
 
 	local args
-	if test -d 'CVS'; then
+	if [[ -d 'CVS' ]]; then
 		args="--pkgversion=cvs-$date"
-	elif test -d '.svn'; then
+	elif [[ -d '.svn' ]]; then
 		local rev=$( svn info | grep '^Revision:\ \+[0-9]\+$' | cut -d ' ' -f 2 )
 		local ver
-		if test "$rev" -ge 1; then
+		if [[ "$rev" -ge 1 ]]; then
 			ver="$rev"
 		else
 			ver="$date"
 		fi
 		args="--pkgversion=$ver-svn"
-	elif test -d '.git'; then
+	elif [[ -d '.git' ]]; then
 		args="--pkgversion=$date-git"
 	else
 		name="`echo "$name" | cut -d - -f 1`"
 	fi
 
 	local cmd
-	if test -f SConstruct -o -f Sconstruct -o -f sconstruct; then
+	if [[ -f SConstruct || -f Sconstruct || -f sconstruct ]]; then
 		cmd="scons install"
-	elif test -f build.ninja; then
+	elif [[ -f build.ninja ]]; then
 		cmd="ninja install"
-	elif test -f waf; then
+	elif [[ -f waf ]]; then
 		cmd="./waf install"
 	else
 		cmd="make install"
 	fi
 
 	local t
-	if test -e /etc/slackware-version; then
+	if [[ -e /etc/slackware-version ]]; then
 		t=slackware
-	elif test -e /etc/debian_version -o -e /etc/devuan_version; then
+	elif [[ -e /etc/debian_version || -e /etc/devuan_version ]]; then
 		t=debian
 	else
 		echo 'nope'; false; return
@@ -54,8 +54,14 @@ function mki()
 
 	cmd="sudo checkinstall --fstrans=no --type=$t --nodoc --pkgname=\"$name\" $args $CHECKINSTALL_ARGS $cmd"
 	echo "$cmd"
-	read -p "proceed ([y]/n)? " answer
-	test "$answer" == "y" -o "$answer" == "" || return
+#	if [[ -n "$BASH" ]]; then
+#		echo bash
+#		read -p "proceed ([y]/n)? " answer
+#	elif [[ -n "$ZSH_VERSION" ]]; then
+#		echo zsh
+#		read answer?'proceed ([y]/n)? '
+#	fi
+#	[[ "$answer" == "y" || "$answer" == "" ]] || return
 	$cmd
 	;;
 	esac
