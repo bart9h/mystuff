@@ -17,7 +17,7 @@ If directory ends in "src" or "build", use parent dir as label (no chdir is done
 EOF
 		return
 	elif [[ "$1" == "" ]]; then
-		tmux list-sessions
+		tmux list-sessions \; list-clients
 		return
 	fi
 
@@ -26,7 +26,7 @@ EOF
 
 	# if arg is _, create "meta" tmux session
 	if [[ "$name" == "_" ]]; then
-		escape="set-option -g prefix C-s \; "
+		escape=" \; set-option -g prefix C-s"
 		if [[ -n "$1" ]]; then
 			name="$1"; shift
 		fi
@@ -39,8 +39,16 @@ EOF
 	fi
 
 	# if arg is existing session, attach
-	if [[ -z "$1" ]] && tmux list-sessions -F '#{session_name}' | grep "^${name}$"; then
-		tmux attach-session -t $name
+	if [[ -z "$1" ]] && tmux list-sessions -F '#{session_group}' | grep "^${name}$"; then
+		local first_detached_line="$(tmux ls | grep "(group $name)$" | head -1)"
+		if [[ -n "$first_detached_line" ]]; then
+			# there is a non-attached session group, attach to the first one
+			detached=$( cut -d : -f 1 <<< $first_detached_line )
+			tmux attach-session -t $detached
+		else
+			# all sessions are attached, create new session
+			tmux -2u new-session -t $name
+		fi
 
 	else  # create session
 		local session_name
@@ -57,11 +65,7 @@ EOF
 			[[ "$p" != "/" ]] && session_name="$p"
 		fi
 
-		if [[ -n "$escape" ]]; then
-			tmux -2u set-option -g prefix C-s \; new-session -s "$session_name"
-		else
-			tmux -2u new-session -s "$session_name"
-		fi
+		tmux -2u new-session -t $session_name $escape
 	fi
 }
 
