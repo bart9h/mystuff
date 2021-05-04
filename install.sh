@@ -63,6 +63,10 @@ if has xinit; then
 	has mplayer && L mplayer .mplayer
 fi
 
+mkdir -p "$XDG_CONFIG_HOME/tmux"
+tmux_local="$XDG_CONFIG_HOME/tmux/local"
+test -e "$tmux_local" || touch "$tmux_local" # TODO: skel
+
 git_dir="$XDG_CONFIG_HOME/git"
 if ! test -d "$git_dir"; then
 	echo "creating directory \"$git_dir\""
