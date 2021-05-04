@@ -1,0 +1,6 @@
+To push to a non-bare repository (for ex. deploy), edit .git/config and...
+
+[remote "myremote"]
+    url = ssh://example.com/dir/repo
+    fetch = +refs/heads/*:refs/remotes/myremote/*
+    push  = +refs/heads/*:refs/remotes/myremote/*      <== ...add this line.
