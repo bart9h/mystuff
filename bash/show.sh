@@ -18,7 +18,7 @@ function get_xwininfo()
 
 function show()
 {
-	local what="$1"; shift
+	local what="$1"; test -n "$1" && shift
 	case "$what" in
 
 	ip)#                 : external IP address (via checkip.dyndns.org)
