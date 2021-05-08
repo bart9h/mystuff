@@ -22,11 +22,11 @@ EOF
 	fi
 
 	local name="$(sed 's/\/$//' <<< "$1")"; shift
-	local escape=""
+	local second_level=""
 
 	# if arg is _, create "meta" tmux session
 	if [[ "$name" == "_" ]]; then
-		escape=" \; set-option -g prefix C-s"
+		second_level=1
 		if [[ -n "$1" ]]; then
 			name="$1"; shift
 		fi
@@ -65,7 +65,11 @@ EOF
 			[[ "$p" != "/" ]] && session_name="$p"
 		fi
 
-		tmux -2u new-session -t $session_name $escape
+		if [[ -z $second_level ]]; then
+			tmux -2u new-session -t $session_name
+		else
+			tmux -2u new-session -t $session_name \; set-option -g prefix C-s
+		fi
 	fi
 }
 
