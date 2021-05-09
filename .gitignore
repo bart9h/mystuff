@@ -4,3 +4,4 @@ util/last_ip.txt
 vim/after
 vim/vimrc.local
 tags
+Session.vim
