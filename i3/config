@@ -3,9 +3,7 @@ set $mod Mod4
 floating_modifier $mod
 hide_edge_borders both
 
-bindsym $mod+q kill
-bindsym $mod+w exec firefox
-bindsym $mod+e exec mate-terminal
+bindsym $mod+BackSpace kill
 bindsym $mod+Return exec mate-terminal
 bindsym $mod+r restart
 
