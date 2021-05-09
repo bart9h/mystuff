@@ -16,6 +16,8 @@ bindsym $mod+Home   exec --no-startup-id xdotool mousemove $(( $(xwininfo -root|
 bindsym $mod+Insert exec --no-startup-id xdotool mousemove 8 0
 bindsym $mod+Up     exec --no-startup-id $ETC/desktop/brightness.pl up
 bindsym $mod+Down   exec --no-startup-id $ETC/desktop/brightness.pl down
+bindsym $mod+Right  exec --no-startup-id $ETC/desktop/volume.pl up
+bindsym $mod+Left   exec --no-startup-id $ETC/desktop/volume.pl down
 bindsym $mod+Shift+s  exec --no-startup-id $ETC/desktop/recstop
 
 bindsym $mod+a layout stacking
