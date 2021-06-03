@@ -62,8 +62,4 @@ else {
 	$msg = '`pacmd dump` failed to list "set-sink-volume" lines';
 }
 
-`pkill aosd_cat`;
-if (open (my $fh, '|-', '/usr/bin/aosd_cat -u 500 -f 0 -p 4 -n "Courier 32" -R yellow')) {
-	print $fh $msg;
-	close $fh;
-}
+`echo "$msg" | /usr/bin/dzen2 -p 1 -fn "-*-courier-*-r-*-*-24-*-*-*-*-*-*-*"`;

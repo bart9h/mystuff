@@ -66,9 +66,6 @@ elsif ($brightness > 1) {
 #  OSD feedback
 #
 
-`pkill aosd_cat`;
-if (open (my $fh, '|-', '/usr/bin/aosd_cat -u 500 -f 0 -p 4 -n "Courier 32" -R yellow')) {
-	my $bar = int($brightness*20);
-	print $fh 'birghtness ['.('=' x $bar).('-' x (20-$bar)).']';
-	close $fh;
-}
+my $bar = int($brightness*20);
+my $msg = 'birghtness ['.('=' x $bar).('-' x (20-$bar)).']';
+`echo "$msg" | /usr/bin/dzen2 -p 1 -fn "-*-courier-*-r-*-*-24-*-*-*-*-*-*-*"`;
