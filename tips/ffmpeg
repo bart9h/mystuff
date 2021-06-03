@@ -14,3 +14,7 @@ ffmpeg -f x11grab -s $res -r $fps -i :0.0 -sameq /tmp/out.mpg
 
 # quality
 -crf 30 (smaller number = higher quality, bigger file)
+
+# cut (use `ffplay -i -ss -t[o]` for preview)
+ffmpeg -i input.mp4 -ss $start_position -t  $duration     -c copy  output.mp4
+ffmpeg -i input.mp4 -ss $start_position -to $end_position -c copy  output.mp4
