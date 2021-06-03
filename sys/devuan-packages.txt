@@ -12,8 +12,8 @@ deb-src  http://deb.devuan.org/merged ascii-backports  main  non-free
 
 ### apt update && install these packages:
 
- screen
  aptitude
+ tmux
  vim
  git
  tig

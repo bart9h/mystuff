@@ -44,6 +44,7 @@
 	ri = rebase --autostash -i
 	co = checkout
 	p  = pull --autostash --rebase
+	ls = ls-files
 
 [apply]
 	whitespace = strip

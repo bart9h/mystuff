@@ -45,7 +45,10 @@ function has {
 	which "$1" >/dev/null 2>/dev/null
 }
 
-if has bash; then
+if has zsh; then
+	L etc/zshrc    .zshrc
+	mkdir -p "$XDG_CONFIG_HOME/zsh"
+elif has bash; then
 	L bash/bashrc  .bashrc
 else
 	L etc/profile  .profile

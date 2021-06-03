@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use v5.10;
 
-my $ultima_baixada = '20200207';
+my $ultima_baixada = '20200814';
 
 # find ~/fotos/ -name '*.jpg' | sort | xargs exiftool -Model -DateTimeOriginal | less
 

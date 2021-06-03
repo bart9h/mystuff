@@ -17,7 +17,7 @@ If directory ends in "src" or "build", use parent dir as label (no chdir is done
 EOF
 		return
 	elif [[ "$1" == "" ]]; then
-		tmux list-sessions \; list-clients
+		tmux list-sessions \; list-clients 2>/dev/null
 		return
 	fi
 
