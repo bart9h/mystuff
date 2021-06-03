@@ -23,6 +23,7 @@ Plugin          'mhinz/vim-signify'         " quick per-line git diff status
 Plugin         'bart9h/vim-cpp-modern'      " better C++ highlighting
 Plugin         'lifepillar/pgsql.vim'       " PostgreSQL syntax highlighting
 Plugin        'fedorenchik/qt-support.vim'  " Qt's QML and qmake.pro
+Plugin         'gregsexton/MatchTag'        " highlight matching HTML/XML tags
 
 " misc
 Plugin          '907th/vim-auto-save'       " activate with :AutoSaveToggle
@@ -45,6 +46,7 @@ set updatetime=100
 unlet! skip_defaults_vim
 source $VIMRUNTIME/defaults.vim
 set tags+=$HOME/.cache/ctags/tags
+packadd! matchit
 set encoding=utf-8
 set noincsearch
 set mouse=
