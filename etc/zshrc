@@ -20,7 +20,7 @@ fi
 
 #{{{1 lazy-loading of functions
 
-for file in "$ETC/bash/"*.sh; do
+for file in $ETC/{zsh,bash}/*.sh; do
 	function_name="$( basename "$file" | sed 's/\.sh$//' )"
 	alias $function_name="call $function_name"
 	unset function_name
@@ -42,10 +42,13 @@ function call()
 
 	# Load function source.
 	if [[ "$function_type" != "function" ]]; then
-		local source_file="$ETC/bash/$function_name.sh"
-		if [[ -r "$source_file" ]]; then
-			source "$source_file" ""
-		fi
+		for dir in zsh bash; do
+			local source_file="$ETC/$dir/$function_name.sh"
+			if [[ -r "$source_file" ]]; then
+				source "$source_file" ""
+				break
+			fi
+		done
 	fi
 
 	# Call the function.
