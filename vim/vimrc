@@ -44,6 +44,7 @@ set updatetime=100
 
 unlet! skip_defaults_vim
 source $VIMRUNTIME/defaults.vim
+set tags+=$HOME/.cache/ctags/tags
 set encoding=utf-8
 set noincsearch
 set mouse=
