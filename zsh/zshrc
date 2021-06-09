@@ -1,9 +1,6 @@
-#!/bin/zsh
-
+#!zsh
 test -z "$ETC" && export ETC="$HOME/etc"
 test -z "$XDG_CONFIG_HOME" && export XDG_CONFIG_HOME="$HOME/.config"
-
-
 
 #{{{1 system-specific
 
@@ -18,51 +15,19 @@ elif which colorls >/dev/null 2>/dev/null; then
 fi
 
 
-#{{{1 lazy-loading of functions
+#{{{1 load of functions from $ETC/zsh/functions/
 
-for file in $ETC/{zsh,bash}/*.sh; do
-	function_name="$( basename "$file" | sed 's/\.sh$//' )"
-	alias $function_name="call $function_name"
-	unset function_name
-done; unset file
+fpath=($ETC/zsh/functions $fpath)
+autoload "$ETC/zsh/functions/"*
 
-function call()
-{
-	local function_name="$1"; shift
-	local function_type="$(type -t "$function_name" 2>/dev/null)"
 
-	# Undo alias on the first run.
-	if [[ "$function_type" == "alias" ]]; then
-		local alias_content="$( alias "$function_name" | cut -d "'" -f 2 )"
-		if test "$alias_content" == "call $function_name"; then
-			unalias "$function_name"
-			function_type="$( type -t "$function_name" 2>/dev/null )"
-		fi
-	fi
-
-	# Load function source.
-	if [[ "$function_type" != "function" ]]; then
-		for dir in zsh bash; do
-			local source_file="$ETC/$dir/$function_name.sh"
-			if [[ -r "$source_file" ]]; then
-				source "$source_file" ""
-				break
-			fi
-		done
-	fi
-
-	# Call the function.
-	"$function_name" "$@"
-}
+#{{{1 load pre-config local setup
 
 function _load() {
 	if [[ -r "$1" ]]; then
 		source "$1"
 	fi
 }
-
-
-#{{{1 load pre-config local setup
 
 _load "$XDG_CONFIG_HOME/zsh/pre"
 
@@ -194,4 +159,4 @@ alias data='date +%Y-%m-%d'
 
 _load "$XDG_CONFIG_HOME/zsh/post"
 
-# vim600:foldmethod=marker:
+#{{{1 vim600:foldmethod=marker:

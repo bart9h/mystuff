@@ -46,7 +46,7 @@ function has {
 }
 
 if has zsh; then
-	L etc/zshrc    .zshrc
+	L zsh/zshrc    .zshrc
 	mkdir -p "$XDG_CONFIG_HOME/zsh"
 elif has bash; then
 	L bash/bashrc  .bashrc
