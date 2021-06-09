@@ -49,6 +49,8 @@ add-zsh-hook precmd vcs_info
 PS1='%B%F{yellow}%*%f %F{$COLOR}%n@%m%f %F{yellow}%~ %F{red}${vcs_info_msg_0_}%f${NEWLINE}%#%b '
 set -o noclobber
 set -o inc_append_history
+set -o hist_find_no_dups
+set -o hist_ignore_space
 
 bindkey -v  # vi command-line editing mode
 bindkey -v '^R' 'history-incremental-search-backward'
