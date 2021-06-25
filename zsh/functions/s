@@ -15,7 +15,8 @@ If directory ends in "src" or "build", use parent dir as label (no chdir is done
 EOF
 	return
 elif [[ "$1" == "" ]]; then
-	tmux list-sessions \; list-clients
+	pgrep tmux >/dev/null 2>/dev/null \
+		&& tmux list-sessions \; list-clients
 	return
 fi
 
@@ -37,7 +38,10 @@ if [[ "$name" == "." ]]; then
 fi
 
 # if arg is existing session, attach
-if [[ -z "$1" ]] && tmux list-sessions -F '#{session_group}' | grep "^${name}$"; then
+if [[ -z "$1" ]] \
+	&&  pgrep tmux >/dev/null 2>/dev/null \
+	&&  tmux list-sessions -F '#{session_group}' | grep "^${name}$"
+then
 	local first_detached_line="$(tmux ls | grep "(group $name)$" | head -1)"
 	if [[ -n "$first_detached_line" ]]; then
 		# there is a non-attached session group, attach to the first one
