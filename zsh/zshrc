@@ -55,6 +55,11 @@ set -o hist_ignore_space
 bindkey -v  # vi command-line editing mode
 bindkey -v '^R' 'history-incremental-search-backward'
 
+# press 'v' in vi command mode to open the editor for the current command line
+autoload edit-command-line
+zle -N edit-command-line
+bindkey -M vicmd v 'edit-command-line'
+
 mkdir -p "$XDG_CONFIG_HOME/zsh"
 HISTFILE="$XDG_CONFIG_HOME/zsh/histfile"
 HISTSIZE=1000
