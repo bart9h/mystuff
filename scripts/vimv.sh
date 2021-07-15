@@ -50,7 +50,7 @@ done
 
 
 function quote {
-	echo "$@" | sed 's/\$/\\$/g'
+	echo "$@" | sed 's/\$/\\$/g;s/\"/\\\"/g'
 }
 
 # Calculate the max lenght of names, to format the columns properly:
