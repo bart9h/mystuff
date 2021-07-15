@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 #
 # VImv, a manual mass-renaming tool using the VIM editor.
 # Rodolfo Borges <barrett@9hells.org>
@@ -11,7 +11,7 @@ include_instructions=false
 
 
 # Usage instructions:
-function usage() {
+function usage {
 	echo "usage: vimv [-v|-f|-i] <files-to-rename>"
 	echo "the -v or -f options (use only one) are passed to mv(1)"
 	echo "the -i option includes brief instructions in the script"
@@ -49,14 +49,14 @@ while true; do
 done
 
 
-function quote() {
+function quote {
 	echo "$@" | sed 's/\$/\\$/g'
 }
 
 # Calculate the max lenght of names, to format the columns properly:
 maxlen=0
 for z in "$@"; do
-	len=$( quote "$z" | wc -c)
+	len=`quote "$z" | wc -c`
 	test $len -gt $maxlen && maxlen=$len
 done
 
@@ -74,8 +74,8 @@ done
 
 EOF
 	for z in "$@"; do
-		q="$( quote "$z" )"
-		len=$( echo "$q" | wc -c)
+		q="`quote "$z"`"
+		len=`echo "$q" | wc -c`
 		echo -n "mv${prompt}${verbose}${force} \"$q\""
 		let count=maxlen-len
 		while test $count -gt 0; do
