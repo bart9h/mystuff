@@ -1,1 +1,5 @@
 In about:config set toolkit.legacyUserProfileCustomizations.stylesheets true
+
+Trydactil hints
+:set hintfiltermode vimperator-reflow
+:set hintchars 1234567890
