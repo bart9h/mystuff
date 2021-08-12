@@ -73,7 +73,6 @@ export PAGER='less'
 export LESS="-X -F -M -R -f -J -W -j4 $sys_less"
 
 alias ag='ag --pager less'
-alias bc='bc -lq'
 alias tig='tig --all'
 
 
@@ -130,6 +129,13 @@ function cal() {
 	fi
 }
 
+function bc() {
+	if test -z "$1"; then
+		command bc -lq
+	else
+		echo "$@" | command bc -lq
+	fi
+}
 
 #{{{1 other aliases and functions
 
