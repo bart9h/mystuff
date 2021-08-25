@@ -220,6 +220,9 @@ nmap <leader>f <Plug>(qf_qf_toggle)
 " comment/uncomment line (tpope/vim-commentary)
 nmap <leader>c gcc
 
+" open fugitive summary in a new tab
+nmap <leader>G :tabnew +Git<CR><c-w>j:q<CR>
+
 " navigate vcs diff hunks (mhinz/vim-signify)
 nmap <leader>dj <plug>(signify-next-hunk)
 nmap <leader>dk <plug>(signify-prev-hunk)
