@@ -97,15 +97,45 @@ cpus)#               : number of CPUs
 ;;#
 
 width)#
-	check_X && get_xwininfo Width
+	case $OSTYPE in
+		darwin*)
+			system_profiler SPDisplaysDataType |awk '/Resolution/ {print $2}'
+			;;
+		linux*)
+			check_X && get_xwininfo Width
+			;;
+		*)
+			echo 1
+			;;
+	esac
 ;;#
 
 height)#
-	check_X && get_xwininfo Height
+	case $OSTYPE in
+		darwin*)
+			system_profiler SPDisplaysDataType |awk '/Resolution/ {print $4}'
+			;;
+		linux*)
+			check_X && get_xwininfo Height
+			;;
+		*)
+			echo 1
+			;;
+	esac
 ;;#
 
 resolution|res)#  : resolution of the X display
-	check_X && echo $(get_xwininfo Width)x$(get_xwininfo Height)
+	case $OSTYPE in
+		darwin*)
+			system_profiler SPDisplaysDataType |awk '/Resolution/ {print $2"x"$4}'
+			;;
+		linux*)
+			check_X && echo $(get_xwininfo Width)x$(get_xwininfo Height)
+			;;
+		*)
+			echo 1
+			;;
+	esac
 ;;#
 
 termsize|rez)#    : resolution of the text terminal
