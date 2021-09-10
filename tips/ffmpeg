@@ -1,6 +1,9 @@
 # remove audio
 ffmpeg -i $input_file -c copy -an $output_file
 
+# join video and audio
+ffmpeg -i video.mp4 -i audio.wav -c copy output.mkv
+
 # stabilization
 ffmpeg -i in.mp4 -vf deshake out.mp4
 
