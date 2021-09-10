@@ -230,10 +230,15 @@ nmap <leader>dk <plug>(signify-prev-hunk)
 
 "{{{1 filetype
 
+autocmd! FileType text      FileTypeText
+autocmd! FileType markdown  FileTypeText
+command! FileTypeText setlocal nonumber
+
 autocmd! FileType arduino  FileTypeCode
 autocmd! FileType c        FileTypeCode
 autocmd! FileType cpp      FileTypeCode
 autocmd! FileType cmake    FileTypeCode
+autocmd! FileType html     FileTypeCode
 autocmd! FileType qml      FileTypeCode
 autocmd! FileType sh       FileTypeCode
 autocmd! FileType zsh      FileTypeCode
