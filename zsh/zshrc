@@ -4,7 +4,14 @@ test -z "$XDG_CONFIG_HOME" && export XDG_CONFIG_HOME="$HOME/.config"
 
 #{{{1 system-specific
 
-[[ "$(uname -s)" == "OpenBSD" ]] && sys_less='-c'
+case $(uname -s) in
+	Darwin)
+		alias ldd='otool -L'
+		;;
+	OpenBSD)
+		sys_less='-c'
+		;;
+esac
 
 if ls --version >/dev/null 2>/dev/null; then
 	sys_ls="--color=always"
