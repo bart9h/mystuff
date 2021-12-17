@@ -1,0 +1,13 @@
+#!zsh
+if [[ $# != 4 ]]; then
+	echo 'You have to pass 4 values.'
+else
+	if   [[ $1 == x ]]; then x="(($2) * ($3)) / ($4)"
+	elif [[ $2 == x ]]; then x="(($1) * ($4)) / ($3)"
+	elif [[ $3 == x ]]; then x="(($1) * ($4)) / ($2)"
+	elif [[ $4 == x ]]; then x="(($2) * ($3)) / ($1)"
+	else echo 'You must pass an "x".'; exit
+	fi
+	echo -n "x = $x\nx = "
+	echo "$x" | bc
+fi
