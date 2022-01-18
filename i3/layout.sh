@@ -8,6 +8,13 @@ layout() {
 	i3-msg 'split v'
 	i3-msg 'focus left'
 	i3-msg 'split v'
+	i3-msg 'exec mate-terminal'
+	sleep .2
+	i3-msg 'split v'
+	i3-msg 'layout tabbed'
+	i3-msg 'focus up'
+	i3-msg 'split v'
+	i3-msg 'layout tabbed'
 	i3-msg 'focus right'
 	i3-msg 'layout tabbed'
 }
