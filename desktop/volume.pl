@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use v5.10;
 
-my $steps = 32;
+my $steps = 20;
 
 
 #
