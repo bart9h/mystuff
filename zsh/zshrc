@@ -1,6 +1,8 @@
 #!zsh
 test -z "$ETC" && export ETC="$HOME/etc"
-test -z "$XDG_CONFIG_HOME" && export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
+export XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
+export XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
 
 #{{{1 system-specific
 
@@ -67,8 +69,8 @@ autoload edit-command-line
 zle -N edit-command-line
 bindkey -M vicmd v 'edit-command-line'
 
-mkdir -p "$XDG_CONFIG_HOME/zsh"
-HISTFILE="$XDG_CONFIG_HOME/zsh/histfile"
+[[ -d "$XDG_STATE_HOME/zsh" ]] || $mkdir -p "$XDG_STATE_HOME/zsh"
+HISTFILE="$XDG_STATE_HOME/zsh/history"
 HISTSIZE=1000
 SAVEHIST=1000
 

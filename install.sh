@@ -3,6 +3,7 @@
 cd "$HOME"  || exit 1
 
 test -z "$XDG_CONFIG_HOME" && XDG_CONFIG_HOME="$HOME/.config"
+test -z "$XDG_STATE_HOME" && XDG_STATE_HOME="$HOME/.local/state"
 
 test -z "$ETC" && ETC="$HOME/etc"
 if ! test -d "$ETC"; then
@@ -48,6 +49,7 @@ function has {
 if has zsh; then
 	L zsh/zshrc    .zshrc
 	mkdir -p "$XDG_CONFIG_HOME/zsh"
+	mkdir -p "$XDG_STATE_HOME/zsh"
 elif has bash; then
 	L bash/bashrc  .bashrc
 else
