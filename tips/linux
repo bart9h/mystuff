@@ -1,1 +1,3 @@
 list open tcp connections: netstat -natp
+
+python3 -m http.server

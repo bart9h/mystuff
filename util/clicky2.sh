@@ -3,8 +3,8 @@ max_dist=8
 location_delay=3
 last_click=-9999
 verbose=0
-sleep=.5
-count=100
+sleep=.01
+count=50
 
 echo 'Move the mouse pointer to the clicky location.'
 for i in `seq $location_delay -1 1`; do

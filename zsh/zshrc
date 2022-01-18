@@ -4,7 +4,7 @@ export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
 export XDG_STATE_HOME=${XDG_STATE_HOME:-$HOME/.local/state}
 export XDG_DATA_HOME=${XDG_DATA_HOME:-$HOME/.local/share}
 
-#{{{1 system-specific
+#{{{1  system-specific
 
 case $(uname -s) in
 	Darwin)
@@ -24,13 +24,13 @@ elif which colorls >/dev/null 2>/dev/null; then
 fi
 
 
-#{{{1 load of functions from $ETC/zsh/functions/
+#{{{1  load of functions from $ETC/zsh/functions/
 
 fpath=($ETC/zsh/functions $fpath)
 autoload "$ETC/zsh/functions/"*
 
 
-#{{{1 load pre-config local setup
+#{{{1  load pre-config local setup
 
 function _load() {
 	if [[ -r "$1" ]]; then
@@ -41,7 +41,7 @@ function _load() {
 _load "$XDG_CONFIG_HOME/zsh/pre"
 
 
-#{{{1 shell setup
+#{{{1  shell setup
 
 NEWLINE=$'\n'
 test -z "$COLOR" && COLOR='white'
@@ -86,7 +86,7 @@ setopt inc_append_history_time   # append lines to history as soon as they are e
 setopt interactive_comments      # enable '#' comments on the interactive shell
 
 
-#{{{1 software setup
+#{{{1  software setup
 
 export EDITOR='vim'
 export PAGER='less'
@@ -101,7 +101,7 @@ alias lsblk='lsblk -o SIZE,LABEL,NAME,MOUNTPOINT,FSTYPE,UUID'
 alias tig='tig --all'
 
 
-#{{{1 ls related aliases and functions
+#{{{1  ls related aliases and functions
 
 function a() {
     local n=$( ls "$@" | wc -l )
@@ -118,7 +118,7 @@ alias d="ls -lhF $sys_ls $sys_ls_l"
 alias z='d -rt'
 
 
-#{{{1 aliases and functions that mask existing programs
+#{{{1  functions that mask existing programs
 
 function mv() {
 	local target="${!#}"
@@ -160,7 +160,8 @@ function bc() {
 	fi
 }
 
-#{{{1 other aliases and functions
+
+#{{{1  other aliases and functions
 
 function mkcd() { mkdir -p "$1" && cd "$1"; }
 function cd..() {
@@ -204,8 +205,8 @@ alias data='date +%Y-%m-%d'
 alias gk='gitk --all &'
 
 
-#{{{1 load post-config local setup
+#{{{1  load post-config local setup
 
 _load "$XDG_CONFIG_HOME/zsh/post"
 
-#{{{1 vim600:foldmethod=marker:
+#{{{1  vim600:foldmethod=marker:

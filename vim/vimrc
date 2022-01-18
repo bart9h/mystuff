@@ -8,7 +8,8 @@ Plugin 'gmarik/vundle'
 
 " nativagion
 Plugin                    'a.vim'           " jump to alternate (.h) file and back
-"Plugin 'ludovicchabant/vim-gutentags'       " automatically generate ctags
+"Plugin           'pechorin/any-jump.vim'    " jump to definition / reference / usage
+Plugin 'ludovicchabant/vim-gutentags'       " automatically generate ctags
 Plugin            'HiPhish/info.vim'        " browse GNU Info articles
 Plugin                    'netrw.vim'       " file browser
 Plugin        'romainl/vim-qf'              " quickfix enhancements
@@ -38,7 +39,7 @@ Plugin          'tpope/vim-surround'        " cs({ change, ds( remove, ys{ add
 call vundle#end()
 
 set updatetime=100
-"let g:gutentags_enabled=0
+let g:gutentags_enabled=0
 
 
 "{{{1  behaviour
@@ -46,7 +47,9 @@ set updatetime=100
 unlet! skip_defaults_vim
 source $VIMRUNTIME/defaults.vim
 set tags+=$HOME/.cache/ctags/tags
+
 packadd! matchit
+
 set encoding=utf-8
 set noincsearch
 set mouse=
@@ -80,6 +83,7 @@ set tabstop=4
 set shiftwidth=4
 set nosmarttab
 set softtabstop=0
+set noexpandtab
 
 
 "{{{1 visual
@@ -89,6 +93,7 @@ set hlsearch
 set winminheight=0
 set laststatus=2
 set listchars=tab:‣\ ,space:·
+set number
 
 let loaded_matchparen=1   " don't highlight matching ()[]{}s
 let perl_extended_vars=1  " highlight perl $extended->{variables}
@@ -109,7 +114,6 @@ set background=dark
 
 if has("gui_running")
 	set novisualbell
-	set number
 	set guioptions -=T
 	set guifont=Inconsolata\ 12
 	hi CursorLine guibg=#0000b0 guifg=white
@@ -221,7 +225,7 @@ nmap <leader>f <Plug>(qf_qf_toggle)
 nmap <leader>c gcc
 
 " open fugitive summary in a new tab
-nmap <leader>G :tabnew +Git<CR><c-w>j:q<CR>
+nmap <leader>G :tab Git<CR>
 
 " navigate vcs diff hunks (mhinz/vim-signify)
 nmap <leader>dj <plug>(signify-next-hunk)
@@ -244,14 +248,14 @@ autocmd! FileType sh       FileTypeCode
 autocmd! FileType zsh      FileTypeCode
 autocmd! FileType vim      FileTypeCode
 autocmd! FileType php      FileTypeCode
-command! FileTypeCode setlocal number | set cindent
+command! FileTypeCode set cindent
 
 autocmd! FileType rust FileTypeRust
-command! FileTypeRust setlocal number | set cindent | set noexpandtab
+command! FileTypeRust set cindent
 
 autocmd! FileType perl FileTypePerl
-command! FileTypePerl setlocal number
-\	| setlocal iskeyword-=:
+command! FileTypePerl
+\	  setlocal iskeyword-=:
 \	| setlocal cindent
 \	| setlocal keywordprg=perldoc\ -f
 \	| setlocal makeprg=perl\ -c\ %
@@ -263,8 +267,7 @@ command! FileTypePerl setlocal number
 \%+C%.%#
 
 autocmd! FileType tex FileTypeTeX
-command! FileTypeTeX setlocal number
-\	| setlocal makeprg=pdflatex\ -file-line-error\ -halt-on-error\ %
+command! FileTypeTeX setlocal makeprg=pdflatex\ -file-line-error\ -halt-on-error\ %
 
 
 "{{{1 commands

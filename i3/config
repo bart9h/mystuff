@@ -137,6 +137,7 @@ bindsym $mod+Control+F4 exec sudo s2ram
 # title, id, class
 for_window [title="sakura"] floating enable
 for_window [title=".* - mpv"] floating enable
+#for_window [title="Petipa.*"] floating enable
 
 ##### criteria #####
 #

@@ -133,6 +133,7 @@ fi
 test "$GNU_COREUTILS" == "1" && alias cp='cp -i --preserve=timestamps'
 
 alias bc='bc -lq'
+alias feh='feh --scale-down'
 alias lsof='lsof -nP'
 alias mpv='mpv --audio-display=no'
 alias qiv='qiv -e'
@@ -207,7 +208,7 @@ function ,() {
 }
 
 alias .,='cd .. && a'
-alias ,d='cd - && a'
+alias ,,='cd - && a'
 
 
 #{{{1 abbreviations

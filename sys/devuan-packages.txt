@@ -27,10 +27,10 @@ deb-src  http://deb.devuan.org/merged ascii-backports  main  non-free
 
  gitk
  xcape
- clipit
+ diodon
 .ffmpeg
  sakura
- aosd_cat
+ dzen2
 .youtube-dl
  firmware-linux
  fonts-inconsolata
@@ -47,6 +47,16 @@ libimage-exiftool-perl
 graphicsmagick
 mpv
 
+
+
+### to compile Petipa:
+
+cmake
+xorg-dev
+libssl-dev
+libjpeg-dev
+libsdl2-dev
+libsdl2-ttf-dev
 
 
 ### to compile darktable:
