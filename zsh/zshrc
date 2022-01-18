@@ -46,6 +46,7 @@ _load "$XDG_CONFIG_HOME/zsh/pre"
 NEWLINE=$'\n'
 test -z "$COLOR" && COLOR='white'
 
+# Setup git/vcs info to add to the prompt bellow.
 zstyle ':vcs_info:git:*' check-for-changes true
 zstyle ':vcs_info:git:*' unstagedstr '*'
 zstyle ':vcs_info:git:*' stagedstr '+'
@@ -55,6 +56,7 @@ autoload -Uz add-zsh-hook vcs_info
 setopt prompt_subst
 add-zsh-hook precmd vcs_info
 
+# The command prompt.
 PS1='%B%F{yellow}%*%f %F{$COLOR}%n@%m%f %F{yellow}%~ %F{red}${vcs_info_msg_0_}%f${NEWLINE}%#%b '
 set -o noclobber
 set -o inc_append_history
@@ -69,10 +71,19 @@ autoload edit-command-line
 zle -N edit-command-line
 bindkey -M vicmd v 'edit-command-line'
 
+# history options
 [[ -d "$XDG_STATE_HOME/zsh" ]] || $mkdir -p "$XDG_STATE_HOME/zsh"
 HISTFILE="$XDG_STATE_HOME/zsh/history"
-HISTSIZE=1000
-SAVEHIST=1000
+HISTSIZE=8000
+SAVEHIST=6000
+setopt extended_history          # add timestamp and duration to history file
+setopt hist_expire_dups_first    # trim dups before uniques
+setopt hist_ignore_dups          # don't add line to history if equal to previous line
+setopt hist_ignore_space         # remove lines that start with a space
+setopt hist_verify               # edit expanded line before executing
+setopt inc_append_history_time   # append lines to history as soon as they are entered
+
+setopt interactive_comments      # enable '#' comments on the interactive shell
 
 
 #{{{1 software setup
