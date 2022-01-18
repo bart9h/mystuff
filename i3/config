@@ -48,8 +48,9 @@ bindsym $mod+2      focus child
 
 bindcode $mod+51    exec --no-startup-id /home/doti/etc/i3/layout.sh
 
-bindcode $mod+107         exec flameshot gui
-bindcode $mod+Shift+107   exec flameshot full -c -d 5000
+bindcode $mod+107           exec flameshot gui
+bindcode $mod+Shift+107     exec flameshot full -c -d 5000
+bindcode $mod+Control+107   exec flameshot full -p /home/doti/screenshot.png -d 5000
 
 # move focused window
 bindsym $mod+Shift+h      move left
