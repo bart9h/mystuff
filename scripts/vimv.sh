@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # VImv, a manual mass-renaming tool using the VIM editor.
 # Rodolfo Borges <barrett@9hells.org>
