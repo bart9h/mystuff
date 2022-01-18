@@ -93,6 +93,11 @@ export PAGER='less'
 export LESS="-X -F -M -R -f -J -W -j4 $sys_less"
 
 alias ag='ag --pager less'
+alias cp='cp -i'
+alias duf='duf -hide-fs tmpfs,devtmpfs'
+alias feh='feh --quiet --scale-down'
+alias history='fc -l 1 -1'
+alias lsblk='lsblk -o SIZE,LABEL,NAME,MOUNTPOINT,FSTYPE,UUID'
 alias tig='tig --all'
 
 
@@ -114,8 +119,6 @@ alias z='d -rt'
 
 
 #{{{1 aliases and functions that mask existing programs
-
-alias cp='cp -i'
 
 function mv() {
 	local target="${!#}"
