@@ -72,7 +72,7 @@ zle -N edit-command-line
 bindkey -M vicmd v 'edit-command-line'
 
 # history options
-[[ -d "$XDG_STATE_HOME/zsh" ]] || $mkdir -p "$XDG_STATE_HOME/zsh"
+[[ -d "$XDG_STATE_HOME/zsh" ]] || mkdir -p "$XDG_STATE_HOME/zsh"
 HISTFILE="$XDG_STATE_HOME/zsh/history"
 HISTSIZE=8000
 SAVEHIST=6000
