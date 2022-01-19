@@ -46,6 +46,12 @@ function has {
 	which "$1" >/dev/null 2>/dev/null
 }
 
+if has nvim; then
+	mkdir -p "$XDG_CONFIG_HOME/nvim"
+	L nvim/init.vim "$XDG_CONFIG_HOME/nvim/"
+	L nvim/lua      "$XDG_CONFIG_HOME/nvim/"
+fi
+
 if has zsh; then
 	L zsh/zshrc    .zshrc
 	mkdir -p "$XDG_CONFIG_HOME/zsh"
