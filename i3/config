@@ -3,6 +3,7 @@ set $mod Mod4
 floating_modifier $mod
 hide_edge_borders both
 
+bindsym $mod+Escape exec --no-startup-id /usr/bin/xsecurelock
 bindsym $mod+BackSpace kill
 bindsym $mod+Return exec mate-terminal
 bindsym $mod+r restart
