@@ -150,9 +150,6 @@ nmap <leader>. @q
 " makes * highlight the word, but don't jump to next occurrence
 "map <silent> * yiw:let @/="\\<".@0."\\>"<CR>:set hls<CR>
 
-" makes * go back to current word
-map <silent> * *N
-
 " diff selections
 vmap <leader>1 "ay
 vmap <leader>2 "by:tabnew<CR>"bP:diffthis<CR>:set buftype=nofile<CR>:vnew<CR>"aP:set buftype=nofile<CR>:diffthis<CR>
@@ -169,12 +166,19 @@ map <space> <leader>
 nmap <leader>V :split $MYVIMRC<CR>
 nmap <leader>S :source $MYVIMRC<CR>
 
-" add word to search pattern
+" Avoid jumping or moving the cursor when using <*>.
+function Set_cword_to_search()
+	let @/='\<' . expand('<cword>') . '\>'
+endfunction
+map <silent> * :call Set_cword_to_search()<CR>
+
+" Use <leader>* to add cword to the search pattern,
+" so it's possible to search multiple words at wonce.
 function Add_cword_to_search()
 	if @/ != ''
 		let @/='\(' . @/ . '\)\|\(\<' . expand('<cword>') . '\>\)'
 	else
-		let @/='\<' . expand('<cword>') . '\>'
+		Set_cword_to_search()
 	endif
 endfunction
 nmap <leader>* :call Add_cword_to_search()<CR>
