@@ -169,6 +169,16 @@ map <space> <leader>
 nmap <leader>V :split $MYVIMRC<CR>
 nmap <leader>S :source $MYVIMRC<CR>
 
+" add word to search pattern
+function Add_cword_to_search()
+	if @/ != ''
+		let @/='\(' . @/ . '\)\|\(\<' . expand('<cword>') . '\>\)'
+	else
+		let @/='\<' . expand('<cword>') . '\>'
+	endif
+endfunction
+nmap <leader>* :call Add_cword_to_search()<CR>
+
 " navitage through compiler errors
 nmap <leader>n :cnext<CR>
 nmap <leader>p :cprevious<CR>
