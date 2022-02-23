@@ -12,13 +12,13 @@ if ! test -d "$ETC"; then
 fi
 
 for cmd in git vim; do
-	if test "`which $cmd`" == ""; then
+	if test -z "`which $cmd`"; then
 		echo "$cmd not found."
 		exit
 	fi
 done
 
-function LINK {
+LINK() {
 	local from="$1"
 	local to="$2"
 
@@ -38,11 +38,11 @@ function LINK {
 	echo "new link $from -> $to"
 }
 
-function L {
+L() {
 	LINK "$ETC/$1" "$HOME/$2"
 }
 
-function has {
+has() {
 	which "$1" >/dev/null 2>/dev/null
 }
 
