@@ -170,7 +170,7 @@ nmap <leader>S :source $MYVIMRC<CR>
 function Set_cword_to_search()
 	let @/='\<' . expand('<cword>') . '\>'
 endfunction
-map <silent> * :call Set_cword_to_search()<CR>
+map <silent> * :call Set_cword_to_search()<CR>:set hlsearch<CR>
 
 " Use <leader>* to add cword to the search pattern,
 " so it's possible to search multiple words at wonce.
