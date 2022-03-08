@@ -21,8 +21,7 @@
 
 	# commit
 	c     = commit
-	cm    = commit -m
-	cam   = commit -a -m
+	ca    = commit -a
 	ci    = commit --interactive
 	fixup = commit --amend -C HEAD
 
