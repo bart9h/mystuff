@@ -4,6 +4,8 @@ export SDL_VIDEO_ALLOW_SCREENSAVER=1
 export NO_AT_BRIDGE=1  # silence accessibility warning when opening programs
 #export TERMINAL="sakura"
 
+xrandr --output DisplayPort-0 --set TearFree on
+
 #xterm -geometry 132x80 &
 #exec twm
 
