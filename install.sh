@@ -61,10 +61,11 @@ elif has bash; then
 else
 	L etc/profile  .profile
 fi
-L etc/inputrc    .inputrc
-L etc/tmux.conf  .tmux.conf
-L etc/tigrc      .tigrc
-L vim            .vim
+L etc/inputrc      .inputrc
+L etc/tmux.conf    .tmux.conf
+L etc/tigrc        .tigrc
+L vim              .vim
+L etc/tridactylrc  .tridactylrc
 
 if has xinit; then
 	L x11/xsession   .xsession
